@@ -1,0 +1,36 @@
+{
+    "name": "web",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@family-budget/database": "workspace:*",
+        "@family-budget/ui": "workspace:*",
+        "@hookform/resolvers": "^5.4.0",
+        "bcryptjs": "catalog:",
+        "jose": "^6.2.3",
+        "next": "16.2.9",
+        "next-safe-action": "^8.5.4",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "react-hook-form": "^7.78.0",
+        "zod": "^4.4.3"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@types/bcryptjs": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "eslint": "catalog:",
+        "eslint-config-next": "16.2.9",
+        "tailwindcss": "^4",
+        "typescript": "catalog:"
+    }
+}
