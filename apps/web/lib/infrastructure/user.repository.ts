@@ -1,5 +1,14 @@
-import { db, eq, Executor, schema, UserPersist } from '@family-budget/database';
-import { User } from '../entities/user';
+import {
+    and,
+    db,
+    eq,
+    Executor,
+    ne,
+    schema,
+    SQL,
+    UserPersist,
+} from '@family-budget/database';
+import { UserBase } from '../entities/user-base';
 import { cleanObject } from '../utils/clean-object';
 
 export class UserRepository {
@@ -16,6 +25,21 @@ export class UserRepository {
             where: eq(schema.users.username, username),
         });
         return user ?? null;
+    }
+
+    async findByFamilyId(
+        familyId: string,
+        exceptUserId?: string,
+    ): Promise<UserPersist[]> {
+        const conditions: SQL[] = [eq(schema.users.familyId, familyId)];
+
+        if (exceptUserId) {
+            conditions.push(ne(schema.users.id, exceptUserId));
+        }
+
+        return await db.query.users.findMany({
+            where: and(...conditions),
+        });
     }
 
     async create(
@@ -53,7 +77,7 @@ export class UserRepository {
     }
 }
 
-export function mapToUser(user: UserPersist): User {
+export function mapToUserBase(user: UserPersist): UserBase {
     return {
         id: user.id,
         username: user.username,
