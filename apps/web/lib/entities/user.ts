@@ -1,5 +1,7 @@
-export interface User {
+import { Family } from './family';
+
+export type User = {
     id: string;
     username: string;
-    familyId: string | null;
-}
+    family: Family | null;
+};
