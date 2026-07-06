@@ -1,35 +1,46 @@
 import { AuthService } from './services/auth.service';
 import { UserRepository } from './infrastructure/user.repository';
+import { FamilyRepository } from './infrastructure/family.repository';
+import { FamilyManagementService } from './services/family-management.service';
+import { SessionService } from './services/session.service';
+import { FlashMessageService } from './services/flash-message.service';
 
 export interface Repositories {
     userRepository: UserRepository;
+    familyRepository: FamilyRepository;
 }
 
 export interface Services {
-    auth: AuthService;
+    authService: AuthService;
+    flashMessageService: FlashMessageService;
+    sessionService: SessionService;
+    familyManagementService: FamilyManagementService;
 }
 
-let repositories: Repositories | undefined;
-let services: Services | undefined;
+export interface Container {
+    repositories: Repositories;
+    services: Services;
+}
 
-export function getRepositories(): Repositories {
-    if (repositories) return repositories;
+function createContainer(): Container {
+    const repositories: Repositories = {
+        userRepository: new UserRepository(),
+        familyRepository: new FamilyRepository(),
+    } as const;
+    const services: Services = {
+        authService: new AuthService(repositories.userRepository),
+        flashMessageService: new FlashMessageService(),
+        sessionService: new SessionService(),
+        familyManagementService: new FamilyManagementService(
+            repositories.familyRepository,
+            repositories.userRepository,
+        ),
+    } as const;
 
-    const userRepository = new UserRepository();
-
-    repositories = {
-        userRepository,
+    return {
+        repositories,
+        services,
     };
-    return repositories;
 }
 
-export function getServices(): Services {
-    if (services) return services;
-
-    const auth = new AuthService(getRepositories().userRepository);
-
-    services = {
-        auth,
-    };
-    return services;
-}
+export const container = createContainer();
