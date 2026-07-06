@@ -13,6 +13,7 @@ catalog:
     "@types/react": ^19
     "@types/react-dom": ^19
     "@types/node": ^20
+    lucide-react: ^1.22.0
     # domain
     bcryptjs: ^3.0.3
     "@types/bcryptjs": ^3.0.0
