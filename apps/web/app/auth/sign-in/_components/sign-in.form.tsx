@@ -12,17 +12,9 @@ import {
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod/v3';
-import { signInAction } from '../_lib/sign-in.actions';
+import { formSchema } from '@/app/auth/sign-in/_lib/sign-in.schema';
+import { signInAction } from '@/app/auth/sign-in/_lib/sign-in.actions';
 import Link from 'next/link';
-
-const formSchema = z.object({
-    username: z.string().min(6, {
-        message: 'Имя пользователя должно быть длиной хотя бы 6 символов',
-    }),
-    password: z.string().min(6, {
-        message: 'Пароль должен быть длиной хотя бы 6 символов',
-    }),
-});
 
 export const SignInForm: FC = () => {
     const {
@@ -30,6 +22,7 @@ export const SignInForm: FC = () => {
         handleSubmit,
         setError,
         formState: {
+            isSubmitting,
             errors: { form: formError },
         },
     } = useForm<z.infer<typeof formSchema>>({
@@ -41,7 +34,7 @@ export const SignInForm: FC = () => {
         const result = await signInAction(data);
         if (!result.success) {
             setError('form', {
-                message: result.message ?? 'Внутренняя ошибка',
+                message: result.message,
             });
         }
     }
@@ -88,8 +81,12 @@ export const SignInForm: FC = () => {
                         )}
                     />
                     <Field>
-                        <Button type="submit" className="w-full">
-                            Вход
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full"
+                        >
+                            {isSubmitting ? 'Вход...' : 'Вход'}
                         </Button>
                     </Field>
                     {formError && <FieldError errors={[formError]} />}

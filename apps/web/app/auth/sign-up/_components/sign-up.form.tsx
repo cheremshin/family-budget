@@ -12,17 +12,9 @@ import {
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod/v3';
-import { signUpAction } from '../_lib/sign-up.actions';
+import { formSchema } from '@/app/auth/sign-up/_lib/sign-up.schema';
+import { signUpAction } from '@/app/auth/sign-up/_lib/sign-up.actions';
 import Link from 'next/link';
-
-const formSchema = z.object({
-    username: z.string().min(6, {
-        message: 'Имя пользователя должно быть длиной хотя бы 6 символов',
-    }),
-    password: z.string().min(6, {
-        message: 'Пароль должен быть длиной хотя бы 6 символов',
-    }),
-});
 
 export const SignUpForm: FC = () => {
     const {
@@ -30,6 +22,7 @@ export const SignUpForm: FC = () => {
         handleSubmit,
         setError,
         formState: {
+            isSubmitting,
             errors: { form: formError },
         },
     } = useForm<z.infer<typeof formSchema>>({
@@ -88,8 +81,12 @@ export const SignUpForm: FC = () => {
                         )}
                     />
                     <Field>
-                        <Button type="submit" className="w-full">
-                            Регистрация
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full"
+                        >
+                            {isSubmitting ? 'Регистрация...' : 'Регистрация'}
                         </Button>
                     </Field>
                     {formError && <FieldError errors={[formError]} />}

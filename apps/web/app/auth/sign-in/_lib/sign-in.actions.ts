@@ -1,24 +1,29 @@
 'use server';
 
-import { getServices } from '@/lib/container';
-import { SignInError } from '@/lib/services/auth.service';
-import { setSession } from '@/lib/utils/session';
+import { container } from '@/lib/container';
+import { AuthError } from '@/lib/services/auth.service';
+import { redirect } from 'next/navigation';
 
 export const signInAction = async (data: {
     username: string;
     password: string;
 }) => {
+    const { authService, sessionService } = container.services;
+
     try {
-        const user = await getServices().auth.signIn(data);
-        await setSession(user.id);
-        return { success: true };
+        const user = await authService.signIn(data);
+        await sessionService.setSession({ userId: user.id });
     } catch (error) {
+        if (error instanceof AuthError) {
+            return { success: false, message: error.message };
+        }
+
+        console.error('signInAction failed', error);
         return {
             success: false,
-            message:
-                error instanceof SignInError
-                    ? error.message
-                    : 'Внутренняя ошибка сервера. Попробуйте позже',
+            message: 'Внутренняя ошибка сервера. Попробуйте позже',
         };
     }
+
+    redirect('/home');
 };
