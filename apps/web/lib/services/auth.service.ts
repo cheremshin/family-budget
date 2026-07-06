@@ -1,7 +1,7 @@
 import { Credentials } from '@/lib/entities/credentials';
-import { User } from '@/lib/entities/user';
+import { UserBase } from '@/lib/entities/user-base';
 import {
-    mapToUser,
+    mapToUserBase,
     UserRepository,
 } from '@/lib/infrastructure/user.repository';
 import bcrypt from 'bcryptjs';
@@ -9,7 +9,7 @@ import bcrypt from 'bcryptjs';
 export class AuthService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async signIn(credentials: Credentials): Promise<User> {
+    async signIn(credentials: Credentials): Promise<UserBase> {
         const username = credentials.username.toLowerCase();
         const existing = await this.userRepository.findByUsername(username);
 
@@ -21,10 +21,10 @@ export class AuthService {
             throw new SignInError();
         }
 
-        return mapToUser(existing);
+        return mapToUserBase(existing);
     }
 
-    async signUp(credentials: Credentials): Promise<User> {
+    async signUp(credentials: Credentials): Promise<UserBase> {
         const username = credentials.username.toLowerCase();
         const existing = await this.userRepository.findByUsername(username);
 
@@ -38,17 +38,19 @@ export class AuthService {
             passwordHash,
         });
 
-        return mapToUser(newUser);
+        return mapToUserBase(newUser);
     }
 }
 
-export class SignInError extends Error {
+export class AuthError extends Error {}
+
+export class SignInError extends AuthError {
     constructor() {
         super(`Неверный логин или пароль`);
     }
 }
 
-export class SignUpError extends Error {
+export class SignUpError extends AuthError {
     constructor() {
         super(`Пользователь с таким именем уже существует`);
     }
