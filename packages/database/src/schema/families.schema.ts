@@ -1,5 +1,7 @@
+import { sql } from 'drizzle-orm';
 import {
-    boolean,
+    check,
+    integer,
     pgTable,
     uniqueIndex,
     uuid,
@@ -12,11 +14,17 @@ export const families = pgTable(
         id: uuid('id').defaultRandom().primaryKey(),
         name: varchar('name', { length: 128 }).notNull(),
         invitationCode: varchar('invitation_code', { length: 8 }).notNull(),
-        isFull: boolean('is_full').default(false).notNull(),
+        maxMembers: integer('max_members').default(2).notNull(),
+        membersCount: integer('members_count').default(1).notNull(),
     },
     (table) => [
         uniqueIndex('families__invitation_code_unique_index').on(
             table.invitationCode,
+        ),
+
+        check(
+            'families__members_count_leq_max_members_check',
+            sql`${table.membersCount} <= ${table.maxMembers}`,
         ),
     ],
 );
