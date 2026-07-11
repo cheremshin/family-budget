@@ -3,11 +3,16 @@
 import { FC, useState } from 'react';
 import { Button, Input } from '@ui/index';
 import { Check, Copy } from 'lucide-react';
-import { useCreateFamilyResult } from '../../contexts/family-context';
+import { useCreateFamily } from '../../contexts/family-context';
 
 export const InviteStep: FC = () => {
-    const family = useCreateFamilyResult();
+    const { family } = useCreateFamily();
     const [copied, setCopied] = useState(false);
+
+    if (!family) {
+        return;
+    }
+
     const inviteLink = `${window.location.origin}/accept-invite/${family.invitationCode}`;
 
     async function handleCopy() {

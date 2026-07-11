@@ -1,8 +1,9 @@
-import { Family } from '@/lib/entities/family';
+import { BudgetDivisionType } from '@family-budget/database';
 import { FC } from 'react';
 
 export type CreateFamilyForm = {
     name: string;
+    budgetDivisionType: BudgetDivisionType;
 };
 
 export type CreateFamilyStep = {
@@ -10,6 +11,5 @@ export type CreateFamilyStep = {
     description: string;
     content: FC;
     fields: readonly (keyof CreateFamilyForm)[];
+    allowBack: boolean;
 };
-
-export type CreateFamilyResult = Omit<Family, 'members'>;

@@ -1,9 +1,13 @@
+import { Family } from '@/lib/family';
 import { createContext, useContext } from 'react';
-import { CreateFamilyResult } from '../types';
 
-export const FamilyContext = createContext<CreateFamilyResult | null>(null);
+type FamilyContextValue = {
+    family: Family | null;
+}
 
-export function useCreateFamilyResult() {
+export const FamilyContext = createContext<FamilyContextValue | null>(null);
+
+export function useCreateFamily() {
     const ctx = useContext(FamilyContext);
     if (!ctx) {
         throw new Error('useCreateFamilyResult must be used in FamilyContext');

@@ -1,7 +1,7 @@
+import { FamilyError } from '@/lib/family';
 import { acceptInvite } from '../_lib/accept-invite';
 import { NextResponse } from 'next/server';
-import { FamilyError } from '@/lib/services/family-management.service';
-import { container } from '@/lib/container';
+import { flashMessageService } from '@/lib/flash-message';
 
 export async function GET(
     request: Request,
@@ -14,7 +14,7 @@ export async function GET(
         return NextResponse.redirect(new URL('/home', request.url));
     } catch (error) {
         if (error instanceof FamilyError) {
-            await container.services.flashMessageService.set({
+            await flashMessageService.set({
                 type: 'error',
                 message: error.message,
             });

@@ -16,7 +16,7 @@ export const Sidebar: FC<ComponentProps<'div'>> = ({
     ...props
 }) => {
     return (
-        <div
+        <aside
             style={
                 {
                     '--sidebar-width': SIDEBAR_WIDTH,
@@ -36,7 +36,7 @@ export const Sidebar: FC<ComponentProps<'div'>> = ({
                     {children}
                 </div>
             </div>
-        </div>
+        </aside>
     );
 };
 

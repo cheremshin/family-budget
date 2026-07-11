@@ -1,14 +1,14 @@
 import { Sidebar } from '@/features/navigation/sidebar.widget';
-import { requireSession } from '@/lib/guards/auth/require-session';
+import { requireAuth } from '@/guards/require-auth';
 
 export default async function InternalLayout({
     children,
 }: Readonly<LayoutProps<'/'>>) {
-    await requireSession();
+    await requireAuth();
     return (
-        <main className="flex">
+        <div className="flex">
             <Sidebar />
             {children}
-        </main>
+        </div>
     );
 }

@@ -1,6 +1,6 @@
 'use server';
 
-import { FamilyError } from '@/lib/services/family-management.service';
+import { FamilyError } from '@/lib/family';
 import { acceptInvite } from './accept-invite';
 
 export const acceptInviteAction = async (data: { invitationCode: string }) => {

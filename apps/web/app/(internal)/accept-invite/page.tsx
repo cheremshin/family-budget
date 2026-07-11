@@ -6,11 +6,11 @@ import {
     CardTitle,
 } from '@ui/index';
 import { AcceptInviteForm } from './_components/accept-invite.form';
-import { container } from '@/lib/container';
 import { FlashCleaner } from '@/components/flash-cleaner/flash-cleaner';
+import { flashMessageService } from '@/lib/flash-message';
 
 export default async function Page() {
-    const flashMessage = await container.services.flashMessageService.get();
+    const flashMessage = await flashMessageService.get();
 
     return (
         <main className="w-full min-h-dvh flex justify-center items-center">

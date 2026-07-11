@@ -1,14 +1,14 @@
-import { getCurrentUser } from './_lib/user.queries';
+import { requireAuth } from '@/guards/require-auth';
 import { CreateFamilyWidget } from '@/features/create-family-wizard/create-family.widget';
 
 export default async function Page() {
-    const user = await getCurrentUser();
+    const { user } = await requireAuth();
 
     return (
         <main className="m-4 flex flex-col">
             <span>Добрый день, {user.username}</span>
             <h1 className="text-2xl font-extrabold">Обзор</h1>
-            {user.family ? <></> : <CreateFamilyWidget />}
+            {user.familyId ? <></> : <CreateFamilyWidget />}
         </main>
     );
 }

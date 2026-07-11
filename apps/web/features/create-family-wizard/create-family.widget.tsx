@@ -45,7 +45,9 @@ export const CreateFamilyWidget: FC = () => {
                         </div>
                     </>
                 ) : (
-                    <CreateFamilyWizard onExit={() => setMode('welcome')} />
+                    <CreateFamilyWizard
+                        onExitAction={() => setMode('welcome')}
+                    />
                 )}
             </DialogContent>
         </Dialog>

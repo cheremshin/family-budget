@@ -13,7 +13,7 @@ import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod/v3';
 import { formSchema } from '@/app/auth/sign-up/_lib/sign-up.schema';
-import { signUpAction } from '@/app/auth/sign-up/_lib/sign-up.actions';
+import { signUpAction } from '@/app/auth/sign-up/_lib/sign-up.action';
 import Link from 'next/link';
 
 export const SignUpForm: FC = () => {

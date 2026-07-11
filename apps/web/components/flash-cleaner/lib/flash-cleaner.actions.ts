@@ -1,7 +1,7 @@
 'use server';
 
-import { container } from '@/lib/container';
+import { flashMessageService } from '@/lib/flash-message';
 
 export const clearFlashAction = async () => {
-    await container.services.flashMessageService.delete();
+    await flashMessageService.remove();
 };

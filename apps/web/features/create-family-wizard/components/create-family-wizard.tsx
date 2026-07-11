@@ -4,24 +4,25 @@ import { FC, useState, useTransition } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { createFamilySchema } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateFamilyForm, CreateFamilyResult } from '../types';
+import { CreateFamilyForm } from '../types';
 import { WizardNavigation } from './wizard-navigation';
 import { steps } from '../steps';
 import { createFamilyAction } from '../lib/create-family.action';
 import { FamilyContext } from '../contexts/family-context';
+import { Family } from '@/lib/family';
 
 type PropsT = {
-    onExit: () => void;
+    onExitAction: () => void;
 };
 
-export const CreateFamilyWizard: FC<PropsT> = ({ onExit }) => {
+export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
     const [step, setStep] = useState(0);
-    const [family, setFamily] = useState<CreateFamilyResult | null>(null);
+    const [family, setFamily] = useState<Family | null>(null);
     const [isPending, startTransition] = useTransition();
 
     const form = useForm<CreateFamilyForm>({
         resolver: zodResolver(createFamilySchema),
-        defaultValues: { name: '' },
+        defaultValues: { name: '', budgetDivisionType: 'in_proportion' },
         mode: 'onChange',
     });
 
@@ -43,7 +44,7 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExit }) => {
                 if (!valid) return;
             }
 
-            if (step === 0) {
+            if (step === 1 && family === null) {
                 try {
                     const result = await createFamilyAction(form.getValues());
                     setFamily(result);
@@ -61,19 +62,20 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExit }) => {
 
     const handlePrevious = () => {
         if (isFirst) {
-            onExit();
+            onExitAction();
             return;
         }
+
         setStep((prev) => prev - 1);
     };
 
     return (
         <FormProvider {...form}>
-            <FamilyContext.Provider value={family}>
+            <FamilyContext value={{ family }}>
                 <div className="flex flex-col gap-6">
                     <div>
                         <h2 className="text-2xl font-bold">{current.title}</h2>
-                        <p className="mt-2 text-muted-foreground">
+                        <p className="mt-4 text-muted-foreground">
                             {current.description}
                         </p>
                     </div>
@@ -81,11 +83,12 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExit }) => {
                     <WizardNavigation
                         isLast={isLast}
                         isLoading={isPending}
+                        navigationBackLocked={!current.allowBack}
                         onPrevious={handlePrevious}
                         onNext={handleNext}
                     />
                 </div>
-            </FamilyContext.Provider>
+            </FamilyContext>
         </FormProvider>
     );
 };

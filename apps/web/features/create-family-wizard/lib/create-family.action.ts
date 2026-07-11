@@ -1,16 +1,17 @@
 'use server';
 
-import { container } from '@/lib/container';
-import { CreateFamilyForm, CreateFamilyResult } from '../types';
-import { requireAuth } from '@/lib/guards/auth/require-auth';
+import { Family, familyService } from '@/lib/family';
+import { CreateFamilyForm } from '../types';
+import { requireAuth } from '@/guards/require-auth';
 
 export async function createFamilyAction(
     data: CreateFamilyForm,
-): Promise<CreateFamilyResult> {
+): Promise<Family> {
     const { user } = await requireAuth();
-    const result = await container.services.familyManagementService.create(
-        user,
+    const family = await familyService.create(
+        user.id,
         data.name,
+        data.budgetDivisionType,
     );
-    return result.family;
+    return family;
 }

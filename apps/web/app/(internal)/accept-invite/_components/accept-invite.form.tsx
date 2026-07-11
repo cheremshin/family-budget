@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { formSchema } from '../_lib/accept-invite.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod/v3';
-import { acceptInviteAction } from '../_lib/accept-invite.actions';
+import { acceptInviteAction } from '../_lib/accept-invite.action';
 import {
     Button,
     Field,

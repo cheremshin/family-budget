@@ -1,8 +1,7 @@
 'use server';
 
-import { container } from '@/lib/container';
+import { sessionService } from '@/lib/session';
 
 export const logoutAction = async () => {
-    const { sessionService } = container.services;
-    await sessionService.invalidateSession();
+    await sessionService.invalidate();
 };
