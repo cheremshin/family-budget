@@ -19,7 +19,7 @@ const url =
     `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}`;
 
 export default defineConfig({
-    schema: ['./src/schema/*.schema.ts'],
+    schema: ['./src/schema/*.enum.ts', './src/schema/*.schema.ts'],
     out: './migrations',
     dialect: 'postgresql',
     dbCredentials: { url },

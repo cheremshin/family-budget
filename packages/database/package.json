@@ -4,7 +4,8 @@
     "private": true,
     "type": "module",
     "exports": {
-        ".": "./src/index.ts"
+        ".": "./src/index.ts",
+        "./connection": "./src/connection.ts"
     },
     "scripts": {
         "lint": "eslint",
@@ -20,7 +21,7 @@
     },
     "devDependencies": {
         "dotenv": "^17.4.2",
-        "drizzle-kit": "^0.31.10",
+        "drizzle-kit": "1.0.0-rc.4",
         "typescript": "catalog:"
     }
 }

@@ -2,46 +2,44 @@ import {
     boolean,
     check,
     date,
-    decimal,
     foreignKey,
     pgTable,
+    PgTableExtraConfigValue,
     uniqueIndex,
     uuid,
 } from 'drizzle-orm/pg-core';
 import { families } from './families.schema';
 import { sql } from 'drizzle-orm';
+import { auditColumns } from '../utils/audit-columns';
 
-export const monthlyBudget = pgTable(
-    'monthly_budget',
+const TABLE_NAME = 'monthly_budget';
+
+export const monthlyBudgets = pgTable(
+    TABLE_NAME,
     {
         id: uuid('id').defaultRandom().primaryKey(),
         familyId: uuid('family_id').notNull(),
+
         period: date('period').notNull(),
-        savingsRate: decimal('savings_rate', { precision: 5, scale: 2 })
-            .notNull()
-            .default('5.0'),
         isClosed: boolean('is_closed').notNull().default(false),
-        amount: decimal('amount', { precision: 10, scale: 2 }),
+
+        createdAt: auditColumns.createdAt,
     },
-    (table) => [
+    (table): PgTableExtraConfigValue[] => [
         foreignKey({
-            name: 'family_monthly_budget',
+            name: `${TABLE_NAME}__family_id_fk`,
             columns: [table.familyId],
             foreignColumns: [families.id],
-        }),
+        }).onDelete('cascade'),
 
-        uniqueIndex('monthly__budget_family_period_unique_index').on(
+        uniqueIndex(`${TABLE_NAME}__family_period_unique_index`).on(
             table.familyId,
             table.period,
         ),
 
         check(
-            'monthly__budget_savings_rate_non_negative_check',
-            sql`${table.savingsRate} >= 0`,
-        ),
-        check(
-            'monthly__budget_amount_non_negative_check',
-            sql`${table.amount} >= 0`,
+            `${TABLE_NAME}__created_at_not_in_future_check`,
+            sql`${table.createdAt} <= CURRENT_TIMESTAMP`,
         ),
     ],
 );

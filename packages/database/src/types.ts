@@ -2,22 +2,61 @@ import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import {
     families,
     users,
-    monthlyBudget,
+    monthlyBudgets,
     plannedIncomes,
     incomes,
+    familySettings,
+    budgetCategories,
+    monthlyBudgetItems,
 } from './schema';
 
-export type FamilyPersist = InferSelectModel<typeof families>;
-export type NewFamilyPersist = InferInsertModel<typeof families>;
+import { budgetDivisionType } from './schema/budget-division.enum';
+import { calculationMode } from './schema/calculation-mode.enum';
+import { budgetCategoryType } from './schema/budget-category-type.enum';
+
+type InferUpdateModel<T, K extends PropertyKey> = Partial<Omit<T, K>>;
+
+export type BudgetDivisionType = (typeof budgetDivisionType.enumValues)[number];
+export const budgetDivisionTypeOptions = budgetDivisionType.enumValues;
+export type CalculaionMode = (typeof calculationMode.enumValues)[number];
+export type BudgetCategoryType = (typeof budgetCategoryType.enumValues)[number];
 
 export type UserPersist = InferSelectModel<typeof users>;
-export type NewUserPersist = InferInsertModel<typeof users>;
+export type NewUser = InferInsertModel<typeof users>;
+export type UpdateUser = InferUpdateModel<NewUser, 'id'>;
 
-export type MonthlyBudgetPersist = InferSelectModel<typeof monthlyBudget>;
-export type NewMonthlyBudgetPersist = InferInsertModel<typeof monthlyBudget>;
+export type FamilyPersist = InferSelectModel<typeof families>;
+export type NewFamily = InferInsertModel<typeof families>;
+export type UpdateFamily = InferUpdateModel<NewFamily, 'id'>;
+
+export type FamilySettingsPersist = InferSelectModel<typeof familySettings>;
+export type NewFamilySettings = InferInsertModel<typeof familySettings>;
+export type UpdateFamilySettings = InferUpdateModel<
+    NewFamilySettings,
+    'familyId'
+>;
+
+export type MonthlyBudgetPersist = InferSelectModel<typeof monthlyBudgets>;
+export type NewMonthlyBudget = InferInsertModel<typeof monthlyBudgets>;
+export type UpdateMonthlyBudget = InferUpdateModel<NewMonthlyBudget, 'id'>;
+
+export type BudgetCategoryPersist = InferSelectModel<typeof budgetCategories>;
+export type NewBudgetCategory = InferInsertModel<typeof budgetCategories>;
+export type UpdateBudgetCategory = InferUpdateModel<NewBudgetCategory, 'id'>;
+
+export type MonthlyBudgetItemPersist = InferSelectModel<
+    typeof monthlyBudgetItems
+>;
+export type NewMonthlyBudgetItem = InferInsertModel<typeof monthlyBudgetItems>;
+export type UpdateMonthlyBudgetItem = InferUpdateModel<
+    NewMonthlyBudgetItem,
+    'id'
+>;
 
 export type PlannedIncomePersist = InferSelectModel<typeof plannedIncomes>;
-export type NewPlannedIncomePersist = InferInsertModel<typeof plannedIncomes>;
+export type NewPlannedIncome = InferInsertModel<typeof plannedIncomes>;
+export type UpdatePlannedIncome = InferUpdateModel<NewPlannedIncome, 'id'>;
 
 export type IncomePersist = InferSelectModel<typeof incomes>;
-export type NewIncomePersist = InferInsertModel<typeof incomes>;
+export type NewIncome = InferInsertModel<typeof incomes>;
+export type UpdateIncome = InferUpdateModel<NewIncome, 'id'>;

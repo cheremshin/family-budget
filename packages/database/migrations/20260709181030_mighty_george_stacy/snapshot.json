@@ -1,0 +1,1348 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "0783c92b-103d-497b-9de5-a2ed7b1299f0",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "values": [
+        "expense",
+        "savings"
+      ],
+      "name": "budget_category_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "in_half",
+        "in_proportion"
+      ],
+      "name": "budget_division_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "absolute",
+        "relative"
+      ],
+      "name": "calculation_mode",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "budget_categories",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "families",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "family_settings",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "incomes",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "monthly_budget_items",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "monthly_budget",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "planned_incomes",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "users",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "family_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "varchar(128)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "budget_category_type",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "calculation_mode",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "calculation_mode",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'0'",
+      "generated": null,
+      "identity": null,
+      "name": "target_amount",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "sort_order",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "is_system",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "archived",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "type": "varchar(128)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "type": "varchar(8)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "invitation_code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "2",
+      "generated": null,
+      "identity": null,
+      "name": "max_members",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "owner_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "family_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "family_settings"
+    },
+    {
+      "type": "budget_division_type",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'in_proportion'",
+      "generated": null,
+      "identity": null,
+      "name": "budget_division_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "family_settings"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "planned_incomes_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "amount",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "received_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "monthly_budget_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "budget_category_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "type": "calculation_mode",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "calculation_mode",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'0'",
+      "generated": null,
+      "identity": null,
+      "name": "target_amount",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "sort_order",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "family_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "period",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "is_closed",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "monthly_budget_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "planned_amount",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(128)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "username",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(128)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "password_hash",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "family_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "family_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": "\"archived\" = false",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "budget_categories__family_name_active_unique_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "family_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "budget_categories__family_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "invitation_code",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "families__invitation_code_unique_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "owner_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "families__owner_id_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "planned_incomes_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "incomes__planned_incomes_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "monthly_budget_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "budget_category_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "monthly_budget_items__budget_category_unique_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "budget_category_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "monthly_budget_items__budget_category_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "family_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "period",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "monthly_budget__family_period_unique_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "monthly_budget_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "planned_incomes__single_user_monthly_plan",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "monthly_budget_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "planned_incomes__monthly_budget_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "planned_incomes__user_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "username",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "users__username_unique_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "family_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "users__family_id_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "family_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "families",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "budget_categories__family_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "owner_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "families__owner_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "family_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "families",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "family_settings__family_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "family_settings"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "planned_incomes_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "planned_incomes",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "incomes__planned_income_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "monthly_budget_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "monthly_budget",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "monthly_budget_items__monthly_budget_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "budget_category_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "budget_categories",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "monthly_budget_items__budget_category_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "family_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "families",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "monthly_budget__family_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "monthly_budget_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "monthly_budget",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "planned_incomes__monthly_budget_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "planned_incomes_user_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "family_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "families",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "users__family_id_fk",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "budget_categories_pkey",
+      "schema": "public",
+      "table": "budget_categories",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "families_pkey",
+      "schema": "public",
+      "table": "families",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "family_id"
+      ],
+      "nameExplicit": false,
+      "name": "family_settings_pkey",
+      "schema": "public",
+      "table": "family_settings",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "incomes_pkey",
+      "schema": "public",
+      "table": "incomes",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "monthly_budget_items_pkey",
+      "schema": "public",
+      "table": "monthly_budget_items",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "monthly_budget_pkey",
+      "schema": "public",
+      "table": "monthly_budget",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "planned_incomes_pkey",
+      "schema": "public",
+      "table": "planned_incomes",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "users_pkey",
+      "schema": "public",
+      "table": "users",
+      "entityType": "pks"
+    },
+    {
+      "value": "length(trim(\"name\")) > 0",
+      "name": "budget_categories__name_format_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "value": "(NOT \"is_system\") OR (NOT \"archived\")",
+      "name": "budget_categories__system_not_archived_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "value": "\n            (\"calculation_mode\" = 'relative' AND \"target_amount\" BETWEEN 0 AND 100)\n            OR\n            (\"calculation_mode\" = 'absolute' AND \"target_amount\" >= 0)\n        ",
+      "name": "budget_categories__target_amount_consistency_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "value": "\n                (\"archived\" = false AND \"archived_at\" IS NULL)\n                OR\n                (\"archived\" = true\n                    AND \"archived_at\" IS NOT NULL\n                    AND \"archived_at\" <= CURRENT_TIMESTAMP\n                )\n            ",
+      "name": "budget_categories__archived_at_consistency_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "value": "\"created_at\" <= CURRENT_TIMESTAMP",
+      "name": "budget_categories__created_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "value": "\"updated_at\" <= CURRENT_TIMESTAMP",
+      "name": "budget_categories__updated_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "budget_categories"
+    },
+    {
+      "value": "\"max_members\" >= 1",
+      "name": "families__max_members_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "value": "length(trim(\"name\")) > 0",
+      "name": "families__name_format_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "value": "\"invitation_code\" = upper(\"invitation_code\")",
+      "name": "families__invitation_code_format_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "value": "\"created_at\" <= CURRENT_TIMESTAMP",
+      "name": "families__created_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "families"
+    },
+    {
+      "value": "\"amount\" >= 0",
+      "name": "incomes__amount_non_negative_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "value": "\"received_at\" <= CURRENT_TIMESTAMP",
+      "name": "incomes__received_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "incomes"
+    },
+    {
+      "value": "\n            (\"calculation_mode\" = 'relative' AND \"target_amount\" BETWEEN 0 AND 100)\n            OR\n            (\"calculation_mode\" = 'absolute' AND \"target_amount\" >= 0)\n        ",
+      "name": "monthly_budget_items__target_amount_consistency_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "monthly_budget_items"
+    },
+    {
+      "value": "\"created_at\" <= CURRENT_TIMESTAMP",
+      "name": "monthly_budget__created_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "monthly_budget"
+    },
+    {
+      "value": "\"planned_amount\" >= 0",
+      "name": "planned_incomes__planned_amount_non_negative_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "planned_incomes"
+    },
+    {
+      "value": "(length(trim(\"username\")) > 0) AND (lower(\"username\") = \"username\")",
+      "name": "users__username_format_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "value": "\"created_at\" <= CURRENT_TIMESTAMP",
+      "name": "users__created_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "value": "\"updated_at\" <= CURRENT_TIMESTAMP",
+      "name": "users__updated_at_not_in_future_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    }
+  ],
+  "renames": []
+}

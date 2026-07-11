@@ -1,17 +1,23 @@
-import { sql } from 'drizzle-orm';
 import {
-    check,
     foreignKey,
+    index,
     pgTable,
-    timestamp,
+    PgTableExtraConfigValue,
     uniqueIndex,
     uuid,
     varchar,
 } from 'drizzle-orm/pg-core';
 import { families } from './families.schema';
+import { auditColumns } from '../utils/audit-columns';
+import {
+    auditNotInFutureChecks,
+    lowercaseNonEmptyCheck,
+} from '../utils/checks';
+
+const TABLE_NAME = 'users';
 
 export const users = pgTable(
-    'users',
+    TABLE_NAME,
     {
         id: uuid('id').defaultRandom().primaryKey(),
         username: varchar('username', { length: 128 }).notNull(),
@@ -19,33 +25,23 @@ export const users = pgTable(
 
         familyId: uuid('family_id'),
 
-        createdAt: timestamp('created_at', { mode: 'date' })
-            .notNull()
-            .defaultNow(),
-        updatedAt: timestamp('updated_at', { mode: 'date' })
-            .notNull()
-            .defaultNow(),
+        createdAt: auditColumns.createdAt,
+        updatedAt: auditColumns.updatedAt,
     },
-    (table) => [
+    (table): PgTableExtraConfigValue[] => [
         foreignKey({
-            name: 'user_family_id',
+            name: `${TABLE_NAME}__family_id_fk`,
             columns: [table.familyId],
             foreignColumns: [families.id],
-        }),
+        }).onDelete('set null'),
 
-        uniqueIndex('users__username_unique_index').on(table.username),
+        uniqueIndex(`${TABLE_NAME}__username_unique_index`).on(table.username),
+        index(`${TABLE_NAME}__family_id_index`).on(table.familyId),
 
-        check(
-            'users__username_format_check',
-            sql`(length(trim(${table.username})) > 0) AND (lower(${table.username}) = ${table.username})`,
+        lowercaseNonEmptyCheck(
+            `${TABLE_NAME}__username_format_check`,
+            table.username,
         ),
-        check(
-            'users__created_at_not_in_future_check',
-            sql`${table.createdAt} <= CURRENT_TIMESTAMP`,
-        ),
-        check(
-            'users__updated_at_not_in_future_check',
-            sql`${table.updatedAt} <= CURRENT_TIMESTAMP`,
-        ),
+        ...auditNotInFutureChecks(TABLE_NAME, table),
     ],
 );

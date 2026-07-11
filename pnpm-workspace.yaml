@@ -17,7 +17,7 @@ catalog:
     # domain
     bcryptjs: ^3.0.3
     "@types/bcryptjs": ^3.0.0
-    drizzle-orm: ^0.45.2
+    drizzle-orm: 1.0.0-rc.4
 
 allowBuilds:
     esbuild: true

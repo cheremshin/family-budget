@@ -2,33 +2,52 @@ import {
     check,
     decimal,
     foreignKey,
+    index,
     pgTable,
+    PgTableExtraConfigValue,
     timestamp,
     uuid,
 } from 'drizzle-orm/pg-core';
 import { plannedIncomes } from './planned-incomes.schema';
 import { sql } from 'drizzle-orm';
 
+const TABLE_NAME = 'incomes';
+
 export const incomes = pgTable(
-    'incomes',
+    TABLE_NAME,
     {
         id: uuid('id').defaultRandom().primaryKey(),
         plannedIncomesId: uuid('planned_incomes_id').notNull(),
-        amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
-        receivedAt: timestamp('received_at', { mode: 'date' })
+
+        amount: decimal('amount', {
+            precision: 12,
+            scale: 2,
+        }).notNull(),
+
+        receivedAt: timestamp('received_at', {
+            withTimezone: true,
+            mode: 'date',
+        })
             .notNull()
             .defaultNow(),
     },
-    (table) => [
+    (table): PgTableExtraConfigValue[] => [
         foreignKey({
-            name: 'planned_incomes_income',
+            name: `${TABLE_NAME}__planned_income_id_fk`,
             columns: [table.plannedIncomesId],
             foreignColumns: [plannedIncomes.id],
-        }),
+        }).onDelete('cascade'),
 
-        check('incomes__amount_non_negative_check', sql`${table.amount} >= 0`),
+        index(`${TABLE_NAME}__planned_incomes_index`).on(
+            table.plannedIncomesId,
+        ),
+
         check(
-            'incomes__received_at_non_in_future_check',
+            `${TABLE_NAME}__amount_non_negative_check`,
+            sql`${table.amount} >= 0`,
+        ),
+        check(
+            `${TABLE_NAME}__received_at_not_in_future_check`,
             sql`${table.receivedAt} <= CURRENT_TIMESTAMP`,
         ),
     ],
