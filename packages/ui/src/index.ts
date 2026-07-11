@@ -34,4 +34,5 @@ export {
     DialogTitle,
     DialogTrigger,
 } from './components/ui/dialog';
+export { RadioGroup, RadioGroupItem } from './components/ui/radio-group';
 export { cn } from './lib/utils';
