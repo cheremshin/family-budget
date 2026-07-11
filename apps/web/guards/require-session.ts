@@ -1,10 +1,8 @@
-'use server';
-
+import { sessionService } from '@/lib/session';
 import { redirect } from 'next/navigation';
-import { getSession } from './cached-session';
 
 export async function requireSession() {
-    const session = await getSession();
+    const session = await sessionService.get();
     if (!session) {
         redirect('/auth/sign-in');
     }

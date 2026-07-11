@@ -1,24 +1,25 @@
-import { container } from '@/lib/container';
+import { getUser } from '@/lib/user';
 import { requireSession } from './require-session';
 import { AuthContext } from './types';
-import { mapToUserBase } from '@/lib/infrastructure/user.repository';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
+import { sessionService } from '@/lib/session';
 
 export const requireAuth = cache(async (): Promise<AuthContext> => {
     const session = await requireSession();
 
-    const { userRepository } = container.repositories;
-    const { sessionService } = container.services;
-
-    const user = await userRepository.findById(session.userId);
+    const user = await getUser(session.userId);
     if (!user) {
-        sessionService.invalidateSession();
+        sessionService.invalidate();
         redirect('/auth/sign-in');
     }
 
     return {
         session,
-        user: mapToUserBase(user),
+        user: {
+            id: user.id,
+            username: user.username,
+            familyId: user.familyId,
+        },
     };
 });
