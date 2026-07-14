@@ -6,6 +6,7 @@ export type Family = {
     name: string;
     invitationCode: string;
     maxMembers: number;
+    ownerId: string;
     settings: FamilySettings;
     members: FamilyMember[];
 };

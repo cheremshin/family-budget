@@ -15,6 +15,8 @@ import { AuthenticatedUser } from '@/lib/user/types/authenticated-user';
 import { getUser } from '@/lib/user/';
 import { lockFamilyByInvitationCode } from './actions/lock-family-by-invitation-code';
 import { updateFamily } from './actions/update-family';
+import { FamilySettings } from './types/family-settings';
+import { updateFamilySettings } from './actions/update-family-settings';
 
 export async function create(
     userId: string,
@@ -88,10 +90,7 @@ export async function acceptInvite(
         const family = await lockFamilyByInvitationCode(invitationCode, tx);
         if (!family) throw new NoSuchFamilyCodeError();
 
-        const membersCount = await tx.$count(
-            schema.users,
-            eq(schema.users.familyId, family.id),
-        );
+        const membersCount = await tx.$count(schema.users, eq(schema.users.familyId, family.id));
         if (membersCount >= family.maxMembers) throw new FamilyIsFullError();
 
         const updatedUser = await setFamily(
@@ -119,4 +118,23 @@ export async function updateInvitationCode(familyId: string): Promise<string> {
     });
 
     return code;
+}
+
+export async function saveSettings(
+    familyId: string,
+    name: string,
+    settings: FamilySettings,
+): Promise<{
+    name: string;
+    settings: FamilySettings;
+}> {
+    return await db.transaction(async (tx) => {
+        const family = await updateFamily(familyId, { name }, tx);
+        const familySettings = await updateFamilySettings(familyId, settings, tx);
+
+        return {
+            name: family.name,
+            settings: familySettings,
+        };
+    });
 }
