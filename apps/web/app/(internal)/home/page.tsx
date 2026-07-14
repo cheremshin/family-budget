@@ -1,14 +1,25 @@
-import { requireAuth } from '@/guards/require-auth';
-import { CreateFamilyWidget } from '@/features/create-family-wizard/create-family.widget';
+import {
+    PageContainer,
+    PageDescription,
+    PageHeader,
+    PageHeaderContent,
+    PageTitle,
+} from '@/components/page-layout';
+import { requireFamily } from '@/lib/request-context';
 
 export default async function Page() {
-    const { user } = await requireAuth();
+    await requireFamily();
 
     return (
-        <main className="m-4 flex flex-col">
-            <span>Добрый день, {user.username}</span>
-            <h1 className="text-2xl font-extrabold">Обзор</h1>
-            {user.familyId ? <></> : <CreateFamilyWidget />}
-        </main>
+        <PageContainer>
+            <PageHeader>
+                <PageHeaderContent>
+                    <PageTitle>Обзор</PageTitle>
+                    <PageDescription>
+                        Добро пожаловать в финансовый центр вашей семьи
+                    </PageDescription>
+                </PageHeaderContent>
+            </PageHeader>
+        </PageContainer>
     );
 }

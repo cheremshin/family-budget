@@ -1,12 +1,11 @@
 import { Sidebar } from '@/features/navigation/sidebar.widget';
-import { requireAuth } from '@/guards/require-auth';
+import { requireUser } from '@/lib/request-context';
 
-export default async function InternalLayout({
-    children,
-}: Readonly<LayoutProps<'/'>>) {
-    await requireAuth();
+export default async function InternalLayout({ children }: Readonly<LayoutProps<'/'>>) {
+    await requireUser();
+
     return (
-        <div className="flex">
+        <div className="flex bg-background text-foreground">
             <Sidebar />
             {children}
         </div>
