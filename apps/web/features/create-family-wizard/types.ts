@@ -11,5 +11,6 @@ export type CreateFamilyStep = {
     description: string;
     content: FC;
     fields: readonly (keyof CreateFamilyForm)[];
+    actionStep: boolean;
     allowBack: boolean;
 };

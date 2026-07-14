@@ -10,15 +10,21 @@ import { steps } from '../steps';
 import { createFamilyAction } from '../lib/create-family.action';
 import { FamilyContext } from '../contexts/family-context';
 import { Family } from '@/lib/family';
+import { useAction } from 'next-safe-action/hooks';
+import { useRouter } from 'next/navigation';
 
 type PropsT = {
     onExitAction: () => void;
 };
 
 export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
+    const router = useRouter();
+
     const [step, setStep] = useState(0);
     const [family, setFamily] = useState<Family | null>(null);
     const [isPending, startTransition] = useTransition();
+
+    const { executeAsync: executeAction } = useAction(createFamilyAction);
 
     const form = useForm<CreateFamilyForm>({
         resolver: zodResolver(createFamilySchema),
@@ -31,29 +37,54 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
     const isFirst = step === 0;
     const isLast = step === steps.length - 1;
 
-    const handleNext = () => {
-        if (isLast) {
-            window.location.reload();
-            return;
+    const validateCurrentStep = async () => {
+        const fields = current.fields;
+
+        if (fields.length) {
+            const valid = await form.trigger(fields);
+            if (!valid) return false;
         }
 
-        const fields = current.fields;
-        startTransition(async () => {
-            if (fields.length) {
-                const valid = await form.trigger(fields);
-                if (!valid) return;
+        return true;
+    };
+
+    const createFamily = async () => {
+        try {
+            const result = await executeAction(form.getValues());
+
+            if (!result.data) {
+                form.setError('form', {
+                    message: 'Не удалось создать семью',
+                });
+                return { success: false };
             }
 
-            if (step === 1 && family === null) {
-                try {
-                    const result = await createFamilyAction(form.getValues());
-                    setFamily(result);
-                } catch {
-                    form.setError('name', {
-                        message: 'Не удалось создать семью, попробуйте еще раз',
-                    });
-                    return;
-                }
+            setFamily(result.data);
+            return { success: true };
+        } catch {
+            form.setError('form', {
+                message: 'Не удалось создать семью',
+            });
+            return { success: false };
+        }
+    };
+
+    const finishWizard = () => {
+        router.push('/home');
+    };
+
+    const handleNext = () => {
+        startTransition(async () => {
+            const valid = await validateCurrentStep();
+            if (!valid) return;
+
+            if (current.actionStep) {
+                const result = await createFamily();
+                if (!result.success) return;
+            }
+
+            if (isLast) {
+                finishWizard();
             }
 
             setStep((prev) => prev + 1);
@@ -66,6 +97,8 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
             return;
         }
 
+        if (!current.allowBack) return;
+
         setStep((prev) => prev - 1);
     };
 
@@ -75,9 +108,7 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
                 <div className="flex flex-col gap-6">
                     <div>
                         <h2 className="text-2xl font-bold">{current.title}</h2>
-                        <p className="mt-4 text-muted-foreground">
-                            {current.description}
-                        </p>
+                        <p className="mt-4 text-muted-foreground">{current.description}</p>
                     </div>
                     <StepContent />
                     <WizardNavigation

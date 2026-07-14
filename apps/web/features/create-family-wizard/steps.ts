@@ -7,10 +7,10 @@ import { BudgetTypeStep } from './components/steps/budget-type-step';
 export const steps: CreateFamilyStep[] = [
     {
         title: 'Как назовем вашу семью?',
-        description:
-            'Это название будут видеть все участники, в будущем его можно поменять',
+        description: 'Это название будут видеть все участники, в будущем его можно поменять',
         content: NameStep,
         fields: ['name'] as const,
+        actionStep: false,
         allowBack: true,
     },
     {
@@ -19,6 +19,7 @@ export const steps: CreateFamilyStep[] = [
             'Бюджет может делиться пропорционально доходу каждого или поровну, в будущем его можно поменять',
         content: BudgetTypeStep,
         fields: ['budgetDivisionType'] as const,
+        actionStep: true,
         allowBack: true,
     },
     {
@@ -26,6 +27,7 @@ export const steps: CreateFamilyStep[] = [
         description: 'Далее найти ее можно в настройках',
         content: InviteStep,
         fields: [] as const,
+        actionStep: false,
         allowBack: false,
     },
     {
@@ -34,6 +36,7 @@ export const steps: CreateFamilyStep[] = [
             'Ваш семейный аккаунт готов к использованию! Также рекомендуем зайти в настройки, чтобы ознакомиться с двумя базовыми категориями: накопления и расходы.',
         content: DoneStep,
         fields: [] as const,
+        actionStep: false,
         allowBack: true,
     },
 ] as const;

@@ -1,17 +1,11 @@
 'use server';
 
-import { Family, familyService } from '@/lib/family';
-import { CreateFamilyForm } from '../types';
-import { requireAuth } from '@/guards/require-auth';
+import { familyService } from '@/lib/family';
+import { authenticatedActionClient } from '@/lib/request-context';
+import { createFamilySchema } from '../schema';
 
-export async function createFamilyAction(
-    data: CreateFamilyForm,
-): Promise<Family> {
-    const { user } = await requireAuth();
-    const family = await familyService.create(
-        user.id,
-        data.name,
-        data.budgetDivisionType,
-    );
-    return family;
-}
+export const createFamilyAction = authenticatedActionClient
+    .inputSchema(createFamilySchema)
+    .action(async ({ ctx, parsedInput }) => {
+        return familyService.create(ctx.user.id, parsedInput.name, parsedInput.budgetDivisionType);
+    });
