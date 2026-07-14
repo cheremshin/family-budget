@@ -70,11 +70,7 @@ export const budgetCategories = pgTable(
             `${TABLE_NAME}__system_not_archived_check`,
             sql`(NOT ${table.isSystem}) OR (NOT ${table.archived})`,
         ),
-        targetAmountConsistencyCheck(
-            TABLE_NAME,
-            table.calculationMode,
-            table.targetAmount,
-        ),
+        targetAmountConsistencyCheck(TABLE_NAME, table.calculationMode, table.targetAmount),
         check(
             `${TABLE_NAME}__archived_at_consistency_check`,
             sql`

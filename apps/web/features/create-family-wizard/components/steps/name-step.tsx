@@ -14,16 +14,8 @@ export const NameStep: FC = () => {
     return (
         <div className="flex flex-col gap-2">
             <Label htmlFor="name">Название семьи</Label>
-            <Input
-                id="name"
-                placeholder="Семья Ивановых"
-                {...register('name')}
-            />
-            {errors.name && (
-                <p className="text-sm text-destructive">
-                    {errors.name.message}
-                </p>
-            )}
+            <Input id="name" placeholder="Семья Ивановых" {...register('name')} />
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
         </div>
     );
 };

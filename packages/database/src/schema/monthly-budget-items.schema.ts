@@ -49,14 +49,8 @@ export const monthlyBudgetItems = pgTable(
             table.monthlyBudgetId,
             table.budgetCategoryId,
         ),
-        index(`${TABLE_NAME}__budget_category_index`).on(
-            table.budgetCategoryId,
-        ),
+        index(`${TABLE_NAME}__budget_category_index`).on(table.budgetCategoryId),
 
-        targetAmountConsistencyCheck(
-            TABLE_NAME,
-            table.calculationMode,
-            table.targetAmount,
-        ),
+        targetAmountConsistencyCheck(TABLE_NAME, table.calculationMode, table.targetAmount),
     ],
 );

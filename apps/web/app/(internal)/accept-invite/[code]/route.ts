@@ -3,10 +3,7 @@ import { acceptInvite } from '../_lib/accept-invite';
 import { NextResponse } from 'next/server';
 import { flashMessageService } from '@/lib/flash-message';
 
-export async function GET(
-    request: Request,
-    { params }: { params: Promise<{ code: string }> },
-) {
+export async function GET(request: Request, { params }: { params: Promise<{ code: string }> }) {
     const { code } = await params;
 
     try {
@@ -19,9 +16,7 @@ export async function GET(
                 message: error.message,
             });
 
-            return NextResponse.redirect(
-                new URL(`/accept-invite?code=${code}`, request.url),
-            );
+            return NextResponse.redirect(new URL(`/accept-invite?code=${code}`, request.url));
         }
 
         throw error;

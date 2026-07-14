@@ -4,10 +4,7 @@ import { AuthError, authService } from '@/lib/auth';
 import { sessionService } from '@/lib/session';
 import { redirect } from 'next/navigation';
 
-export const signInAction = async (data: {
-    username: string;
-    password: string;
-}) => {
+export const signInAction = async (data: { username: string; password: string }) => {
     try {
         const user = await authService.signIn(data);
         await sessionService.create({ userId: user.id });

@@ -2,10 +2,7 @@ import { jwtVerify, SignJWT } from 'jose';
 import { v4 as uuidv4 } from 'uuid';
 import { secret } from './configuration/secret';
 import { cookies } from 'next/headers';
-import {
-    COOKIE_KEY,
-    SESSION_COOKIE_OPTIONS,
-} from './configuration/cookie-options';
+import { COOKIE_KEY, SESSION_COOKIE_OPTIONS } from './configuration/cookie-options';
 import { Session } from './types/session';
 import { cache } from 'react';
 

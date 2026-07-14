@@ -10,11 +10,7 @@ import Link, { LinkProps } from 'next/link';
 const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_ICON_WIDTH = '3rem';
 
-export const Sidebar: FC<ComponentProps<'div'>> = ({
-    children,
-    className,
-    ...props
-}) => {
+export const Sidebar: FC<ComponentProps<'div'>> = ({ children, className, ...props }) => {
     return (
         <aside
             style={
@@ -47,10 +43,7 @@ export const SidebarHeader: FC<
     } & ComponentProps<'div'>
 > = ({ className, title, icon: Icon, ...props }) => {
     return (
-        <div
-            className={cn('flex gap-3 p-6 items-center', className)}
-            {...props}
-        >
+        <div className={cn('flex gap-3 p-6 items-center', className)} {...props}>
             <div className="w-8 h-8 rounded-lg bg-(--sidebar-foreground) flex items-center justify-center">
                 <Icon color="white" strokeWidth={1.5} />
             </div>
@@ -65,21 +58,11 @@ export const SidebarNavigationMenu: FC<
     } & ComponentProps<'nav'>
 > = ({ className, items, ...props }) => {
     return (
-        <nav
-            className={cn(
-                'flex flex-col flex-1 p-6 gap-2 overflow-auto',
-                className,
-            )}
-            {...props}
-        >
+        <nav className={cn('flex flex-col flex-1 p-6 gap-2 overflow-auto', className)} {...props}>
             {items.map((item) => {
                 const { id, label, icon: Icon, href, isActive } = item;
                 return (
-                    <SidebarNavigationMenuItem
-                        key={id}
-                        href={href}
-                        isActive={isActive}
-                    >
+                    <SidebarNavigationMenuItem key={id} href={href} isActive={isActive}>
                         <Icon />
                         {label}
                     </SidebarNavigationMenuItem>
@@ -113,15 +96,9 @@ export const SidebarNavigationMenuItem: FC<
     );
 };
 
-export const SidebarFooter: FC<ComponentProps<'div'>> = ({
-    className,
-    ...props
-}) => {
+export const SidebarFooter: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
     return (
-        <div
-            className={cn('p-6 border-border border-t-[1]', className)}
-            {...props}
-        >
+        <div className={cn('p-6 border-border border-t-[1]', className)} {...props}>
             <Logout className="w-full justify-start gap-2" />
         </div>
     );

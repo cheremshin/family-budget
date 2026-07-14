@@ -31,10 +31,7 @@ export type UpdateFamily = InferUpdateModel<NewFamily, 'id'>;
 
 export type FamilySettingsPersist = InferSelectModel<typeof familySettings>;
 export type NewFamilySettings = InferInsertModel<typeof familySettings>;
-export type UpdateFamilySettings = InferUpdateModel<
-    NewFamilySettings,
-    'familyId'
->;
+export type UpdateFamilySettings = InferUpdateModel<NewFamilySettings, 'familyId'>;
 
 export type MonthlyBudgetPersist = InferSelectModel<typeof monthlyBudgets>;
 export type NewMonthlyBudget = InferInsertModel<typeof monthlyBudgets>;
@@ -44,14 +41,9 @@ export type BudgetCategoryPersist = InferSelectModel<typeof budgetCategories>;
 export type NewBudgetCategory = InferInsertModel<typeof budgetCategories>;
 export type UpdateBudgetCategory = InferUpdateModel<NewBudgetCategory, 'id'>;
 
-export type MonthlyBudgetItemPersist = InferSelectModel<
-    typeof monthlyBudgetItems
->;
+export type MonthlyBudgetItemPersist = InferSelectModel<typeof monthlyBudgetItems>;
 export type NewMonthlyBudgetItem = InferInsertModel<typeof monthlyBudgetItems>;
-export type UpdateMonthlyBudgetItem = InferUpdateModel<
-    NewMonthlyBudgetItem,
-    'id'
->;
+export type UpdateMonthlyBudgetItem = InferUpdateModel<NewMonthlyBudgetItem, 'id'>;
 
 export type PlannedIncomePersist = InferSelectModel<typeof plannedIncomes>;
 export type NewPlannedIncome = InferInsertModel<typeof plannedIncomes>;

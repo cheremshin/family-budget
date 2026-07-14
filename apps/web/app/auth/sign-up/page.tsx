@@ -1,10 +1,4 @@
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@ui/index';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { SignUpForm } from './_components/sign-up.form';
 
 export default function Page() {
@@ -12,9 +6,7 @@ export default function Page() {
         <Card className="w-100">
             <CardHeader>
                 <CardTitle>Регистрация</CardTitle>
-                <CardDescription>
-                    Введите имя пользователя и пароль
-                </CardDescription>
+                <CardDescription>Введите имя пользователя и пароль</CardDescription>
             </CardHeader>
             <CardContent>
                 <SignUpForm />

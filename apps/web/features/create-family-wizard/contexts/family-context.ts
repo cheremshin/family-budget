@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 
 type FamilyContextValue = {
     family: Family | null;
-}
+};
 
 export const FamilyContext = createContext<FamilyContextValue | null>(null);
 

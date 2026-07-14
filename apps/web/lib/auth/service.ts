@@ -5,15 +5,12 @@ import { AuthenticatedUser } from '@/lib/user/types/authenticated-user';
 import { getUserByUsername } from '@/lib/user/queries/get-user-by-username';
 import { createUser } from '@/lib/user/actions/create-user';
 
-export async function signIn(
-    credentials: Credentials,
-): Promise<AuthenticatedUser> {
+export async function signIn(credentials: Credentials): Promise<AuthenticatedUser> {
     const username = credentials.username.toLowerCase();
     const existing = await getUserByUsername(username);
 
     const validCredentials =
-        existing &&
-        (await bcrypt.compare(credentials.password, existing.passwordHash));
+        existing && (await bcrypt.compare(credentials.password, existing.passwordHash));
 
     if (!validCredentials) throw new SignInError();
 
@@ -24,9 +21,7 @@ export async function signIn(
     };
 }
 
-export async function signUp(
-    credentials: Credentials,
-): Promise<AuthenticatedUser> {
+export async function signUp(credentials: Credentials): Promise<AuthenticatedUser> {
     const username = credentials.username.toLowerCase();
     const existing = await getUserByUsername(username);
 

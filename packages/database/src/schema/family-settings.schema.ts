@@ -1,9 +1,4 @@
-import {
-    foreignKey,
-    pgTable,
-    PgTableExtraConfigValue,
-    uuid,
-} from 'drizzle-orm/pg-core';
+import { foreignKey, pgTable, PgTableExtraConfigValue, uuid } from 'drizzle-orm/pg-core';
 import { budgetDivisionType } from './budget-division.enum';
 import { families } from './families.schema';
 

@@ -38,14 +38,9 @@ export const incomes = pgTable(
             foreignColumns: [plannedIncomes.id],
         }).onDelete('cascade'),
 
-        index(`${TABLE_NAME}__planned_incomes_index`).on(
-            table.plannedIncomesId,
-        ),
+        index(`${TABLE_NAME}__planned_incomes_index`).on(table.plannedIncomesId),
 
-        check(
-            `${TABLE_NAME}__amount_non_negative_check`,
-            sql`${table.amount} >= 0`,
-        ),
+        check(`${TABLE_NAME}__amount_non_negative_check`, sql`${table.amount} >= 0`),
         check(
             `${TABLE_NAME}__received_at_not_in_future_check`,
             sql`${table.receivedAt} <= CURRENT_TIMESTAMP`,

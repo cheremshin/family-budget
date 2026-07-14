@@ -1,9 +1,6 @@
 import { cookies } from 'next/headers';
 import { FlashMessage } from './types/flash-message';
-import {
-    COOKIE_KEY,
-    FLASH_COOKIE_OPTIONS,
-} from './configuration/cookie-options';
+import { COOKIE_KEY, FLASH_COOKIE_OPTIONS } from './configuration/cookie-options';
 
 export async function set(message: FlashMessage): Promise<void> {
     const cookieStore = await cookies();

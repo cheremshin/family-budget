@@ -37,15 +37,10 @@ export const families = pgTable(
             foreignColumns: [users.id],
         }).onDelete('restrict'),
 
-        uniqueIndex(`${TABLE_NAME}__invitation_code_unique_index`).on(
-            table.invitationCode,
-        ),
+        uniqueIndex(`${TABLE_NAME}__invitation_code_unique_index`).on(table.invitationCode),
         index(`${TABLE_NAME}__owner_id_index`).on(table.ownerId),
 
-        check(
-            `${TABLE_NAME}__max_members_check`,
-            sql`${table.maxMembers} >= 1`,
-        ),
+        check(`${TABLE_NAME}__max_members_check`, sql`${table.maxMembers} >= 1`),
         nonEmptyCheck(`${TABLE_NAME}__name_format_check`, table.name),
         check(
             `${TABLE_NAME}__invitation_code_format_check`,

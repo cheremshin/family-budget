@@ -1,11 +1,5 @@
 import { db } from '@family-budget/database/connection';
-import {
-    eq,
-    Executor,
-    FamilyPersist,
-    schema,
-    UpdateFamily,
-} from '@family-budget/database';
+import { eq, Executor, FamilyPersist, schema, UpdateFamily } from '@family-budget/database';
 
 export async function updateFamily(
     id: string,

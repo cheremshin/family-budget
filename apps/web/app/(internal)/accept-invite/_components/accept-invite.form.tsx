@@ -6,14 +6,7 @@ import { formSchema } from '../_lib/accept-invite.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod/v3';
 import { acceptInviteAction } from '../_lib/accept-invite.action';
-import {
-    Button,
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-    Input,
-} from '@ui/index';
+import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 type PropsT = {
@@ -73,24 +66,14 @@ export const AcceptInviteForm: FC<PropsT> = ({ initialError }) => {
                                     id="form-accept-invite-code"
                                     placeholder="Введите 8-значный код"
                                     autoComplete="off"
-                                    onChange={(e) =>
-                                        field.onChange(
-                                            e.target.value.toUpperCase(),
-                                        )
-                                    }
+                                    onChange={(e) => field.onChange(e.target.value.toUpperCase())}
                                 />
-                                {fieldState.invalid && (
-                                    <FieldError errors={[fieldState.error]} />
-                                )}
+                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                         )}
                     />
                     <Field>
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full"
-                        >
+                        <Button type="submit" disabled={isSubmitting} className="w-full">
                             {isSubmitting ? 'Вступление...' : 'Вступить'}
                         </Button>
                     </Field>

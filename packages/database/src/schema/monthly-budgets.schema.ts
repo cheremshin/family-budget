@@ -32,10 +32,7 @@ export const monthlyBudgets = pgTable(
             foreignColumns: [families.id],
         }).onDelete('cascade'),
 
-        uniqueIndex(`${TABLE_NAME}__family_period_unique_index`).on(
-            table.familyId,
-            table.period,
-        ),
+        uniqueIndex(`${TABLE_NAME}__family_period_unique_index`).on(table.familyId, table.period),
 
         check(
             `${TABLE_NAME}__created_at_not_in_future_check`,

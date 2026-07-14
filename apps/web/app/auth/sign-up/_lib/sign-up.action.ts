@@ -4,10 +4,7 @@ import { AuthError, authService } from '@/lib/auth';
 import { sessionService } from '@/lib/session';
 import { redirect } from 'next/navigation';
 
-export const signUpAction = async (data: {
-    username: string;
-    password: string;
-}) => {
+export const signUpAction = async (data: { username: string; password: string }) => {
     try {
         console.log('biba');
         const user = await authService.signUp(data);

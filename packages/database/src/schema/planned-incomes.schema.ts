@@ -46,9 +46,6 @@ export const plannedIncomes = pgTable(
         index(`${TABLE_NAME}__monthly_budget_index`).on(table.monthlyBudgetId),
         index(`${TABLE_NAME}__user_index`).on(table.userId),
 
-        check(
-            `${TABLE_NAME}__planned_amount_non_negative_check`,
-            sql`${table.plannedAmount} >= 0`,
-        ),
+        check(`${TABLE_NAME}__planned_amount_non_negative_check`, sql`${table.plannedAmount} >= 0`),
     ],
 );

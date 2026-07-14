@@ -9,10 +9,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { families } from './families.schema';
 import { auditColumns } from '../utils/audit-columns';
-import {
-    auditNotInFutureChecks,
-    lowercaseNonEmptyCheck,
-} from '../utils/checks';
+import { auditNotInFutureChecks, lowercaseNonEmptyCheck } from '../utils/checks';
 
 const TABLE_NAME = 'users';
 
@@ -38,10 +35,7 @@ export const users = pgTable(
         uniqueIndex(`${TABLE_NAME}__username_unique_index`).on(table.username),
         index(`${TABLE_NAME}__family_id_index`).on(table.familyId),
 
-        lowercaseNonEmptyCheck(
-            `${TABLE_NAME}__username_format_check`,
-            table.username,
-        ),
+        lowercaseNonEmptyCheck(`${TABLE_NAME}__username_format_check`, table.username),
         ...auditNotInFutureChecks(TABLE_NAME, table),
     ],
 );

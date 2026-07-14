@@ -12,6 +12,8 @@
     },
     "devDependencies": {
         "eslint": "catalog:",
+        "eslint-config-prettier": "catalog:",
+        "prettier": "catalog:",
         "typescript": "catalog:",
         "typescript-eslint": "catalog:"
     }

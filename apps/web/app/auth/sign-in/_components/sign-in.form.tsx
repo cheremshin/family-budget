@@ -1,14 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-    Button,
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-    Input,
-} from '@ui/index';
+import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod/v3';
@@ -55,9 +48,7 @@ export const SignInForm: FC = () => {
                                     placeholder="Введите имя пользователя"
                                     autoComplete="off"
                                 />
-                                {fieldState.invalid && (
-                                    <FieldError errors={[fieldState.error]} />
-                                )}
+                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                         )}
                     />
@@ -74,18 +65,12 @@ export const SignInForm: FC = () => {
                                     autoComplete="off"
                                     type="password"
                                 />
-                                {fieldState.invalid && (
-                                    <FieldError errors={[fieldState.error]} />
-                                )}
+                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                         )}
                     />
                     <Field>
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full"
-                        >
+                        <Button type="submit" disabled={isSubmitting} className="w-full">
                             {isSubmitting ? 'Вход...' : 'Вход'}
                         </Button>
                     </Field>

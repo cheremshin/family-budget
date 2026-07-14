@@ -15,12 +15,10 @@ export const CreateFamilyWidget: FC = () => {
                 {mode === 'welcome' ? (
                     <>
                         <div className="h-64">
-                            <h1 className="text-4xl font-extrabold">
-                                Добро пожаловать
-                            </h1>
+                            <h1 className="text-4xl font-extrabold">Добро пожаловать</h1>
                             <p className="mt-5">
-                                Чтобы начать, необходимо создать семью или
-                                присоединиться к существующей.
+                                Чтобы начать, необходимо создать семью или присоединиться к
+                                существующей.
                             </p>
                         </div>
                         <div className="flex flex-col gap-3">
@@ -45,9 +43,7 @@ export const CreateFamilyWidget: FC = () => {
                         </div>
                     </>
                 ) : (
-                    <CreateFamilyWizard
-                        onExitAction={() => setMode('welcome')}
-                    />
+                    <CreateFamilyWizard onExitAction={() => setMode('welcome')} />
                 )}
             </DialogContent>
         </Dialog>

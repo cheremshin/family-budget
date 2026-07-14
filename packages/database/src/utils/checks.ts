@@ -21,10 +21,7 @@ export function auditNotInFutureChecks(
  * Guard на непустую lowercase строку
  */
 export function lowercaseNonEmptyCheck(name: string, column: AnyPgColumn) {
-    return check(
-        name,
-        sql`(length(trim(${column})) > 0) AND (lower(${column}) = ${column})`,
-    );
+    return check(name, sql`(length(trim(${column})) > 0) AND (lower(${column}) = ${column})`);
 }
 
 /**

@@ -1,10 +1,5 @@
 import { db } from '@family-budget/database/connection';
-import {
-    Executor,
-    FamilyPersist,
-    schema,
-    sql,
-} from '@family-budget/database';
+import { Executor, FamilyPersist, schema, sql } from '@family-budget/database';
 
 export async function lockFamilyByInvitationCode(
     invitationCode: string,
