@@ -1,6 +1,6 @@
 'use client';
 
-import { useSidebarConfig } from './config';
+import { useSidebarConfig } from './lib/config';
 import {
     SidebarFooter,
     SidebarHeader,

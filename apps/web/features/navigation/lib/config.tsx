@@ -3,12 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { NavigationConfig } from './types';
-import {
-    HomeIcon,
-    SettingsIcon,
-    TrendingUpIcon,
-    WalletIcon,
-} from 'lucide-react';
+import { HomeIcon, SettingsIcon, TrendingUpIcon, WalletIcon } from 'lucide-react';
 
 export const useSidebarConfig = () => {
     const pathname = usePathname();
