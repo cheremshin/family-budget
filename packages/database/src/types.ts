@@ -10,16 +10,7 @@ import {
     monthlyBudgetItems,
 } from './schema';
 
-import { budgetDivisionType } from './schema/budget-division.enum';
-import { calculationMode } from './schema/calculation-mode.enum';
-import { budgetCategoryType } from './schema/budget-category-type.enum';
-
 type InferUpdateModel<T, K extends PropertyKey> = Partial<Omit<T, K>>;
-
-export type BudgetDivisionType = (typeof budgetDivisionType.enumValues)[number];
-export const budgetDivisionTypeOptions = budgetDivisionType.enumValues;
-export type CalculaionMode = (typeof calculationMode.enumValues)[number];
-export type BudgetCategoryType = (typeof budgetCategoryType.enumValues)[number];
 
 export type UserPersist = InferSelectModel<typeof users>;
 export type NewUser = InferInsertModel<typeof users>;

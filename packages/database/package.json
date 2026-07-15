@@ -16,8 +16,10 @@
         "db:studio": "drizzle-kit studio"
     },
     "dependencies": {
+        "@family-budget/domain": "workspace:*",
         "drizzle-orm": "catalog:",
-        "postgres": "^3.4.9"
+        "postgres": "^3.4.9",
+        "server-only": "^0.0.1"
     },
     "devDependencies": {
         "dotenv": "^17.4.2",

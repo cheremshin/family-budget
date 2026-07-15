@@ -1,0 +1,22 @@
+{
+    "name": "@family-budget/domain",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./user": "./src/user/index.ts",
+        "./family": "./src/family/index.ts",
+        "./budget-category": "./src/budget-category/index.ts",
+        "./shared": "./src/shared/index.ts"
+    },
+    "scripts": {
+        "lint": "eslint",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "typescript": "catalog:"
+    }
+}

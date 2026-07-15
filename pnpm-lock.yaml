@@ -45,6 +45,9 @@ catalogs:
         typescript-eslint:
             specifier: ^8.61.0
             version: 8.61.0
+        zod:
+            specifier: ^4.4.3
+            version: 4.4.3
 
 importers:
     .:
@@ -70,6 +73,9 @@ importers:
             '@family-budget/database':
                 specifier: workspace:*
                 version: link:../../packages/database
+            '@family-budget/domain':
+                specifier: workspace:*
+                version: link:../../packages/domain
             '@family-budget/ui':
                 specifier: workspace:*
                 version: link:../../packages/ui
@@ -104,7 +110,7 @@ importers:
                 specifier: ^14.0.1
                 version: 14.0.1
             zod:
-                specifier: ^4.4.3
+                specifier: 'catalog:'
                 version: 4.4.3
         devDependencies:
             '@tailwindcss/postcss':
@@ -134,12 +140,18 @@ importers:
 
     packages/database:
         dependencies:
+            '@family-budget/domain':
+                specifier: workspace:*
+                version: link:../domain
             drizzle-orm:
                 specifier: 'catalog:'
                 version: 1.0.0-rc.4(@types/pg@8.20.0)(pg@8.22.0)(postgres@3.4.9)(zod@4.4.3)
             postgres:
                 specifier: ^3.4.9
                 version: 3.4.9
+            server-only:
+                specifier: ^0.0.1
+                version: 0.0.1
         devDependencies:
             dotenv:
                 specifier: ^17.4.2
@@ -147,6 +159,16 @@ importers:
             drizzle-kit:
                 specifier: 1.0.0-rc.4
                 version: 1.0.0-rc.4
+            typescript:
+                specifier: 'catalog:'
+                version: 5.9.3
+
+    packages/domain:
+        dependencies:
+            zod:
+                specifier: 'catalog:'
+                version: 4.4.3
+        devDependencies:
             typescript:
                 specifier: 'catalog:'
                 version: 5.9.3
@@ -4129,6 +4151,12 @@ packages:
         engines: { node: '>=10' }
         hasBin: true
 
+    server-only@0.0.1:
+        resolution:
+            {
+                integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==,
+            }
+
     set-function-length@1.2.2:
         resolution:
             {
@@ -6898,6 +6926,8 @@ snapshots:
     semver@6.3.1: {}
 
     semver@7.8.4: {}
+
+    server-only@0.0.1: {}
 
     set-function-length@1.2.2:
         dependencies:

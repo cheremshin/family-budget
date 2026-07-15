@@ -20,6 +20,7 @@ catalog:
     bcryptjs: ^3.0.3
     '@types/bcryptjs': ^3.0.0
     drizzle-orm: 1.0.0-rc.4
+    zod: ^4.4.3
 
 allowBuilds:
     esbuild: true
