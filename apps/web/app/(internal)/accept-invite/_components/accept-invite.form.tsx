@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { formSchema } from '../_lib/accept-invite.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod/v3';
+import z from 'zod';
 import { acceptInviteAction } from '../_lib/accept-invite.action';
 import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
 import { useRouter, useSearchParams } from 'next/navigation';

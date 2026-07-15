@@ -1,5 +1,5 @@
-import { FamilyMember } from '@/lib/family';
 import { getFirstCharacter } from '@/lib/utils/get-first-character';
+import { FamilyMember } from '@family-budget/domain/family';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { FC } from 'react';
 

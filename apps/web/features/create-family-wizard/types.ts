@@ -1,10 +1,8 @@
-import { BudgetDivisionType } from '@family-budget/database';
+import { createFamilySchema } from '@family-budget/domain/family';
 import { FC } from 'react';
+import z from 'zod';
 
-export type CreateFamilyForm = {
-    name: string;
-    budgetDivisionType: BudgetDivisionType;
-};
+export type CreateFamilyForm = z.infer<typeof createFamilySchema>;
 
 export type CreateFamilyStep = {
     title: string;

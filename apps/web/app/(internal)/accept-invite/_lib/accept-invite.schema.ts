@@ -1,4 +1,4 @@
-import z from 'zod/v3';
+import z from 'zod';
 
 export const formSchema = z.object({
     code: z.string().length(8, {

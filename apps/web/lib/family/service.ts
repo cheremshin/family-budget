@@ -1,28 +1,27 @@
 import { db } from '@family-budget/database/connection';
-import { BudgetDivisionType, eq, schema } from '@family-budget/database';
-import { Family } from './types/family';
-import {
-    FamilyAlreadyExistsError,
-    FamilyIsFullError,
-    GenerateFamilyInvitationCodeError,
-    NoSuchFamilyCodeError,
-} from './errors';
+import { eq, schema } from '@family-budget/database';
 import { generateInvitationCode } from './utils/generate-invitation-code';
 import { insertFamily } from './actions/insert-family';
 import { insertFamilySettings } from './actions/insert-family-settings';
 import { setFamily } from '@/lib/user/actions/set-family';
-import { AuthenticatedUser } from '@/lib/user/types/authenticated-user';
 import { getUser } from '@/lib/user/';
 import { lockFamilyByInvitationCode } from './actions/lock-family-by-invitation-code';
 import { updateFamily } from './actions/update-family';
-import { FamilySettings } from './types/family-settings';
 import { updateFamilySettings } from './actions/update-family-settings';
+import {
+    CreateFamilyInput,
+    Family,
+    FamilyAlreadyExistsError,
+    FamilyIsFullError,
+    FamilySettings,
+    GenerateFamilyInvitationCodeError,
+    NoSuchFamilyCodeError,
+    UpdateFamilyInput,
+} from '@family-budget/domain/family';
+import { AuthenticatedUser } from '@family-budget/domain/user';
+import { requireFamilyMember } from './guards/require-family-member';
 
-export async function create(
-    userId: string,
-    familyName: string,
-    budgetDivisionType: BudgetDivisionType,
-): Promise<Family> {
+export async function create(userId: string, input: CreateFamilyInput): Promise<Family> {
     const user = await getUser(userId);
 
     if (!user) throw new Error('Пользователь не найден');
@@ -36,7 +35,7 @@ export async function create(
     return await db.transaction(async (tx) => {
         const createdFamily = await insertFamily(
             {
-                name: familyName,
+                name: input.name,
                 invitationCode: code,
                 ownerId: user.id,
             },
@@ -46,7 +45,7 @@ export async function create(
         const createdFamilySettings = await insertFamilySettings(
             {
                 familyId: createdFamily.id,
-                budgetDivisionType,
+                budgetDivisionType: input.budgetDivisionType,
             },
             tx,
         );
@@ -64,6 +63,7 @@ export async function create(
             name: createdFamily.name,
             invitationCode: createdFamily.invitationCode,
             maxMembers: createdFamily.maxMembers,
+            ownerId: createdFamily.ownerId,
             settings: {
                 budgetDivisionType: createdFamilySettings.budgetDivisionType,
             },
@@ -109,7 +109,8 @@ export async function acceptInvite(
     });
 }
 
-export async function updateInvitationCode(familyId: string): Promise<string> {
+export async function updateInvitationCode(userId: string): Promise<string> {
+    const familyId = await requireFamilyMember(userId);
     const code = await generateInvitationCode();
     if (!code) throw new GenerateFamilyInvitationCodeError();
 
@@ -121,19 +122,29 @@ export async function updateInvitationCode(familyId: string): Promise<string> {
 }
 
 export async function saveSettings(
-    familyId: string,
-    name: string,
-    settings: FamilySettings,
+    userId: string,
+    input: UpdateFamilyInput,
 ): Promise<{
     name: string;
+    maxMembers: number;
     settings: FamilySettings;
 }> {
+    const familyId = await requireFamilyMember(userId);
     return await db.transaction(async (tx) => {
-        const family = await updateFamily(familyId, { name }, tx);
-        const familySettings = await updateFamilySettings(familyId, settings, tx);
+        const family = await updateFamily(
+            familyId,
+            { name: input.name, maxMembers: input.maxMembers },
+            tx,
+        );
+        const familySettings = await updateFamilySettings(
+            familyId,
+            { budgetDivisionType: input.budgetDivisionType },
+            tx,
+        );
 
         return {
             name: family.name,
+            maxMembers: family.maxMembers,
             settings: familySettings,
         };
     });

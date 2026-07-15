@@ -1,9 +1,9 @@
 import { Credentials } from './types/credentials';
 import bcrypt from 'bcryptjs';
 import { SignInError, SignUpError } from './errors';
-import { AuthenticatedUser } from '@/lib/user/types/authenticated-user';
 import { getUserByUsername } from '@/lib/user/queries/get-user-by-username';
 import { createUser } from '@/lib/user/actions/create-user';
+import { AuthenticatedUser } from '@family-budget/domain/user';
 
 export async function signIn(credentials: Credentials): Promise<AuthenticatedUser> {
     const username = credentials.username.toLowerCase();

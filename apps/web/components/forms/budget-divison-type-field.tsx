@@ -1,6 +1,6 @@
 'use client';
 
-import { BudgetDivisionType } from '@family-budget/database';
+import { BudgetDivisionType } from '@family-budget/domain/family';
 import {
     Field,
     FieldContent,

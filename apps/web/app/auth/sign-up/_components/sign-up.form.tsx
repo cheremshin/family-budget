@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@family-budget/ui';
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod/v3';
+import { z } from 'zod';
 import { formSchema } from '@/app/auth/sign-up/_lib/sign-up.schema';
 import { signUpAction } from '@/app/auth/sign-up/_lib/sign-up.action';
 import Link from 'next/link';

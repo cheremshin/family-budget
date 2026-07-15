@@ -2,16 +2,15 @@
 
 import { FC, useState, useTransition } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { createFamilySchema } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateFamilyForm } from '../types';
 import { WizardNavigation } from './wizard-navigation';
 import { steps } from '../steps';
 import { createFamilyAction } from '../lib/create-family.action';
 import { FamilyContext } from '../contexts/family-context';
-import { Family } from '@/lib/family';
 import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
+import { createFamilySchema, Family } from '@family-budget/domain/family';
 
 type PropsT = {
     onExitAction: () => void;

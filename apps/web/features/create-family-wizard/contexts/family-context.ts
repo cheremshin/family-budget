@@ -1,4 +1,4 @@
-import { Family } from '@/lib/family';
+import { Family } from '@family-budget/domain/family';
 import { createContext, useContext } from 'react';
 
 type FamilyContextValue = {

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { FC } from 'react';
 import { FamilySettingsForm } from './components/family-settings.form';
-import { Family } from '@/lib/family';
+import { Family } from '@family-budget/domain/family';
 
 type PropsT = {
     family: Family;

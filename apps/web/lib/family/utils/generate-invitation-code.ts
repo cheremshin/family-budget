@@ -1,6 +1,6 @@
 import { generateRandomCode } from '@/lib/utils/generate-random-code';
 import { MAX_CREATE_ATTEMPTS } from '../configuration/max-create-attempts';
-import { db } from '@family-budget/database/connection';
+import { db } from '@family-budget/database';
 
 export async function generateInvitationCode(): Promise<string | undefined> {
     for (let attempt = 0; attempt < MAX_CREATE_ATTEMPTS; attempt++) {

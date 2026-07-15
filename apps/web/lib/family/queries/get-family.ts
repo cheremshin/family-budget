@@ -1,4 +1,4 @@
-import { db } from '@family-budget/database/connection';
+import { db } from '@family-budget/database';
 
 export async function getFamily(id: string) {
     return await db.query.families.findFirst({

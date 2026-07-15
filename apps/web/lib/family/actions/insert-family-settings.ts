@@ -1,5 +1,5 @@
-import { db } from '@family-budget/database/connection';
 import {
+    db,
     Executor,
     FamilySettingsPersist,
     NewFamilySettings,

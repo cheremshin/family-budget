@@ -1,13 +1,5 @@
-import { budgetDivisionTypeOptions } from '@family-budget/database';
-import z from 'zod/v3';
+import { updateFamilySchema } from '@family-budget/domain/family';
+import z from 'zod';
 
-export const familySettingsSchema = z.object({
-    name: z.string().min(3, {
-        message: 'Название семьи должно быть длиной хотя бы 3 символа',
-    }),
-    budgetDivisionType: z.enum(budgetDivisionTypeOptions, {
-        message: 'Выбран несуществующий тип бюджета',
-    }),
-});
-
+export const familySettingsSchema = updateFamilySchema.omit({ maxMembers: true }).required();
 export type FamilySettingsSchema = z.infer<typeof familySettingsSchema>;

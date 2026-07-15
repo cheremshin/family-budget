@@ -1,8 +1,7 @@
-export type { Family } from './types/family';
-export type { FamilyMember } from './types/family-member';
-export type { FamilySettings } from './types/family-settings';
-
 export { getFamily } from './queries/get-family';
+export { getFamilyMembers } from './queries/get-family-members';
 
 export * as familyService from './service';
-export * from './errors';
+
+export { requireFamilyOwner } from './guards/require-family-owner';
+export { requireFamilyMember } from './guards/require-family-member';
