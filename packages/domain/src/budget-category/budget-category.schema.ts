@@ -33,10 +33,12 @@ function validateTargetAmount(
     }
 }
 
-export const createCategorySchema = categoryFieldsSchema.superRefine(validateTargetAmount);
+export const categoryFormSchema = categoryFieldsSchema.superRefine(validateTargetAmount);
+export const createCategorySchema = categoryFormSchema;
 export const updateCategorySchema = categoryFieldsSchema
     .partial()
     .superRefine(validateTargetAmount);
 
+export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
