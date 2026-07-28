@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     turbopack: {
         root: path.resolve(__dirname, '../..'),
     },
-    transpilePackages: ['@family-budget/ui', '@family-budget/database'],
+    transpilePackages: ['@family-budget/domain', '@family-budget/ui', '@family-budget/database'],
 };
 
 export default nextConfig;
