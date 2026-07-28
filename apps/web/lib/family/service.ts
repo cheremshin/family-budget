@@ -20,6 +20,8 @@ import {
 } from '@family-budget/domain/family';
 import { AuthenticatedUser } from '@family-budget/domain/user';
 import { requireFamilyMember } from './guards/require-family-member';
+import { SYSTEM_CATEGORIES } from '@/lib/budget-category';
+import { insertBudgetCategories } from '@/lib/budget-category/actions/insert-budget-category';
 
 export async function create(userId: string, input: CreateFamilyInput): Promise<Family> {
     const user = await getUser(userId);
@@ -47,6 +49,14 @@ export async function create(userId: string, input: CreateFamilyInput): Promise<
                 familyId: createdFamily.id,
                 budgetDivisionType: input.budgetDivisionType,
             },
+            tx,
+        );
+
+        await insertBudgetCategories(
+            SYSTEM_CATEGORIES.map((data) => ({
+                ...data,
+                familyId: createdFamily.id,
+            })),
             tx,
         );
 
