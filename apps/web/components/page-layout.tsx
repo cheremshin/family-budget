@@ -5,7 +5,7 @@ export const PageContainer: FC<PropsWithChildren<{ className?: string }>> = ({
     children,
     className,
 }) => {
-    return <div className={cn('p-8', className)}>{children}</div>;
+    return <div className={cn('w-full p-8', className)}>{children}</div>;
 };
 
 export const PageHeader: FC<PropsWithChildren<{ className?: string }>> = ({
