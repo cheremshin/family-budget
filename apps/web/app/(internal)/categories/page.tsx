@@ -1,0 +1,32 @@
+import {
+    PageContainer,
+    PageContent,
+    PageDescription,
+    PageHeader,
+    PageHeaderActions,
+    PageHeaderContent,
+    PageTitle,
+} from '@/components/page-layout';
+import { loadCategories } from './_lib/categories.loader';
+import { CategoryList, CreateCategoryButton } from '@/features/budget-category';
+
+export default async function Page() {
+    const categories = await loadCategories();
+
+    return (
+        <PageContainer>
+            <PageHeader>
+                <PageHeaderContent>
+                    <PageTitle>Категории</PageTitle>
+                    <PageDescription>Управление структурой вашего бюджета</PageDescription>
+                </PageHeaderContent>
+                <PageHeaderActions>
+                    <CreateCategoryButton />
+                </PageHeaderActions>
+            </PageHeader>
+            <PageContent>
+                <CategoryList categories={categories} />
+            </PageContent>
+        </PageContainer>
+    );
+}
