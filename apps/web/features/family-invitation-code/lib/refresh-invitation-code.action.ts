@@ -5,6 +5,6 @@ import { familyActionClient } from '@/lib/request-context';
 import { revalidatePath } from 'next/cache';
 
 export const refreshInvitationCodeAction = familyActionClient.action(async ({ ctx }) => {
-    familyService.updateInvitationCode(ctx.user.id);
+    await familyService.updateInvitationCode(ctx.user.id);
     revalidatePath('/settings');
 });

@@ -1,5 +1,3 @@
-'use client';
-
 import { FC, useState } from 'react';
 import { Button, Input } from '@ui/index';
 import { Check, Copy } from 'lucide-react';

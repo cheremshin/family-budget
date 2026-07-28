@@ -7,5 +7,5 @@ import { createFamilySchema } from '@family-budget/domain/family';
 export const createFamilyAction = authenticatedActionClient
     .inputSchema(createFamilySchema)
     .action(async ({ ctx, parsedInput }) => {
-        return familyService.create(ctx.user.id, { ...parsedInput });
+        return await familyService.create(ctx.user.id, { ...parsedInput });
     });

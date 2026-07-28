@@ -8,6 +8,6 @@ import { updateFamilySchema } from '@family-budget/domain/family';
 export const saveSettingsAction = familyActionClient
     .inputSchema(updateFamilySchema)
     .action(async ({ ctx, parsedInput }) => {
-        familyService.saveSettings(ctx.user.id, { ...parsedInput });
+        await familyService.saveSettings(ctx.user.id, { ...parsedInput });
         revalidatePath('/settings');
     });
