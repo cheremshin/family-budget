@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { NavigationConfig } from './types';
-import { HomeIcon, SettingsIcon, TrendingUpIcon, WalletIcon } from 'lucide-react';
+import { HomeIcon, LayersIcon, SettingsIcon, TrendingUpIcon, WalletIcon } from 'lucide-react';
 
 export const useSidebarConfig = () => {
     const pathname = usePathname();
@@ -25,6 +25,13 @@ export const useSidebarConfig = () => {
                     href: '/incomes',
                     icon: TrendingUpIcon,
                     isActive: pathname === '/incomes',
+                },
+                {
+                    id: 'budget-categories',
+                    label: 'Категории',
+                    href: '/categories',
+                    icon: LayersIcon,
+                    isActive: pathname === '/categories',
                 },
                 {
                     id: 'settings',
