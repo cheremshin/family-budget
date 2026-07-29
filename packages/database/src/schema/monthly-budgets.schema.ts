@@ -3,6 +3,7 @@ import {
     check,
     date,
     foreignKey,
+    integer,
     pgTable,
     PgTableExtraConfigValue,
     uniqueIndex,
@@ -22,6 +23,7 @@ export const monthlyBudgets = pgTable(
 
         period: date('period').notNull(),
         isClosed: boolean('is_closed').notNull().default(false),
+        version: integer('version').notNull().default(1),
 
         createdAt: auditColumns.createdAt,
     },
