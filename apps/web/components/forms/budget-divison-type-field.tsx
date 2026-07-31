@@ -1,6 +1,5 @@
 'use client';
 
-import { BudgetDivisionType } from '@family-budget/domain/family';
 import {
     Field,
     FieldContent,
@@ -14,6 +13,8 @@ import {
     RadioGroupItem,
 } from '@ui/index';
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form';
+
+import { BudgetDivisionType } from '@family-budget/domain/family';
 
 type BudgetDivisionTypeFieldItem = {
     id: BudgetDivisionType;

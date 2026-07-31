@@ -1,9 +1,11 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
+import { createCategorySchema } from '@family-budget/domain/budget-category';
+
 import { budgetCategoryService } from '@/lib/budget-category';
 import { familyActionClient } from '@/lib/request-context';
-import { createCategorySchema } from '@family-budget/domain/budget-category';
-import { revalidatePath } from 'next/cache';
 
 export const createCategoryAction = familyActionClient
     .inputSchema(createCategorySchema)

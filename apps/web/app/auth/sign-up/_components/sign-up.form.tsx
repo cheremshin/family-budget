@@ -1,13 +1,17 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@family-budget/ui';
 import { FC } from 'react';
+
+import Link from 'next/link';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { formSchema } from '@/app/auth/sign-up/_lib/sign-up.schema';
+
+import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@family-budget/ui';
+
 import { signUpAction } from '@/app/auth/sign-up/_lib/sign-up.action';
-import Link from 'next/link';
+import { formSchema } from '@/app/auth/sign-up/_lib/sign-up.schema';
 
 export const SignUpForm: FC = () => {
     const {

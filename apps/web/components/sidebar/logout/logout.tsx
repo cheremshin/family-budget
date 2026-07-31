@@ -1,9 +1,12 @@
 'use client';
 
-import { Button } from '@family-budget/ui';
 import { FC } from 'react';
-import { logoutAction } from './_lib/logout.actions';
+
 import { LogOut } from 'lucide-react';
+
+import { Button } from '@family-budget/ui';
+
+import { logoutAction } from './_lib/logout.actions';
 
 type PropsT = {
     className?: string;

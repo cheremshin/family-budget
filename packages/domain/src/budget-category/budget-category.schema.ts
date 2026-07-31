@@ -1,5 +1,6 @@
-import { moneySchema } from '../shared';
 import z from 'zod';
+
+import { moneySchema } from '../shared';
 import { budgetCategoryTypeOptions, calculationModeOptions } from './budget-category.types';
 
 export const categoryFieldsSchema = z.object({

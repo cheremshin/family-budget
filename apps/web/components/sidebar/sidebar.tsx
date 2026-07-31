@@ -1,11 +1,14 @@
 'use client';
 
-import { ComponentProps, CSSProperties, FC } from 'react';
-import { LucideIcon } from 'lucide-react';
+import { CSSProperties, ComponentProps, FC } from 'react';
+
+import Link, { LinkProps } from 'next/link';
+
 import { buttonVariants, cn } from '@ui/index';
+import { LucideIcon } from 'lucide-react';
+
 import { Logout } from './logout/logout';
 import { NavigationItem } from './types';
-import Link, { LinkProps } from 'next/link';
 
 const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_ICON_WIDTH = '3rem';

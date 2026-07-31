@@ -1,5 +1,6 @@
-import { Family } from '@family-budget/domain/family';
 import { createContext, useContext } from 'react';
+
+import { Family } from '@family-budget/domain/family';
 
 type FamilyContextValue = {
     family: Family | null;

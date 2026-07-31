@@ -1,12 +1,13 @@
 'use client';
 
-import { useSidebarConfig } from './lib/config';
 import {
     SidebarFooter,
     SidebarHeader,
     SidebarNavigationMenu,
     Sidebar as SidebarView,
 } from '@/components/sidebar/sidebar';
+
+import { useSidebarConfig } from './lib/config';
 
 export const Sidebar = () => {
     const { config } = useSidebarConfig();

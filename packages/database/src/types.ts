@@ -1,13 +1,14 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+
 import {
+    budgetCategories,
     families,
-    users,
+    familySettings,
+    incomes,
+    monthlyBudgetItems,
     monthlyBudgets,
     plannedIncomes,
-    incomes,
-    familySettings,
-    budgetCategories,
-    monthlyBudgetItems,
+    users,
 } from './schema';
 
 type InferUpdateModel<T, K extends PropertyKey> = Partial<Omit<T, K>>;

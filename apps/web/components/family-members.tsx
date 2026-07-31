@@ -1,7 +1,10 @@
-import { getFirstCharacter } from '@/lib/utils/get-first-character';
-import { FamilyMember } from '@family-budget/domain/family';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { FC } from 'react';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
+
+import { FamilyMember } from '@family-budget/domain/family';
+
+import { getFirstCharacter } from '@/lib/utils/get-first-character';
 
 type PropsT = {
     ownerId: string;

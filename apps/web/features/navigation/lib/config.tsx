@@ -1,9 +1,12 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
-import { NavigationConfig } from './types';
+
+import { usePathname } from 'next/navigation';
+
 import { HomeIcon, LayersIcon, SettingsIcon, TrendingUpIcon, WalletIcon } from 'lucide-react';
+
+import { NavigationConfig } from './types';
 
 export const useSidebarConfig = () => {
     const pathname = usePathname();

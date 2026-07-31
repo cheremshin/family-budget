@@ -1,7 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
-import { AcceptInviteForm } from './_components/accept-invite.form';
+
 import { FlashCleaner } from '@/components/flash-cleaner/flash-cleaner';
 import { flashMessageService } from '@/lib/flash-message';
+
+import { AcceptInviteForm } from './_components/accept-invite.form';
 
 export default async function Page() {
     const flashMessage = await flashMessageService.get();

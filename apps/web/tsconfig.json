@@ -4,7 +4,9 @@
         "plugins": [{ "name": "next" }],
         "paths": {
             "@/*": ["./*"],
-            "@ui/*": ["../../packages/ui/src/*"]
+            "@domain/*": ["../../packages/domain/src/*"],
+            "@ui/*": ["../../packages/ui/src/*"],
+            "@database/*": ["../../packages/database/src/*"]
         }
     },
     "include": [

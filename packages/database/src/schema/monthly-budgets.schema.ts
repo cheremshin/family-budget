@@ -1,17 +1,18 @@
+import { sql } from 'drizzle-orm';
 import {
+    PgTableExtraConfigValue,
     boolean,
     check,
     date,
     foreignKey,
     integer,
     pgTable,
-    PgTableExtraConfigValue,
     uniqueIndex,
     uuid,
 } from 'drizzle-orm/pg-core';
-import { families } from './families.schema';
-import { sql } from 'drizzle-orm';
+
 import { auditColumns } from '../utils/audit-columns';
+import { families } from './families.schema';
 
 const TABLE_NAME = 'monthly_budget';
 

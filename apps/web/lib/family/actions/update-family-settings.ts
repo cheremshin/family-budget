@@ -1,10 +1,10 @@
 import {
-    db,
-    eq,
     Executor,
     FamilySettingsPersist,
-    schema,
     UpdateFamilySettings,
+    db,
+    eq,
+    schema,
 } from '@family-budget/database';
 
 export async function updateFamilySettings(

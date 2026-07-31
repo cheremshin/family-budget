@@ -1,9 +1,12 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { FC } from 'react';
-import { FamilySettingsForm } from './components/family-settings.form';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
+
 import { Family } from '@family-budget/domain/family';
+
+import { FamilySettingsForm } from './components/family-settings.form';
 
 type PropsT = {
     family: Family;

@@ -1,11 +1,14 @@
 'use client';
 
+import { FC, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { Check, Copy, RefreshCcw } from 'lucide-react';
-import { FC, useState } from 'react';
-import { refreshInvitationCodeAction } from './lib/refresh-invitation-code.action';
 import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
+
+import { refreshInvitationCodeAction } from './lib/refresh-invitation-code.action';
 
 type PropsT = {
     invitationCode: string;

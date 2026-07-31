@@ -1,6 +1,7 @@
 'use server';
 
 import { FamilyError } from '@family-budget/domain/family';
+
 import { acceptInvite } from './accept-invite';
 
 export const acceptInviteAction = async (data: { invitationCode: string }) => {

@@ -1,6 +1,7 @@
+import { cache } from 'react';
+
 import { getFamilyBudgetCategories, mapToBudgetCategory } from '@/lib/budget-category';
 import { requireFamily } from '@/lib/request-context';
-import { cache } from 'react';
 
 export const loadCategories = cache(async () => {
     const family = await requireFamily();

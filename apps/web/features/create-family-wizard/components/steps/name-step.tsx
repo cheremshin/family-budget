@@ -1,6 +1,8 @@
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+
 import { Input, Label } from '@ui/index';
+import { useFormContext } from 'react-hook-form';
+
 import { CreateFamilyForm } from '../../types';
 
 export const NameStep: FC = () => {

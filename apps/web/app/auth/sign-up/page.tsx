@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
+
 import { SignUpForm } from './_components/sign-up.form';
 
 export default function Page() {

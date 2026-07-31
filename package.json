@@ -11,9 +11,14 @@
         "typecheck": "pnpm -r typecheck"
     },
     "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^6.0.2",
         "eslint": "catalog:",
         "eslint-config-prettier": "catalog:",
+        "eslint-import-resolver-typescript": "^4.4.5",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-simple-import-sort": "^14.0.0",
         "prettier": "catalog:",
+        "prettier-plugin-sort-imports": "^1.8.11",
         "typescript": "catalog:",
         "typescript-eslint": "catalog:"
     }

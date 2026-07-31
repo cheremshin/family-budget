@@ -7,6 +7,7 @@
         "./user": "./src/user/index.ts",
         "./family": "./src/family/index.ts",
         "./budget-category": "./src/budget-category/index.ts",
+        "./monthly-budget": "./src/monthly-budget/index.ts",
         "./shared": "./src/shared/index.ts"
     },
     "scripts": {

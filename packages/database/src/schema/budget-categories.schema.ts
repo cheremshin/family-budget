@@ -1,4 +1,6 @@
+import { sql } from 'drizzle-orm';
 import {
+    PgTableExtraConfigValue,
     boolean,
     check,
     decimal,
@@ -6,22 +8,21 @@ import {
     index,
     integer,
     pgTable,
-    PgTableExtraConfigValue,
     timestamp,
     uniqueIndex,
     uuid,
     varchar,
 } from 'drizzle-orm/pg-core';
-import { budgetCategoryType } from './budget-category-type.enum';
-import { calculationMode } from './calculation-mode.enum';
+
 import { auditColumns } from '../utils/audit-columns';
-import { families } from './families.schema';
 import {
     auditNotInFutureChecks,
     nonEmptyCheck,
     targetAmountConsistencyCheck,
 } from '../utils/checks';
-import { sql } from 'drizzle-orm';
+import { budgetCategoryType } from './budget-category-type.enum';
+import { calculationMode } from './calculation-mode.enum';
+import { families } from './families.schema';
 
 const TABLE_NAME = 'budget_categories';
 

@@ -1,8 +1,10 @@
-import { getUser } from '@/lib/user';
 import { FamilyNotFound, NoFamilyYetError } from '@family-budget/domain/family';
 import { UserNotFound } from '@family-budget/domain/user';
-import { getFamilyMembers } from '../queries/get-family-members';
+
 import { InsufficientPermissionError } from '@/lib/shared/errors';
+import { getUser } from '@/lib/user';
+
+import { getFamilyMembers } from '../queries/get-family-members';
 
 export async function requireFamilyMember(
     userId: string,

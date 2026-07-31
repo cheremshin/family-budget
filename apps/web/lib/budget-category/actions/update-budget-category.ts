@@ -1,10 +1,10 @@
 import {
-    db,
     BudgetCategoryPersist,
-    eq,
     Executor,
-    schema,
     UpdateBudgetCategory,
+    db,
+    eq,
+    schema,
 } from '@family-budget/database';
 
 export async function updateBudgetCategory(

@@ -4,11 +4,12 @@ import {
     CreateCategoryInput,
     UpdateCategoryInput,
 } from '@family-budget/domain/budget-category';
+
+import { requireFamilyMember } from '../family';
 import { insertBudgetCategory } from './actions/insert-budget-category';
 import { updateBudgetCategory } from './actions/update-budget-category';
-import { getBudgetCategory } from './queries/get-budget-category';
 import { mapToBudgetCategory } from './budget-category.mappers';
-import { requireFamilyMember } from '../family';
+import { getBudgetCategory } from './queries/get-budget-category';
 
 export async function create(userId: string, input: CreateCategoryInput): Promise<BudgetCategory> {
     const familyId = await requireFamilyMember(userId);

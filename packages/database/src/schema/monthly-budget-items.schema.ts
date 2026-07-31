@@ -1,17 +1,18 @@
 import {
+    PgTableExtraConfigValue,
     decimal,
     foreignKey,
     index,
     integer,
     pgTable,
-    PgTableExtraConfigValue,
     uniqueIndex,
     uuid,
 } from 'drizzle-orm/pg-core';
+
+import { targetAmountConsistencyCheck } from '../utils/checks';
+import { budgetCategories } from './budget-categories.schema';
 import { calculationMode } from './calculation-mode.enum';
 import { monthlyBudgets } from './monthly-budgets.schema';
-import { budgetCategories } from './budget-categories.schema';
-import { targetAmountConsistencyCheck } from '../utils/checks';
 
 const TABLE_NAME = 'monthly_budget_items';
 

@@ -1,7 +1,5 @@
-import { MoneyField } from '@/components/forms/money-field';
-import { calculationModeLabels } from '@/lib/i18n/ru/calculation-mode';
-import { categoryTypeLabels } from '@/lib/i18n/ru/category-type';
-import { categoryFormSchema, CategoryFormValues } from '@family-budget/domain/budget-category';
+import { FC } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
     Select,
@@ -20,8 +18,13 @@ import {
     FieldLabel,
     Input,
 } from '@ui/index';
-import { FC } from 'react';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
+
+import { CategoryFormValues, categoryFormSchema } from '@family-budget/domain/budget-category';
+
+import { MoneyField } from '@/components/forms/money-field';
+import { calculationModeLabels } from '@/lib/i18n/ru/calculation-mode';
+import { categoryTypeLabels } from '@/lib/i18n/ru/category-type';
 
 type PropsT = {
     defaultValues?: CategoryFormValues;

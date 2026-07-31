@@ -1,18 +1,19 @@
 import { sql } from 'drizzle-orm';
 import {
+    PgTableExtraConfigValue,
     check,
     foreignKey,
     index,
     integer,
     pgTable,
-    PgTableExtraConfigValue,
     uniqueIndex,
     uuid,
     varchar,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.schema';
+
 import { auditColumns } from '../utils/audit-columns';
 import { nonEmptyCheck } from '../utils/checks';
+import { users } from './users.schema';
 
 const TABLE_NAME = 'families';
 

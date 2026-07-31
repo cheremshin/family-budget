@@ -1,4 +1,5 @@
 import z from 'zod';
+
 import { budgetDivisionTypeOptions } from './family.types';
 
 export const familySettingsFieldsSchema = z.object({

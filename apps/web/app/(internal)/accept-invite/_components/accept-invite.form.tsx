@@ -1,13 +1,16 @@
 'use client';
 
 import { FC, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { formSchema } from '../_lib/accept-invite.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
-import { acceptInviteAction } from '../_lib/accept-invite.action';
-import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
+
 import { useRouter, useSearchParams } from 'next/navigation';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
+import { Controller, useForm } from 'react-hook-form';
+import z from 'zod';
+
+import { acceptInviteAction } from '../_lib/accept-invite.action';
+import { formSchema } from '../_lib/accept-invite.schema';
 
 type PropsT = {
     initialError?: string;

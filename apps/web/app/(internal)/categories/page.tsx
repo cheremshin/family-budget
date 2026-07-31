@@ -7,8 +7,9 @@ import {
     PageHeaderContent,
     PageTitle,
 } from '@/components/page-layout';
-import { loadCategories } from './_lib/categories.loader';
 import { CategoryList, CreateCategoryButton } from '@/features/budget-category';
+
+import { loadCategories } from './_lib/categories.loader';
 
 export default async function Page() {
     const categories = await loadCategories();

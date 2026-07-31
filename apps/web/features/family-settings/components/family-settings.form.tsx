@@ -1,10 +1,13 @@
 import { FC } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { type FamilySettingsSchema, familySettingsSchema } from '../lib/schema';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
+import { FormProvider, useForm } from 'react-hook-form';
+
 import { BudgetDivisionTypeField } from '@/components/forms/budget-divison-type-field';
+
 import { saveSettingsAction } from '../lib/save-settings.action';
+import { type FamilySettingsSchema, familySettingsSchema } from '../lib/schema';
 
 type PropsT = {
     currentSettings: FamilySettingsSchema;

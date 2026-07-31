@@ -1,9 +1,12 @@
 'use client';
 
-import { CategoryFormValues } from '@family-budget/domain/budget-category';
+import { useState } from 'react';
+
 import { Button, Dialog, DialogContent, DialogTrigger } from '@ui/index';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+
+import { CategoryFormValues } from '@family-budget/domain/budget-category';
+
 import { CategoryForm } from './components/category.form';
 import { createCategoryAction } from './lib/create-category.action';
 

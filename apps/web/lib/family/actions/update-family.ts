@@ -1,4 +1,4 @@
-import { db, eq, Executor, FamilyPersist, schema, UpdateFamily } from '@family-budget/database';
+import { Executor, FamilyPersist, UpdateFamily, db, eq, schema } from '@family-budget/database';
 
 export async function updateFamily(
     id: string,

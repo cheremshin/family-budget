@@ -1,16 +1,17 @@
+import { sql } from 'drizzle-orm';
 import {
+    PgTableExtraConfigValue,
     check,
     decimal,
     foreignKey,
     index,
     pgTable,
-    PgTableExtraConfigValue,
     uniqueIndex,
     uuid,
 } from 'drizzle-orm/pg-core';
+
 import { monthlyBudgets } from './monthly-budgets.schema';
 import { users } from './users.schema';
-import { sql } from 'drizzle-orm';
 
 const TABLE_NAME = 'planned_incomes';
 

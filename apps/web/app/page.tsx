@@ -1,5 +1,6 @@
-import { Button } from '@ui/index';
 import Link from 'next/link';
+
+import { Button } from '@ui/index';
 
 export default function Landing() {
     return (

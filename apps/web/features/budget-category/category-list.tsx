@@ -1,12 +1,15 @@
 'use client';
 
-import { BudgetCategory, CategoryFormValues } from '@family-budget/domain/budget-category';
 import { FC, useState } from 'react';
-import { CategoryItem } from './components/category-item';
+
 import { Dialog, DialogContent } from '@ui/index';
+
+import { BudgetCategory, CategoryFormValues } from '@family-budget/domain/budget-category';
+
+import { CategoryItem } from './components/category-item';
 import { CategoryForm } from './components/category.form';
-import { updateCategoryAction } from './lib/update-category.action';
 import { archiveCategoryAction } from './lib/archive-category.action';
+import { updateCategoryAction } from './lib/update-category.action';
 
 type PropsT = {
     categories: BudgetCategory[];

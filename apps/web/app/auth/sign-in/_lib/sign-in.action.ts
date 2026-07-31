@@ -1,8 +1,9 @@
 'use server';
 
+import { redirect } from 'next/navigation';
+
 import { AuthError, authService } from '@/lib/auth';
 import { sessionService } from '@/lib/session';
-import { redirect } from 'next/navigation';
 
 export const signInAction = async (data: { username: string; password: string }) => {
     try {

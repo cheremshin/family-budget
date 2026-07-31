@@ -1,8 +1,8 @@
-import { CreateFamilyStep } from './types';
-import { NameStep } from './components/steps/name-step';
-import { InviteStep } from './components/steps/invite-step';
-import { DoneStep } from './components/steps/done-step';
 import { BudgetTypeStep } from './components/steps/budget-type-step';
+import { DoneStep } from './components/steps/done-step';
+import { InviteStep } from './components/steps/invite-step';
+import { NameStep } from './components/steps/name-step';
+import { CreateFamilyStep } from './types';
 
 export const steps: CreateFamilyStep[] = [
     {

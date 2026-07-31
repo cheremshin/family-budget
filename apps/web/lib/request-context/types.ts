@@ -1,6 +1,7 @@
-import { Session } from '@/lib/session';
 import { Family } from '@family-budget/domain/family';
 import { AuthenticatedUser } from '@family-budget/domain/user';
+
+import { Session } from '@/lib/session';
 
 export type RequestContext = {
     session: Session | null;

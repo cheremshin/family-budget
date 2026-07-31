@@ -1,5 +1,6 @@
-import { cn } from '@ui/index';
 import { FC, PropsWithChildren } from 'react';
+
+import { cn } from '@ui/index';
 
 export const PageContainer: FC<PropsWithChildren<{ className?: string }>> = ({
     children,

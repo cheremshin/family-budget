@@ -1,8 +1,9 @@
 'use server';
 
+import { createFamilySchema } from '@family-budget/domain/family';
+
 import { familyService } from '@/lib/family';
 import { authenticatedActionClient } from '@/lib/request-context';
-import { createFamilySchema } from '@family-budget/domain/family';
 
 export const createFamilyAction = authenticatedActionClient
     .inputSchema(createFamilySchema)

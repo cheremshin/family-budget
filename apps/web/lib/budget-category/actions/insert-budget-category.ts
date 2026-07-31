@@ -1,8 +1,8 @@
 import {
-    db,
     BudgetCategoryPersist,
     Executor,
     NewBudgetCategory,
+    db,
     schema,
 } from '@family-budget/database';
 

@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { CreateFamilyForm } from '../../types';
+
 import { Label, RadioGroup, RadioGroupItem } from '@ui/index';
+import { useFormContext } from 'react-hook-form';
+
+import { CreateFamilyForm } from '../../types';
 
 export const BudgetTypeStep: FC = () => {
     const { setValue, watch } = useFormContext<CreateFamilyForm>();

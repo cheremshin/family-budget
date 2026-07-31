@@ -1,1 +1,1 @@
-export { MONEY_REGEX, moneySchema, isValidMoney } from './money';
+export { isValidMoney, MONEY_REGEX, moneySchema } from './money';

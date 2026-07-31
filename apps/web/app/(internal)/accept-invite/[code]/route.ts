@@ -1,7 +1,10 @@
-import { acceptInvite } from '../_lib/accept-invite';
 import { NextResponse } from 'next/server';
-import { flashMessageService } from '@/lib/flash-message';
+
 import { FamilyError } from '@family-budget/domain/family';
+
+import { flashMessageService } from '@/lib/flash-message';
+
+import { acceptInvite } from '../_lib/accept-invite';
 
 export async function GET(request: Request, { params }: { params: Promise<{ code: string }> }) {
     const { code } = await params;

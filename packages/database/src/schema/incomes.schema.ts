@@ -1,15 +1,16 @@
+import { sql } from 'drizzle-orm';
 import {
+    PgTableExtraConfigValue,
     check,
     decimal,
     foreignKey,
     index,
     pgTable,
-    PgTableExtraConfigValue,
     timestamp,
     uuid,
 } from 'drizzle-orm/pg-core';
+
 import { plannedIncomes } from './planned-incomes.schema';
-import { sql } from 'drizzle-orm';
 
 const TABLE_NAME = 'incomes';
 
