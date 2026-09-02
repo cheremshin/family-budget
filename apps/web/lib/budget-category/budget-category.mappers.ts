@@ -1,14 +1,19 @@
 import { BudgetCategoryPersist } from '@family-budget/database';
-import { BudgetCategory } from '@family-budget/domain/budget-category';
+import { BudgetCategory, budgetCategorySchema } from '@family-budget/domain/budget-category';
+import { assertContract } from '@family-budget/domain/shared';
 
 export function mapToBudgetCategory(category: BudgetCategoryPersist): BudgetCategory {
-    return {
-        id: category.id,
-        name: category.name,
-        type: category.type,
-        calculationMode: category.calculationMode,
-        targetAmount: category.targetAmount,
-        sortOrder: category.sortOrder,
-        isSystem: category.isSystem,
-    };
+    return assertContract(
+        budgetCategorySchema,
+        {
+            id: category.id,
+            name: category.name,
+            type: category.type,
+            calculationMode: category.calculationMode,
+            targetAmount: category.targetAmount,
+            sortOrder: category.sortOrder,
+            isSystem: category.isSystem,
+        },
+        'mapToBudgetCategory',
+    );
 }

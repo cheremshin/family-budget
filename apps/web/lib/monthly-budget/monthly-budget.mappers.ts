@@ -1,72 +1,89 @@
-import {
-    IncomePersist,
-    MonthlyBudgetItemPersist,
-    PlannedIncomePersist,
-} from '@family-budget/database';
+import { IncomePersist, MonthlyBudgetItemPersist } from '@family-budget/database';
+import { FamilyMember } from '@family-budget/domain/family';
 import {
     Income,
+    MemberIncome,
     MonthlyBudget,
     MonthlyBudgetItem,
-    PlannedIncome,
+    distribute,
+    monthlyBudgetSchema,
 } from '@family-budget/domain/monthly-budget';
+import { assertContract } from '@family-budget/domain/shared';
 
-import { MonthlyBudgetWithRelations, PlannedIncomeWithIncomes } from './types';
+import { MonthlyBudgetWithRelations, PlannedIncomeWithRelations } from './types';
 
-export function mapToMonthlyBudget(budget: MonthlyBudgetWithRelations): MonthlyBudget {
-    return {
+export function mapToMonthlyBudget(
+    budget: MonthlyBudgetWithRelations,
+    members: FamilyMember[],
+): MonthlyBudget {
+    const base = {
         id: budget.id,
         period: budget.period,
-        isClosed: budget.isClosed,
         version: budget.version,
         items: budget.items.map(mapToMonthlyBudgetItem),
-        plannedIncomes: budget.plannedIncomes.map(mapToPlannedIncome),
     };
-}
 
-export function withUpsertedPlannedIncome(
-    budget: MonthlyBudget,
-    plannedIncomeRow: PlannedIncomePersist,
-): MonthlyBudget {
-    const plannedIncome = mapToPlannedIncome({ ...plannedIncomeRow, incomes: [] });
-    const index = budget.plannedIncomes.findIndex((pi) => pi.memberId === plannedIncome.memberId);
+    if (!budget.isClosed) {
+        return assertContract(
+            monthlyBudgetSchema,
+            { ...base, isClosed: false as const, memberIncomes: mirrorMembers(members, budget) },
+            'mapToMonthlyBudget',
+        );
+    }
 
-    const plannedIncomes =
-        index === -1
-            ? [...budget.plannedIncomes, plannedIncome]
-            : budget.plannedIncomes.map((pi, i) => (i === index ? plannedIncome : pi));
+    const memberIncomes = budget.plannedIncomes.map(mapToClosedMemberIncome);
 
-    return { ...budget, plannedIncomes };
-}
+    const { contributions, personalRemainders } = distribute({
+        divisionType: budget.budgetDivisionType!,
+        items: base.items,
+        members: memberIncomes,
+    });
 
-export function withUpsertedIncome(budget: MonthlyBudget, incomeRow: IncomePersist): MonthlyBudget {
-    const income = mapToIncome(incomeRow);
-    return {
-        ...budget,
-        plannedIncomes: budget.plannedIncomes.map((plannedIncome) =>
-            plannedIncome.id === incomeRow.plannedIncomesId
-                ? {
-                      ...plannedIncome,
-                      incomeReceipts: [...plannedIncome.incomeReceipts, income],
-                  }
-                : plannedIncome,
-        ),
-    };
+    return assertContract(
+        monthlyBudgetSchema,
+        {
+            ...base,
+            isClosed: true as const,
+            memberIncomes,
+            contributions,
+            personalRemainders,
+        },
+        'mapToMonthlyBudget',
+    );
 }
 
 export function mapToMonthlyBudgetItem(item: MonthlyBudgetItemPersist): MonthlyBudgetItem {
     return {
         id: item.id,
-        budgetId: item.budgetCategoryId,
+        categoryId: item.budgetCategoryId,
         calculationMode: item.calculationMode,
         targetAmount: item.targetAmount,
         sortOrder: item.sortOrder,
     };
 }
 
-export function mapToPlannedIncome(plannedIncome: PlannedIncomeWithIncomes): PlannedIncome {
+function mirrorMembers(
+    members: FamilyMember[],
+    budget: MonthlyBudgetWithRelations,
+): MemberIncome[] {
+    const byUser = new Map(budget.plannedIncomes.map((income) => [income.userId, income]));
+
+    return members.map((member) => {
+        const plannedIncome = byUser.get(member.id);
+
+        return {
+            memberId: member.id,
+            memberName: member.username,
+            plannedAmount: plannedIncome?.plannedAmount ?? null,
+            incomeReceipts: plannedIncome?.incomes.map(mapToIncome) ?? [],
+        };
+    });
+}
+
+function mapToClosedMemberIncome(plannedIncome: PlannedIncomeWithRelations) {
     return {
-        id: plannedIncome.id,
         memberId: plannedIncome.userId,
+        memberName: plannedIncome.user.username,
         plannedAmount: plannedIncome.plannedAmount,
         incomeReceipts: plannedIncome.incomes.map(mapToIncome),
     };

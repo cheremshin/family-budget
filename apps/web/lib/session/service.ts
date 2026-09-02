@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { COOKIE_KEY, SESSION_COOKIE_OPTIONS } from './configuration/cookie-options';
 import { secret } from './configuration/secret';
-import { Session } from './types/session';
+import { Session } from './types';
 
 export async function create(data: { userId: string }): Promise<void> {
     const token = await new SignJWT()

@@ -1,8 +1,8 @@
 import { cache } from 'react';
 
-import { getFamily } from '@/lib/family';
+import { familyService } from '@/lib/family';
 import { sessionService } from '@/lib/session';
-import { getUser } from '@/lib/user';
+import { userService } from '@/lib/user';
 
 import { RequestContext } from './types';
 
@@ -17,7 +17,7 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
         };
     }
 
-    const user = await getUser(session.userId);
+    const user = await userService.getUser(session.userId);
 
     // user blocked/deleted but session still exists
     if (!user) {
@@ -37,7 +37,7 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
         };
     }
 
-    const family = await getFamily(user.familyId);
+    const family = await familyService.getFamily(user.familyId);
 
     if (!family) {
         throw new Error('Family not found');

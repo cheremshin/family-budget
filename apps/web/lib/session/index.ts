@@ -1,3 +1,3 @@
-export type { Session } from './types/session';
+export type { Session } from './types';
 
 export * as sessionService from './service';

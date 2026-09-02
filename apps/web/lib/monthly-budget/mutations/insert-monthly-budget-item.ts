@@ -18,5 +18,14 @@ export async function insertMonthlyBudgetItems(
     data: NewMonthlyBudgetItem[],
     tx: Executor = db,
 ): Promise<MonthlyBudgetItemPersist[]> {
-    return await tx.insert(schema.monthlyBudgetItems).values(data).returning();
+    return await tx
+        .insert(schema.monthlyBudgetItems)
+        .values(data)
+        .onConflictDoNothing({
+            target: [
+                schema.monthlyBudgetItems.monthlyBudgetId,
+                schema.monthlyBudgetItems.budgetCategoryId,
+            ],
+        })
+        .returning();
 }

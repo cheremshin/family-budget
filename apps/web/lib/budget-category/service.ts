@@ -1,3 +1,4 @@
+import { Executor, db } from '@family-budget/database';
 import {
     ArchiveSystemBudgetCategoryError,
     BudgetCategory,
@@ -6,10 +7,32 @@ import {
 } from '@family-budget/domain/budget-category';
 
 import { requireFamilyMember } from '../family';
-import { insertBudgetCategory } from './actions/insert-budget-category';
-import { updateBudgetCategory } from './actions/update-budget-category';
 import { mapToBudgetCategory } from './budget-category.mappers';
+import { SYSTEM_CATEGORIES } from './configuration/system-categories';
+import { insertBudgetCategories, insertBudgetCategory } from './mutations/insert-budget-category';
+import { updateBudgetCategory } from './mutations/update-budget-category';
 import { getBudgetCategory } from './queries/get-budget-category';
+import { getFamilyBudgetCategories } from './queries/get-family-budget-categories';
+
+export async function getFamilyCategories(
+    familyId: string,
+    tx: Executor = db,
+): Promise<BudgetCategory[]> {
+    const rows = await getFamilyBudgetCategories(familyId, { archived: false }, tx);
+    return rows.map(mapToBudgetCategory);
+}
+
+export async function seedSystemCategories(
+    familyId: string,
+    tx: Executor = db,
+): Promise<BudgetCategory[]> {
+    const rows = await insertBudgetCategories(
+        SYSTEM_CATEGORIES.map((category) => ({ ...category, familyId })),
+        tx,
+    );
+
+    return rows.map(mapToBudgetCategory);
+}
 
 export async function create(userId: string, input: CreateCategoryInput): Promise<BudgetCategory> {
     const familyId = await requireFamilyMember(userId);

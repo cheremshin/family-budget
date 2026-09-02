@@ -1,7 +1,7 @@
-import { db } from '@family-budget/database';
+import { Executor, db } from '@family-budget/database';
 
-export async function getFamilyMembers(familyId: string) {
-    return await db.query.users.findMany({
+export async function getFamilyMembers(familyId: string, tx: Executor = db) {
+    return await tx.query.users.findMany({
         columns: {
             id: true,
             username: true,

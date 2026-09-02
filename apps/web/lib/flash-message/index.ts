@@ -1,3 +1,3 @@
-export type { FlashMessage } from './types/flash-message';
+export type { FlashMessage } from './types';
 
 export * as flashMessageService from './service';

@@ -1,7 +1,7 @@
-import { db } from '@family-budget/database';
+import { Executor, db } from '@family-budget/database';
 
-export async function getUser(id: string) {
-    return await db.query.users.findFirst({
+export async function getUser(id: string, tx: Executor = db) {
+    return await tx.query.users.findFirst({
         where: {
             id: { eq: id },
         },

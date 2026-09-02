@@ -1,10 +1,15 @@
 import { Executor, db } from '@family-budget/database';
+import { Period } from '@family-budget/domain/shared';
 
 import { MonthlyBudgetWithRelations } from '../types';
 
+/**
+ * Читает агрегат целиком. Порядок вложенных коллекций задаётся здесь, а не в маппере:
+ * маппер обязан оставаться чистым преобразованием формы, а сортировка — дело запроса.
+ */
 export async function getMonthlyBudget(
     familyId: string,
-    period: string,
+    period: Period,
     tx: Executor = db,
 ): Promise<MonthlyBudgetWithRelations | undefined> {
     return await tx.query.monthlyBudgets.findFirst({
@@ -13,10 +18,16 @@ export async function getMonthlyBudget(
             period: { eq: period },
         },
         with: {
-            items: true,
+            items: {
+                orderBy: { sortOrder: 'asc', id: 'asc' },
+            },
             plannedIncomes: {
+                orderBy: { userId: 'asc' },
                 with: {
-                    incomes: true,
+                    user: true,
+                    incomes: {
+                        orderBy: { receivedAt: 'asc', id: 'asc' },
+                    },
                 },
             },
         },

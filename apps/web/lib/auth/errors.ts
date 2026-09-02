@@ -1,4 +1,6 @@
-export class AuthError extends Error {}
+import { DomainError } from '@family-budget/domain/shared';
+
+export class AuthError extends DomainError {}
 
 export class SignInError extends AuthError {
     constructor() {
