@@ -2,11 +2,11 @@ import { sql } from 'drizzle-orm';
 import {
     PgTableExtraConfigValue,
     check,
+    date,
     decimal,
     foreignKey,
     index,
     pgTable,
-    timestamp,
     uuid,
 } from 'drizzle-orm/pg-core';
 
@@ -25,12 +25,7 @@ export const incomes = pgTable(
             scale: 2,
         }).notNull(),
 
-        receivedAt: timestamp('received_at', {
-            withTimezone: true,
-            mode: 'date',
-        })
-            .notNull()
-            .defaultNow(),
+        receivedAt: date('received_at').notNull().defaultNow(),
     },
     (table): PgTableExtraConfigValue[] => [
         foreignKey({
@@ -44,7 +39,7 @@ export const incomes = pgTable(
         check(`${TABLE_NAME}__amount_non_negative_check`, sql`${table.amount} >= 0`),
         check(
             `${TABLE_NAME}__received_at_not_in_future_check`,
-            sql`${table.receivedAt} <= CURRENT_TIMESTAMP`,
+            sql`${table.receivedAt} <= CURRENT_DATE`,
         ),
     ],
 );

@@ -1,0 +1,2 @@
+ALTER TABLE "incomes" ALTER COLUMN "received_at" SET DATA TYPE date USING "received_at"::date;--> statement-breakpoint
+ALTER TABLE "incomes" DROP CONSTRAINT "incomes__received_at_not_in_future_check", ADD CONSTRAINT "incomes__received_at_not_in_future_check" CHECK ("received_at" <= CURRENT_DATE);

@@ -1,0 +1,2 @@
+ALTER TABLE "monthly_budget" ADD COLUMN "budget_division_type" "budget_division_type";--> statement-breakpoint
+ALTER TABLE "monthly_budget" ADD CONSTRAINT "monthly_budget__closed_has_division_type_check" CHECK ("is_closed" = false OR "budget_division_type" IS NOT NULL);

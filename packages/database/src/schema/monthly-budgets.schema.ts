@@ -12,6 +12,7 @@ import {
 } from 'drizzle-orm/pg-core';
 
 import { auditColumns } from '../utils/audit-columns';
+import { budgetDivisionType } from './budget-division.enum';
 import { families } from './families.schema';
 
 const TABLE_NAME = 'monthly_budget';
@@ -25,6 +26,7 @@ export const monthlyBudgets = pgTable(
         period: date('period').notNull(),
         isClosed: boolean('is_closed').notNull().default(false),
         version: integer('version').notNull().default(1),
+        budgetDivisionType: budgetDivisionType('budget_division_type'),
 
         createdAt: auditColumns.createdAt,
     },
@@ -37,6 +39,10 @@ export const monthlyBudgets = pgTable(
 
         uniqueIndex(`${TABLE_NAME}__family_period_unique_index`).on(table.familyId, table.period),
 
+        check(
+            `${TABLE_NAME}__closed_has_division_type_check`,
+            sql`${table.isClosed} = false OR ${table.budgetDivisionType} IS NOT NULL`,
+        ),
         check(
             `${TABLE_NAME}__created_at_not_in_future_check`,
             sql`${table.createdAt} <= CURRENT_TIMESTAMP`,
