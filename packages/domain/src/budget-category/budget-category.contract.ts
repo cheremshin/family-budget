@@ -1,9 +1,11 @@
 import z from 'zod';
 
 import { moneySchema } from '../shared';
-import { budgetCategoryTypeOptions, calculationModeOptions } from './budget-category.types';
+import { budgetCategoryTypeOptions, calculationModeOptions } from './budget-category.enums';
 
-export const categoryFieldsSchema = z.object({
+// вход
+
+const categoryFieldsSchema = z.object({
     name: z.string().trim().min(1, 'Название обязательно').max(128),
     type: z.enum(budgetCategoryTypeOptions),
     calculationMode: z.enum(calculationModeOptions),
@@ -43,3 +45,13 @@ export const updateCategorySchema = categoryFieldsSchema
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
+
+// выход
+
+export const budgetCategorySchema = categoryFieldsSchema.extend({
+    id: z.uuid(),
+    sortOrder: z.number().int(),
+    isSystem: z.boolean(),
+});
+
+export type BudgetCategory = z.infer<typeof budgetCategorySchema>;

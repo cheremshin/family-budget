@@ -12,12 +12,14 @@
     },
     "scripts": {
         "lint": "eslint",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "lint:fix": "eslint --fix"
     },
     "dependencies": {
         "zod": "catalog:"
     },
     "devDependencies": {
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "@types/node": "catalog:"
     }
 }

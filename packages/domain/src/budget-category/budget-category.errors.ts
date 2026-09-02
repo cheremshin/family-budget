@@ -1,4 +1,6 @@
-export class BudgetCategoryError extends Error {}
+import { DomainError } from '../shared';
+
+export class BudgetCategoryError extends DomainError {}
 
 export class BudgetCategoryNotFound extends BudgetCategoryError {
     constructor() {

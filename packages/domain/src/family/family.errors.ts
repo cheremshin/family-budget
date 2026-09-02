@@ -1,4 +1,6 @@
-export class FamilyError extends Error {}
+import { DomainError } from '../shared';
+
+export class FamilyError extends DomainError {}
 
 export class FamilyNotFound extends FamilyError {
     constructor() {
@@ -15,12 +17,6 @@ export class FamilyAlreadyExistsError extends FamilyError {
 export class NoFamilyYetError extends FamilyError {
     constructor() {
         super(`У вас еще нет семьи`);
-    }
-}
-
-export class FamilyCreateError extends FamilyError {
-    constructor() {
-        super(`Не удалось создать семью. Попробуйте позже`);
     }
 }
 
