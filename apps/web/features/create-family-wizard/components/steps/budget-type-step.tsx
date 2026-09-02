@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
-import { Label, RadioGroup, RadioGroupItem } from '@ui/index';
 import { useFormContext } from 'react-hook-form';
+
+import { Label, RadioGroup, RadioGroupItem } from '@family-budget/ui';
 
 import { CreateFamilyForm } from '../../types';
 

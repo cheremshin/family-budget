@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
-import { Input, Label } from '@ui/index';
 import { useFormContext } from 'react-hook-form';
+
+import { Input, Label } from '@family-budget/ui';
 
 import { CreateFamilyForm } from '../../types';
 

@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { Button, Dialog, DialogContent, DialogTrigger } from '@ui/index';
 import { Plus } from 'lucide-react';
 
 import { CategoryFormValues } from '@family-budget/domain/budget-category';
+import { Button, Dialog, DialogContent, DialogTrigger } from '@family-budget/ui';
 
 import { CategoryForm } from './components/category.form';
 import { createCategoryAction } from './lib/create-category.action';

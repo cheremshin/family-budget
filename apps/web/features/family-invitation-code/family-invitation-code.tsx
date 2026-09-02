@@ -4,9 +4,17 @@ import { FC, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
 import { Check, Copy, RefreshCcw } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
+
+import {
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@family-budget/ui';
 
 import { refreshInvitationCodeAction } from './lib/refresh-invitation-code.action';
 

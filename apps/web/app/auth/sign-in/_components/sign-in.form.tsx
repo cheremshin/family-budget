@@ -5,9 +5,10 @@ import { FC } from 'react';
 import Link from 'next/link';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@family-budget/ui';
 
 import { signInAction } from '@/app/auth/sign-in/_lib/sign-in.action';
 import { formSchema } from '@/app/auth/sign-in/_lib/sign-in.schema';

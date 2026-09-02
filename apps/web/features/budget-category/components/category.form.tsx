@@ -1,13 +1,9 @@
 import { FC } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@ui/components/ui/select';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
+
+import { CategoryFormValues, categoryFormSchema } from '@family-budget/domain/budget-category';
 import {
     Button,
     DialogClose,
@@ -17,14 +13,17 @@ import {
     FieldGroup,
     FieldLabel,
     Input,
-} from '@ui/index';
-import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
-
-import { CategoryFormValues, categoryFormSchema } from '@family-budget/domain/budget-category';
+} from '@family-budget/ui';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@family-budget/ui/components/select';
 
 import { MoneyField } from '@/components/forms/money-field';
-import { calculationModeLabels } from '@/lib/i18n/ru/calculation-mode';
-import { categoryTypeLabels } from '@/lib/i18n/ru/category-type';
+import { calculationModeLabels, categoryTypeLabels } from '@/lib/i18n';
 
 type PropsT = {
     defaultValues?: CategoryFormValues;

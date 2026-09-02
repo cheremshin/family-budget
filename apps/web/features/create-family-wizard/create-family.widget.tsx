@@ -4,8 +4,9 @@ import { FC, useState } from 'react';
 
 import Link from 'next/link';
 
-import { Button, Dialog, DialogContent, buttonVariants, cn } from '@ui/index';
 import { ArrowRight } from 'lucide-react';
+
+import { Button, Dialog, DialogContent, buttonVariants, cn } from '@family-budget/ui';
 
 import { CreateFamilyWizard } from './components/create-family-wizard';
 

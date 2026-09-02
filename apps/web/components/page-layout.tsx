@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { cn } from '@ui/index';
+import { cn } from '@family-budget/ui';
 
 export const PageContainer: FC<PropsWithChildren<{ className?: string }>> = ({
     children,

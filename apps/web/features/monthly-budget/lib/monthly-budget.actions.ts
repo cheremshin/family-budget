@@ -1,31 +1,27 @@
 'use server';
 
-import { MonthlyBudget } from '@family-budget/domain/monthly-budget';
+import z from 'zod';
 
-import {
-    getMonthlyBudget as getMonthlyBudgetQuery,
-    mapToMonthlyBudget,
-    monthlyBudgetService,
-} from '@/lib/monthly-budget';
-import { requireFamily, requireUser } from '@/lib/request-context';
+import { addIncomeSchema, addPlannedIncomeSchema } from '@family-budget/domain/monthly-budget';
+import { periodSchema } from '@family-budget/domain/shared';
 
-export async function getMonthlyBudget(period: string): Promise<MonthlyBudget | undefined> {
-    const { id: familyId } = await requireFamily();
-    const budget = await getMonthlyBudgetQuery(familyId, period);
-    return budget ? mapToMonthlyBudget(budget) : undefined;
-}
+import { monthlyBudgetService } from '@/lib/monthly-budget';
+import { familyActionClient } from '@/lib/request-context';
 
-export async function setPlannedIncome(input: {
-    plannedAmount: string;
-    period: Date;
-}): Promise<MonthlyBudget> {
-    const { id: userId } = await requireUser();
-    await requireFamily();
-    return await monthlyBudgetService.setPlannedIncome(userId, input);
-}
+export const getMonthlyBudgetAction = familyActionClient
+    .inputSchema(z.object({ period: periodSchema }))
+    .action(async ({ ctx, parsedInput }) => {
+        return await monthlyBudgetService.getMonthlyBudget(ctx.family.id, parsedInput.period);
+    });
 
-export async function addIncome(input: { amount: string; receivedAt: Date; period: Date }) {
-    const { id: userId } = await requireUser();
-    await requireFamily();
-    return await monthlyBudgetService.addActualIncome(userId, input);
-}
+export const setPlannedIncomeAction = familyActionClient
+    .inputSchema(addPlannedIncomeSchema)
+    .action(async ({ ctx, parsedInput }) => {
+        return await monthlyBudgetService.setPlannedIncome(ctx.user.id, parsedInput);
+    });
+
+export const addIncomeAction = familyActionClient
+    .inputSchema(addIncomeSchema)
+    .action(async ({ ctx, parsedInput }) => {
+        return await monthlyBudgetService.addActualIncome(ctx.user.id, parsedInput);
+    });

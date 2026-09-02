@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google';
 
-import { cn } from '@ui/index';
+import { cn } from '@family-budget/ui';
 
 import '@/styles/globals.css';
 

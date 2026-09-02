@@ -1,7 +1,8 @@
 'use client';
 
-import { Field, FieldContent, FieldError, FieldLabel, Input } from '@ui/index';
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form';
+
+import { Field, FieldContent, FieldError, FieldLabel, Input } from '@family-budget/ui';
 
 function sanitizeMoneyInput(raw: string, maxIntegerDigits = 10, maxDecimalDigits = 2): string {
     const digitsAndDot = raw.replace(/[^\d.]/g, '');

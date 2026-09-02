@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 
-import { Button, Input } from '@ui/index';
 import { Check, Copy } from 'lucide-react';
+
+import { Button, Input } from '@family-budget/ui';
 
 import { useCreateFamily } from '../../contexts/family-context';
 

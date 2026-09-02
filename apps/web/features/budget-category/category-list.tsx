@@ -2,9 +2,8 @@
 
 import { FC, useState } from 'react';
 
-import { Dialog, DialogContent } from '@ui/index';
-
 import { BudgetCategory, CategoryFormValues } from '@family-budget/domain/budget-category';
+import { Dialog, DialogContent } from '@family-budget/ui';
 
 import { CategoryItem } from './components/category-item';
 import { CategoryForm } from './components/category.form';

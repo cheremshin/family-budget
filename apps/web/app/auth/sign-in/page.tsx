@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@family-budget/ui';
 
 import { SignInForm } from './_components/sign-in.form';
 

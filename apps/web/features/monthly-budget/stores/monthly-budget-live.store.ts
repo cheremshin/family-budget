@@ -1,10 +1,14 @@
-import { type MonthlyBudgetChangedEvent } from '@/lib/monthly-budget/realtime/types';
+import { makeObservable } from 'mobx';
+
+import { type MonthlyBudgetChangedEvent } from '@/lib/monthly-budget';
 
 export class MonthlyBudgetLiveStore {
     private eventSource: EventSource | null = null;
     private readonly eventTypes = ['monthly-budget.changed'];
 
-    constructor(private readonly onChange: (budget: MonthlyBudgetChangedEvent) => void) {}
+    constructor(private readonly onChange: (budget: MonthlyBudgetChangedEvent) => void) {
+        makeObservable(this);
+    }
 
     connect(): void {
         if (this.eventSource) return;

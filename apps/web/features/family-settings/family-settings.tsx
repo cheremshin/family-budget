@@ -2,9 +2,8 @@
 
 import { FC } from 'react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
-
 import { Family } from '@family-budget/domain/family';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@family-budget/ui';
 
 import { FamilySettingsForm } from './components/family-settings.form';
 

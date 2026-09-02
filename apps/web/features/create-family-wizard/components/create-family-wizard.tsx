@@ -86,6 +86,7 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
 
             if (isLast) {
                 finishWizard();
+                return;
             }
 
             setStep((prev) => prev + 1);

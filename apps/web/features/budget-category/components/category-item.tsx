@@ -1,13 +1,11 @@
 import { FC } from 'react';
 
-import { Button, Card, cn } from '@ui/index';
 import { Settings2, Trash2 } from 'lucide-react';
 
 import { BudgetCategory } from '@family-budget/domain/budget-category';
+import { Button, Card, cn } from '@family-budget/ui';
 
-import { calculationModeLabels, formatMoney } from '@/lib/i18n/ru/calculation-mode';
-import { categoryTypeLabels } from '@/lib/i18n/ru/category-type';
-import { formatPercent } from '@/shared/format-percent';
+import { calculationModeLabels, categoryTypeLabels, formatMoney, formatPercent } from '@/lib/i18n';
 
 type PropsT = {
     category: BudgetCategory;

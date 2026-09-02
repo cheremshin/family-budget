@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Button } from '@ui/index';
+import { Button } from '@family-budget/ui';
 
 type PropsT = {
     isLast: boolean;

@@ -1,10 +1,9 @@
 import { cache } from 'react';
 
-import { getFamilyBudgetCategories, mapToBudgetCategory } from '@/lib/budget-category';
+import { budgetCategoryService } from '@/lib/budget-category';
 import { requireFamily } from '@/lib/request-context';
 
 export const loadCategories = cache(async () => {
     const family = await requireFamily();
-    const categories = await getFamilyBudgetCategories(family.id, { archived: false });
-    return categories.map((category) => mapToBudgetCategory(category));
+    return await budgetCategoryService.getFamilyCategories(family.id);
 });

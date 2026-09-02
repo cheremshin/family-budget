@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@family-budget/ui';
 
 import { FlashCleaner } from '@/components/flash-cleaner/flash-cleaner';
 import { flashMessageService } from '@/lib/flash-message';

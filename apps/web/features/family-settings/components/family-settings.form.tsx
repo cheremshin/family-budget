@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@ui/index';
 import { FormProvider, useForm } from 'react-hook-form';
+
+import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@family-budget/ui';
 
 import { BudgetDivisionTypeField } from '@/components/forms/budget-divison-type-field';
 

@@ -1,10 +1,7 @@
 import { FC } from 'react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/index';
-
 import { FamilyMember } from '@family-budget/domain/family';
-
-import { getFirstCharacter } from '@/lib/utils/get-first-character';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@family-budget/ui';
 
 type PropsT = {
     ownerId: string;
@@ -26,7 +23,7 @@ export const FamilyMembers: FC<PropsT> = ({ ownerId, members, maxMembers }) => {
                         className="flex gap-4 items-center bg-accent p-4 border-border border rounded-xl"
                     >
                         <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
-                            {getFirstCharacter(member.username)}
+                            {member.username.at(0)?.toUpperCase()}
                         </div>
                         <div className="flex flex-col">
                             <span className="font-semibold">{member.username}</span>

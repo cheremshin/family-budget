@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Button } from '@ui/index';
+import { Button } from '@family-budget/ui';
 
 export default function Landing() {
     return (

@@ -4,8 +4,9 @@ import { CSSProperties, ComponentProps, FC } from 'react';
 
 import Link, { LinkProps } from 'next/link';
 
-import { buttonVariants, cn } from '@ui/index';
 import { LucideIcon } from 'lucide-react';
+
+import { buttonVariants, cn } from '@family-budget/ui';
 
 import { Logout } from './logout/logout';
 import { NavigationItem } from './types';
