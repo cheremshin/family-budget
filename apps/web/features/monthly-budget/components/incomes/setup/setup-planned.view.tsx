@@ -8,10 +8,11 @@ import { PlannedIncomeForm } from './planned-income.form';
 
 type PropsT = {
     onSubmit: (amount: string) => Promise<unknown>;
+    className?: string;
 };
 
-export const SetupPlannedIncomeView: FC<PropsT> = ({ onSubmit }) => (
-    <Card>
+export const SetupPlannedIncomeView: FC<PropsT> = ({ onSubmit, className }) => (
+    <Card className={className}>
         <CardHeader>
             <CardTitle className="text-lg flex gap-2">
                 <Wallet />

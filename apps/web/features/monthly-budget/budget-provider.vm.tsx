@@ -10,6 +10,7 @@ import { BudgetView, toBudgetView } from './budget.view';
 import { MonthNavigationStore } from './stores/month-navigation.store';
 import { MonthlyBudgetLiveStore } from './stores/monthly-budget-live.store';
 import { MonthlyBudgetStore } from './stores/monthly-budget.store';
+import { DistributionView, toDistributionView } from '@/features/monthly-budget/distribution.view';
 
 export type BudgetInitialData = {
     monthlyBudget: MonthlyBudget;
@@ -44,6 +45,15 @@ export class BudgetVM {
                 setPlan: (amount) => this.budget.setPlannedIncomeMutation.mutate(amount),
                 addIncome: (amount) => this.budget.addIncomeMutation.mutate(amount),
             },
+        );
+    }
+
+    @computed
+    get distributionView(): DistributionView {
+        return toDistributionView(
+            this.budget.monthlyBudget,
+            this.navigation.selectedPeriod,
+            this.currentUserId,
         );
     }
 
@@ -96,4 +106,8 @@ export function useNavigationStore(): MonthNavigationStore {
 
 export function useBudgetView(): BudgetView {
     return useBudgetVM().view;
+}
+
+export function useDistributionView(): DistributionView {
+    return useBudgetVM().distributionView;
 }

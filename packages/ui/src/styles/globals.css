@@ -21,6 +21,12 @@
     --color-input: var(--input);
     --color-ring: var(--ring);
     --color-ring-offset: var(--background);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
     --color-badge-system: var(--badge-system);
     --color-badge-system-foreground: var(--badge-system-foreground);
     --color-badge-system-border: var(--badge-system-border);

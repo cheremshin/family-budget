@@ -1,7 +1,8 @@
 import z from 'zod';
 
-import { calculationModeOptions } from '../budget-category/budget-category.enums';
+import { budgetCategoryTypeOptions, calculationModeOptions } from '../budget-category/budget-category.enums';
 import { isoDateSchema, moneySchema, periodSchema } from '../shared';
+import { budgetDivisionTypeOptions } from '../family';
 
 // вход
 
@@ -54,6 +55,8 @@ export const personalRemainderSchema = z.object({
 const monthlyBudgetItemSchema = z.object({
     id: z.uuid(),
     categoryId: z.uuid(),
+    categoryName: z.string().min(1),
+    categoryType: z.enum(budgetCategoryTypeOptions),
     calculationMode: z.enum(calculationModeOptions),
     targetAmount: moneySchema,
     sortOrder: z.number().int(),
@@ -62,6 +65,7 @@ const monthlyBudgetItemSchema = z.object({
 const budgetBaseSchema = monthlyBudgetFieldsSchema.extend({
     id: z.uuid(),
     version: z.number().int().positive(),
+    divisionType: z.enum(budgetDivisionTypeOptions),
     items: z.array(monthlyBudgetItemSchema),
 });
 

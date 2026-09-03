@@ -21,7 +21,7 @@ import { Period } from '@family-budget/domain/shared';
 import { familyService, requireFamilyMember, requireFamilyOwner } from '@/lib/family';
 
 import { budgetCategoryService } from '../budget-category';
-import { mapToMonthlyBudget } from './monthly-budget.mappers';
+import { mapToClosedMonthlyBudget, mapToOpenMonthlyBudget } from './monthly-budget.mappers';
 import { deleteMonthlyBudgetItem } from './mutations/delete-monthly-budget-item';
 import { insertIncome } from './mutations/insert-income';
 import { insertMonthlyBudgetIfMissing } from './mutations/insert-monthly-budget';
@@ -44,9 +44,10 @@ export async function getMonthlyBudget(
 
     if (!row) return undefined;
 
-    const members = row.isClosed ? [] : await familyService.getMembers(familyId, tx);
+    // Закрытый месяц состав и правило деления несет в снимке.
+    if (row.isClosed) return mapToClosedMonthlyBudget(row);
 
-    return mapToMonthlyBudget(row, members);
+    return mapToOpenMonthlyBudget(row, await familyService.requireFamily(familyId, tx));
 }
 
 export async function requireMonthlyBudget(
@@ -210,6 +211,8 @@ async function syncMonthlyBudgetItems(
             missing.push({
                 monthlyBudgetId: budget.id,
                 budgetCategoryId: category.id,
+                categoryName: category.name,
+                categoryType: category.type,
                 calculationMode: category.calculationMode,
                 targetAmount: category.targetAmount,
                 sortOrder: category.sortOrder,
@@ -218,6 +221,8 @@ async function syncMonthlyBudgetItems(
         }
 
         if (
+            item.categoryName !== category.name ||
+            item.categoryType !== category.type ||
             item.calculationMode !== category.calculationMode ||
             item.targetAmount !== category.targetAmount ||
             item.sortOrder !== category.sortOrder
@@ -225,6 +230,8 @@ async function syncMonthlyBudgetItems(
             outdated.push({
                 id: item.id,
                 data: {
+                    categoryName: category.name,
+                    categoryType: category.type,
                     calculationMode: category.calculationMode,
                     targetAmount: category.targetAmount,
                     sortOrder: category.sortOrder,

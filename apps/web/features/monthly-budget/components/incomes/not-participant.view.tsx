@@ -4,10 +4,14 @@ import { CalendarOff } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@family-budget/ui';
 
-export const NotParticipantView: FC = () => (
-    <Card>
+type PropsT = {
+    className?: string;
+};
+
+export const NotParticipantView: FC<PropsT> = ({ className }) => (
+    <Card className={className}>
         <CardHeader>
-            <CardTitle className="text-lg flex gap-2">
+            <CardTitle className="flex gap-2 text-lg">
                 <CalendarOff />
                 Месяц закрыт без вашего участия
             </CardTitle>

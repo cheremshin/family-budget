@@ -32,6 +32,10 @@ export class MonthlyBudgetStore {
         private readonly navigation: MonthNavigationStore,
         initialData?: MonthlyBudget,
     ) {
+        if (initialData) {
+            this.updateCache(initialData);
+        }
+
         this.query = new Query({
             queryClient: this.queryClient,
             abortSignal: this.abortController.signal,
@@ -69,10 +73,6 @@ export class MonthlyBudgetStore {
                 ),
             onSuccess: (budget) => this.updateCache(budget),
         });
-
-        if (initialData) {
-            this.updateCache(initialData);
-        }
 
         makeObservable(this);
     }

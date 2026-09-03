@@ -7,12 +7,14 @@ import {
     pgTable,
     uniqueIndex,
     uuid,
+    varchar,
 } from 'drizzle-orm/pg-core';
 
-import { targetAmountConsistencyCheck } from '../utils/checks';
+import { nonEmptyCheck, targetAmountConsistencyCheck } from '../utils/checks';
 import { budgetCategories } from './budget-categories.schema';
 import { calculationMode } from './calculation-mode.enum';
 import { monthlyBudgets } from './monthly-budgets.schema';
+import { budgetCategoryType } from './budget-category-type.enum';
 
 const TABLE_NAME = 'monthly_budget_items';
 
@@ -23,6 +25,8 @@ export const monthlyBudgetItems = pgTable(
         monthlyBudgetId: uuid('monthly_budget_id').notNull(),
         budgetCategoryId: uuid('budget_category_id').notNull(),
 
+        categoryName: varchar('category_name', { length: 128 }).notNull(),
+        categoryType: budgetCategoryType('category_type').notNull(),
         calculationMode: calculationMode('calculation_mode').notNull(),
         targetAmount: decimal('target_amount', {
             precision: 12,
@@ -40,11 +44,12 @@ export const monthlyBudgetItems = pgTable(
             foreignColumns: [monthlyBudgets.id],
         }).onDelete('cascade'),
 
+        // Категория, попавшая в бюджет, физически не удаляется (можно только архивировать)
         foreignKey({
             name: `${TABLE_NAME}__budget_category_id_fk`,
             columns: [table.budgetCategoryId],
             foreignColumns: [budgetCategories.id],
-        }).onDelete('cascade'),
+        }).onDelete('no action'),
 
         uniqueIndex(`${TABLE_NAME}__budget_category_unique_index`).on(
             table.monthlyBudgetId,
@@ -53,5 +58,6 @@ export const monthlyBudgetItems = pgTable(
         index(`${TABLE_NAME}__budget_category_index`).on(table.budgetCategoryId),
 
         targetAmountConsistencyCheck(TABLE_NAME, table.calculationMode, table.targetAmount),
+        nonEmptyCheck(`${TABLE_NAME}__category_name_not_empty_check`, table.categoryName),
     ],
 );

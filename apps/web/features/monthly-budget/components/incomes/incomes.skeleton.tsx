@@ -2,8 +2,12 @@ import { FC } from 'react';
 
 import { Card, CardContent, CardHeader } from '@family-budget/ui';
 
-export const IncomesSkeleton: FC = () => (
-    <Card>
+type PropsT = {
+    className?: string;
+};
+
+export const IncomesSkeleton: FC<PropsT> = ({ className }) => (
+    <Card className={className}>
         <CardHeader>
             <div className="h-6 w-48 animate-pulse rounded bg-muted" />
         </CardHeader>

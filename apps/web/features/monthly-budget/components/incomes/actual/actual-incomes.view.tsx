@@ -13,12 +13,13 @@ import { IncomesStatus } from './incomes-status';
 type PropsT = {
     income: PlannedIncomeView;
     isClosed: boolean;
+    className?: string;
 };
 
-export const ActualIncomesView: FC<PropsT> = ({ income, isClosed }) => (
-    <Card>
+export const ActualIncomesView: FC<PropsT> = ({ income, isClosed, className }) => (
+    <Card className={className}>
         <CardHeader>
-            <CardTitle className="text-lg flex gap-2">
+            <CardTitle className="flex gap-2 text-lg">
                 <Lock />
                 {isClosed ? 'Месяц закрыт' : 'План зафиксирован'}
             </CardTitle>
