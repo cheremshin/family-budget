@@ -1,18 +1,19 @@
-import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action';
+import { createSafeActionClient } from 'next-safe-action';
 
-import { DomainError } from '@family-budget/domain/shared';
+import { DomainError, ServerError } from '@family-budget/domain/shared';
 
 import { getRequestContext } from '../get-request-context';
 
 export const actionClient = createSafeActionClient({
-    handleServerError(error) {
+    defaultValidationErrorsShape: 'flattened',
+    handleServerError(error): ServerError {
         if (error instanceof DomainError) {
-            return error.message;
+            return { code: 'domain', message: error.message };
         }
 
         console.error('[action]', error);
 
-        return DEFAULT_SERVER_ERROR_MESSAGE;
+        return { code: 'unexpected', message: 'Не удалось выполнить операцию. Попробуйте снова' };
     },
 }).use(async ({ next }) => {
     return next({
