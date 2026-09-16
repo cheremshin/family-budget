@@ -1,4 +1,4 @@
-import { MonthlyBudgetChangedEvent } from './types';
+import type { MonthlyBudgetChangedEvent } from '@family-budget/domain/monthly-budget';
 
 export function createMonthlyBudgetChangedEvent(data: {
     monthlyBudgetId: string;
