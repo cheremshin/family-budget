@@ -1,3 +1,4 @@
+import { requireFamily } from '@/client/request-context';
 import { FamilyMembers } from '@/components/family-members';
 import {
     PageContainer,
@@ -9,7 +10,6 @@ import {
 } from '@/components/page-layout';
 import { FamilyInvitationCode } from '@/features/family-invitation-code';
 import { FamilySettings } from '@/features/family-settings';
-import { requireFamily } from '@/lib/request-context';
 
 export default async function Page() {
     const family = await requireFamily();

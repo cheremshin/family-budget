@@ -1,11 +1,10 @@
 import { ClientError, toClientError } from './client-error';
 
-export type CommandResult = { ok: true } | { ok: false; error: ClientError };
+export type CommandResult<T = unknown> = { ok: true; data: T } | { ok: false; error: ClientError };
 
-export async function runCommand(command: () => Promise<unknown>): Promise<CommandResult> {
+export async function runCommand<T>(command: () => Promise<T>): Promise<CommandResult<T>> {
     try {
-        await command();
-        return { ok: true };
+        return { ok: true, data: await command() };
     } catch (error) {
         return { ok: false, error: toClientError(error) };
     }

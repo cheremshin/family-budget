@@ -20,7 +20,7 @@ export const CategoryItem: FC<PropsT> = ({ category, onEdit, onDelete }) => {
             : formatPercent(category.targetAmount);
 
     return (
-        <Card className="w-full p-5 flex justify-between group">
+        <Card className="w-full p-5 flex flex-row justify-between group">
             <div>
                 <div className="flex items-center gap-2">
                     <span className="font-bold">{category.name}</span>

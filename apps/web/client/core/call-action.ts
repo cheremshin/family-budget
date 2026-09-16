@@ -1,11 +1,12 @@
 import type { ServerError } from '@family-budget/domain/shared';
-import { ClientError, toClientError, UNEXPECTED_MESSAGE, type FieldErrors } from './client-error';
+
+import { ClientError, type FieldErrors, UNEXPECTED_MESSAGE, toClientError } from './client-error';
 
 type SafeActionResult<Out> = {
     data?: Out;
     serverError?: ServerError;
-    validationErrors?: { formErrors: string[]; fieldErrors: FieldErrors }
-}
+    validationErrors?: { formErrors: string[]; fieldErrors: FieldErrors };
+};
 
 type SafeAction<In, Out> = (input: In) => Promise<SafeActionResult<Out> | undefined>;
 

@@ -1,15 +1,23 @@
 import { environmentManager, hashKey } from '@tanstack/query-core';
 import { QueryClient } from 'mobx-tanstack-query';
 
-function createQueryClient() {
+import { toClientError } from './client-error';
+
+export function createQueryClient(): QueryClient {
+    const isServer = environmentManager.isServer();
+
     return new QueryClient({
         defaultOptions: {
             queries: {
+                lazy: true,
                 throwOnError: false,
                 queryKeyHashFn: hashKey,
+                staleTime: 60 * 1000,
                 refetchOnWindowFocus: true,
                 refetchOnReconnect: true,
-                staleTime: 10 * 60 * 1000,
+                retry: isServer
+                    ? false
+                    : (failureCount, error) => failureCount < 2 && toClientError(error).isRetryable,
             },
             mutations: {
                 throwOnError: true,
