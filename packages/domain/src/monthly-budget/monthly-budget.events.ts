@@ -5,7 +5,7 @@ import { periodSchema } from '../shared';
 export const monthlyBudgetChangedEventSchema = z.object({
     id: z.string(),
     type: z.literal('monthly-budget.changed'),
-    occuredAt: z.iso.datetime(),
+    occurredAt: z.iso.datetime(),
     monthlyBudgetId: z.uuid(),
     familyId: z.uuid(),
     period: periodSchema,

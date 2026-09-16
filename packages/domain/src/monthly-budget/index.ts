@@ -4,8 +4,8 @@ export {
     closeMonthlyBudgetSchema,
     contributionSchema,
     incomeFieldsSchema,
+    memberRemainderSchema,
     monthlyBudgetSchema,
-    personalRemainderSchema,
     plannedIncomeFieldsSchema,
 } from './monthly-budget.contract';
 export type {
@@ -19,14 +19,17 @@ export type {
     MonthlyBudget,
     MonthlyBudgetItem,
     OpenMonthlyBudget,
-    PersonalRemainder,
 } from './monthly-budget.contract';
-export { distribute, hasOverAllocation } from './monthly-budget.calculation';
+export { allocateReceipts, distribute, isOverAllocated } from './monthly-budget.calculation';
 export type {
     DistributionInput,
     DistributionItem,
     DistributionMember,
     DistributionResult,
+    MemberRemainder,
+    ReceiptAllocation,
+    ReceiptAllocationInput,
+    ReceiptAllocationResult,
 } from './monthly-budget.calculation';
 export {
     MonthlyBudgetClosedError,
@@ -36,3 +39,5 @@ export {
     MonthlyBudgetPlanIncomplete,
     PlannedIncomeNotSet,
 } from './monthly-budget.errors';
+export { monthlyBudgetChangedEventSchema } from './monthly-budget.events';
+export type { MonthlyBudgetChangedEvent } from './monthly-budget.events';

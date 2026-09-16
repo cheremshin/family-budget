@@ -12,9 +12,9 @@ import {
 
 import { nonEmptyCheck, targetAmountConsistencyCheck } from '../utils/checks';
 import { budgetCategories } from './budget-categories.schema';
+import { budgetCategoryType } from './budget-category-type.enum';
 import { calculationMode } from './calculation-mode.enum';
 import { monthlyBudgets } from './monthly-budgets.schema';
-import { budgetCategoryType } from './budget-category-type.enum';
 
 const TABLE_NAME = 'monthly_budget_items';
 

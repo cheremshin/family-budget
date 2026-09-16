@@ -14,13 +14,14 @@ import {
     MonthlyBudgetPlanIncomplete,
     PlannedIncomeNotSet,
     distribute,
-    hasOverAllocation,
+    isOverAllocated,
 } from '@family-budget/domain/monthly-budget';
 import { Period } from '@family-budget/domain/shared';
 
 import { familyService, requireFamilyMember, requireFamilyOwner } from '@/lib/family';
 
 import { budgetCategoryService } from '../budget-category';
+import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { mapToClosedMonthlyBudget, mapToOpenMonthlyBudget } from './monthly-budget.mappers';
 import { deleteMonthlyBudgetItem } from './mutations/delete-monthly-budget-item';
 import { insertIncome } from './mutations/insert-income';
@@ -88,7 +89,7 @@ export async function setPlannedIncome(
     const familyId = await requireFamilyMember(userId);
 
     const budget = await db.transaction(async (tx) => {
-        const monthlyBudget = await ensureMonthlyBudget({ familyId, period: input.period }, tx);
+        const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
 
         if (monthlyBudget.isClosed) {
             throw new MonthlyBudgetClosedError();
@@ -119,7 +120,7 @@ export async function addActualIncome(
     const familyId = await requireFamilyMember(userId);
 
     const budget = await db.transaction(async (tx) => {
-        const monthlyBudget = await ensureMonthlyBudget({ familyId, period: input.period }, tx);
+        const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
         const plannedIncome = await getPlannedIncome(monthlyBudget.id, userId, tx);
 
         if (!plannedIncome) {
@@ -148,7 +149,7 @@ export async function closeMonthlyBudget(userId: string, period: Period): Promis
     const familyId = await requireFamilyOwner(userId);
 
     const budget = await db.transaction(async (tx) => {
-        const monthlyBudget = await ensureMonthlyBudget({ familyId, period }, tx);
+        const monthlyBudget = await requireMonthlyBudget(familyId, period, tx);
 
         if (monthlyBudget.isClosed) {
             throw new MonthlyBudgetClosedError();
@@ -164,8 +165,13 @@ export async function closeMonthlyBudget(userId: string, period: Period): Promis
         const family = await familyService.requireFamily(familyId, tx);
         const divisionType = family.settings.budgetDivisionType;
 
-        const distribution = distribute({ divisionType, items: monthlyBudget.items, members });
-        if (hasOverAllocation(distribution)) {
+        const distribution = distribute({
+            divisionType,
+            personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
+            items: monthlyBudget.items,
+            members,
+        });
+        if (isOverAllocated(distribution)) {
             throw new MonthlyBudgetOverAllocated();
         }
 

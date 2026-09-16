@@ -11,6 +11,7 @@ import {
 } from '@family-budget/domain/monthly-budget';
 import { assertContract } from '@family-budget/domain/shared';
 
+import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { MonthlyBudgetWithRelations, PlannedIncomeWithRelations } from './types';
 
 export function mapToOpenMonthlyBudget(
@@ -36,8 +37,9 @@ export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): Cl
 
     // Вклады не хранятся: все входы заморожены закрытием, поэтому раскладка —
     // чистая функция от уже сохранённого.
-    const { contributions, personalRemainders } = distribute({
+    const { contributions, remainders } = distribute({
         divisionType,
+        personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
         items,
         members: memberIncomes,
     });
@@ -49,7 +51,7 @@ export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): Cl
             isClosed: true as const,
             memberIncomes,
             contributions,
-            personalRemainders,
+            remainders,
         },
         'mapToClosedMonthlyBudget',
     ) as ClosedMonthlyBudget;
@@ -61,6 +63,7 @@ function mapToBase(budget: MonthlyBudgetWithRelations, divisionType: BudgetDivis
         period: budget.period,
         version: budget.version,
         divisionType,
+        personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
         items: budget.items.map(mapToMonthlyBudgetItem),
     };
 }
@@ -77,7 +80,10 @@ export function mapToMonthlyBudgetItem(item: MonthlyBudgetItemPersist): MonthlyB
     };
 }
 
-function mirrorMembers(members: FamilyMember[], budget: MonthlyBudgetWithRelations): MemberIncome[] {
+function mirrorMembers(
+    members: FamilyMember[],
+    budget: MonthlyBudgetWithRelations,
+): MemberIncome[] {
     const byUser = new Map(budget.plannedIncomes.map((income) => [income.userId, income]));
 
     return members.map((member) => {
