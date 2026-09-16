@@ -27,9 +27,16 @@ type PropsT<T extends FieldValues> = {
     name: Path<T>;
     label?: string;
     placeholder?: string;
+    className?: string;
 };
 
-export function MoneyField<T extends FieldValues>({ formId, name, label, placeholder }: PropsT<T>) {
+export function MoneyField<T extends FieldValues>({
+    formId,
+    name,
+    label,
+    placeholder,
+    className,
+}: PropsT<T>) {
     const { control } = useFormContext<T>();
 
     return (
@@ -49,6 +56,7 @@ export function MoneyField<T extends FieldValues>({ formId, name, label, placeho
                             value={field.value ?? ''}
                             onBlur={field.onBlur}
                             onChange={(e) => field.onChange(sanitizeMoneyInput(e.target.value))}
+                            className={className}
                         />
                     </FieldContent>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

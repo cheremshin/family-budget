@@ -2,23 +2,19 @@
 
 import { FC } from 'react';
 
-import { BudgetInitialData, BudgetProvider } from './budget-provider.vm';
-import { Distribution } from './components/distribution/distribution';
-import { Incomes } from './components/incomes/incomes';
+import { Period } from '@family-budget/domain/shared';
 
-type PropsT = {
-    familyId: string;
-    currentUserId: string;
-    initialData?: BudgetInitialData;
+import { Viewer } from '@/client/core';
+
+import { BudgetScreen } from './components/screen/budget-screen';
+import { useBudgetVM } from './use-budget-vm';
+
+type MonthlyBudgetT = {
+    viewer: Viewer;
+    today: Period;
 };
 
-export const MonthlyBudget: FC<PropsT> = ({ familyId, currentUserId, initialData }) => {
-    return (
-        <BudgetProvider familyId={familyId} currentUserId={currentUserId} initialData={initialData}>
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-                <Incomes className="lg:w-80 lg:shrink-0" />
-                <Distribution className="lg:flex-1" />
-            </div>
-        </BudgetProvider>
-    );
+export const MonthlyBudget: FC<MonthlyBudgetT> = ({ viewer, today }) => {
+    const vm = useBudgetVM(viewer, today);
+    return <BudgetScreen vm={vm} />;
 };
