@@ -1,5 +1,6 @@
+import type { MonthlyBudgetChangedEvent } from '@family-budget/domain/monthly-budget';
+
 import { InMemoryMonthlyBudgetEventBus } from './adapters/in-memory-monthly-budget-event-bus';
-import { MonthlyBudgetChangedEvent } from './types';
 
 export type MonthlyBudgetEventListener = (event: MonthlyBudgetChangedEvent) => void;
 
@@ -8,4 +9,9 @@ export interface MonthlyBudgetEventBus {
     subscribe(familyId: string, listener: MonthlyBudgetEventListener): () => void;
 }
 
-export const monthlyBudgetEventBus = new InMemoryMonthlyBudgetEventBus();
+const globalForBus = globalThis as typeof globalThis & {
+    __monthlyBudgetEventBus__?: MonthlyBudgetEventBus;
+};
+
+export const monthlyBudgetEventBus: MonthlyBudgetEventBus =
+    (globalForBus.__monthlyBudgetEventBus__ ??= new InMemoryMonthlyBudgetEventBus());
