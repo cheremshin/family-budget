@@ -28,7 +28,7 @@ export const ActualIncomesWidget: FC<ActualIncomesWidgetT> = observer(({ store, 
     const [isAddIncomeOpen, setAddIncomeOpen] = useState(false);
 
     if (view.status === 'hidden') return null;
-    if (view.status === 'loading') return <ActualIncomesSkeleton />;
+    if (view.status === 'loading') return <ActualIncomesSkeleton className={className} />;
 
     return (
         <Card className={className}>

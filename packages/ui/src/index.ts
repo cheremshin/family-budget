@@ -49,3 +49,4 @@ export {
 } from './components/ui/table';
 export { Progress } from './components/ui/progress';
 export { Popover, PopoverContent, PopoverTrigger } from './components/ui/popover';
+export { Skeleton } from './components/ui/skeleton';

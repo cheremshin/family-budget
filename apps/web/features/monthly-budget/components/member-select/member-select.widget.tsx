@@ -16,7 +16,7 @@ type MemberSelectWidgetT = {
 export const MembersSelectWidget: FC<MemberSelectWidgetT> = observer(({ store, className }) => {
     const { view } = store;
     if (view.status === 'loading') {
-        return <MemberSelectSkeleton />;
+        return <MemberSelectSkeleton className={className} />;
     }
 
     return (
