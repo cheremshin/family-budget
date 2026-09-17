@@ -14,6 +14,7 @@ import {
 } from '@/client/monthly-budget';
 
 import { ReceiptsStore } from './components/actual-incomes/actual-incomes.store';
+import { DateStore } from './components/date-picker/date-picker.store';
 import { MembersStore } from './components/member-select/members.store';
 import { PlannedIncomeStore } from './components/planned-income/planned-income.store';
 import { ScreenStore } from './components/screen/screen.store';
@@ -23,6 +24,7 @@ import { SelectionStore } from './stores/selection.store';
 
 export class BudgetVM {
     readonly period: PeriodStore;
+    readonly datePicker: DateStore;
     readonly screen: ScreenStore;
     readonly members: MembersStore;
     readonly plannedIncome: PlannedIncomeStore;
@@ -54,6 +56,7 @@ export class BudgetVM {
 
         // Фасады виджетов
         this.period = period;
+        this.datePicker = new DateStore(budget, period);
         this.screen = new ScreenStore(budget, period, createBudget);
         this.members = new MembersStore(budget, selection);
         this.plannedIncome = new PlannedIncomeStore(budget, selection, setPlannedIncome);

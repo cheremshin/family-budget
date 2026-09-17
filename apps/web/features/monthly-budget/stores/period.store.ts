@@ -5,7 +5,7 @@ import { type Period, shiftPeriod } from '@family-budget/domain/shared';
 export class PeriodStore {
     @observable selectedPeriod: Period;
 
-    constructor(private readonly currentPeriod: Period) {
+    constructor(readonly currentPeriod: Period) {
         this.selectedPeriod = currentPeriod;
         makeObservable(this);
     }
