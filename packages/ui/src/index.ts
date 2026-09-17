@@ -48,3 +48,4 @@ export {
     TableRow,
 } from './components/ui/table';
 export { Progress } from './components/ui/progress';
+export { Popover, PopoverContent, PopoverTrigger } from './components/ui/popover';
