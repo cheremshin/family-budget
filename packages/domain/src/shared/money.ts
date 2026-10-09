@@ -1,7 +1,7 @@
 import z from 'zod';
 
 /**
- * Деньги везде — decimal-строка, а не число
+ * Деньги везде - decimal-строка, а не число
  *
  * Повторяет колонку `decimal(12, 2)`: до 10 цифр целой части и до 2 дробной.
  */
@@ -35,15 +35,22 @@ export function sumMoney(amounts: SignedMoney[]): SignedMoney {
     return fromKopecks(amounts.reduce((acc, amount) => acc + toKopecks(amount), 0));
 }
 
+/**
+ * Процент от суммы, половина копейки округляется вверх
+ *
+ * Считается в целых: процент - в сотых долях (`'33.33'` → 3333), произведение в BigInt,
+ * потому что копейки × сотые выходят за точный диапазон Number. Через float было UB:
+ * 0.57% от 50.00 давало 0.28, а 0.69% - 0.35.
+ */
 export function percentOf(total: Money, percent: string): Money {
-    return fromKopecks(Math.round((toKopecks(total) * Number(percent)) / 100));
+    const scaled = BigInt(toKopecks(total)) * BigInt(toKopecks(percent));
+    return fromKopecks(Number((scaled + 5_000n) / 10_000n));
 }
 
 /**
- * Делит `total` между `weights` методом наибольших остатков — без потери копеек
+ * Делит `total` между `weights` методом наибольших остатков - без потери копеек.
  *
- * `total` может быть отрицательным (например, общий пул личных остатков при перерасходе):
- * делим модуль, затем переносим знак на все доли — веса всегда неотрицательны.
+ * `total` может быть отрицательным (например, общий пул личных остатков при перерасходе)
  */
 export function allocate(total: SignedMoney, weights: number[]): SignedMoney[] {
     const totalKopecks = toKopecks(total);
