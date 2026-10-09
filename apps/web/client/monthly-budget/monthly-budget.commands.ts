@@ -1,6 +1,7 @@
 import {
     AddIncomeInput,
     AddPlannedIncomeInput,
+    CloseMonthlyBudgetInput,
     MonthlyBudget,
 } from '@family-budget/domain/monthly-budget';
 import { Period } from '@family-budget/domain/shared';
@@ -9,6 +10,7 @@ import { callAction } from '../core';
 import { MutationCommand } from '../core/command';
 import {
     addIncomeAction,
+    closeMonth,
     createMonthlyBudget,
     setPlannedIncomeAction,
 } from './monthly-budget.actions';
@@ -38,5 +40,11 @@ export class SetPlannedIncomeCommand extends BudgetCommand<AddPlannedIncomeInput
 export class AddIncomeCommand extends BudgetCommand<AddIncomeInput> {
     constructor(deps: MonthlyBudgetDeps) {
         super(deps, (input) => callAction(addIncomeAction, input));
+    }
+}
+
+export class CloseMonthCommand extends BudgetCommand<CloseMonthlyBudgetInput> {
+    constructor(deps: MonthlyBudgetDeps) {
+        super(deps, (input) => callAction(closeMonth, input));
     }
 }

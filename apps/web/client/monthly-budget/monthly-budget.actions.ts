@@ -2,7 +2,7 @@
 
 import z from 'zod';
 
-import { addIncomeSchema, addPlannedIncomeSchema } from '@family-budget/domain/monthly-budget';
+import { addIncomeSchema, addPlannedIncomeSchema, closeMonthlyBudgetSchema } from '@family-budget/domain/monthly-budget';
 import { periodSchema } from '@family-budget/domain/shared';
 
 import { monthlyBudgetService } from '@/lib/monthly-budget';
@@ -28,4 +28,10 @@ export const addIncomeAction = familyActionClient
     .inputSchema(addIncomeSchema)
     .action(async ({ ctx, parsedInput }) =>
         monthlyBudgetService.addActualIncome(ctx.user.id, parsedInput),
+    );
+
+export const closeMonth = familyActionClient
+    .inputSchema(closeMonthlyBudgetSchema)
+    .action(async ({ ctx, parsedInput }) =>
+        monthlyBudgetService.closeMonthlyBudget(ctx.user.id, parsedInput),
     );
