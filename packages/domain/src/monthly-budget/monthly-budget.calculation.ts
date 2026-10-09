@@ -68,8 +68,7 @@ export function distribute({
             ? orderedMembers.map(() => 1)
             : proportional;
 
-    const contributions: Contribution[] = [];
-    const spentByMember = new Map(orderedMembers.map((member) => [member.memberId, 0]));
+    const shares: Share[] = [];
 
     for (const item of items) {
         const required =
@@ -78,17 +77,26 @@ export function distribute({
                 : percentOf(totalPlanned, item.targetAmount);
 
         allocate(required, weights).forEach((amount, index) => {
-            const { memberId } = orderedMembers[index];
-            contributions.push({ memberId, categoryId: item.categoryId, amount });
-            spentByMember.set(memberId, spentByMember.get(memberId)! + toKopecks(amount));
+            shares.push({
+                memberId: orderedMembers[index].memberId,
+                categoryId: item.categoryId,
+                kopecks: toKopecks(amount),
+                isRelative: item.calculationMode === 'relative',
+            });
         });
     }
 
+    absorbRoundingShortfall(personalRemainderPolicy, orderedMembers, shares);
+
+    const contributions: Contribution[] = shares.map(({ memberId, categoryId, kopecks }) => ({
+        memberId,
+        categoryId,
+        amount: fromKopecks(kopecks),
+    }));
+
     const ownRemainders = orderedMembers.map((member) => ({
         memberId: member.memberId,
-        ownRemainder: fromKopecks(
-            toKopecks(member.plannedAmount) - spentByMember.get(member.memberId)!,
-        ),
+        ownRemainder: fromKopecks(ownRemainderOf(member, shares)),
     }));
 
     const personalAmounts = resolvePersonalAmounts(personalRemainderPolicy, ownRemainders);
@@ -105,6 +113,79 @@ export function distribute({
 
     return { contributions, remainders };
 }
+
+/**
+ * Недостача, которую считаем погрешностью округления, а не перерасходом
+ *
+ * Процентные категории округляются каждая отдельно, поэтому даже ровно 100% дохода
+ * в сумме могут потребовать на копейки больше самого дохода.
+ */
+export const ROUNDING_TOLERANCE_KOPECKS = 100;
+
+type Share = {
+    memberId: string;
+    categoryId: string;
+    kopecks: number;
+    isRelative: boolean;
+};
+
+function ownRemainderOf(member: DistributionMember, shares: Share[]): number {
+    const spent = shares
+        .filter((share) => share.memberId === member.memberId)
+        .reduce((acc, share) => acc + share.kopecks, 0);
+    return toKopecks(member.plannedAmount) - spent;
+}
+
+/**
+ * Гасит недостачу в пределах допуска за счёт процентных вкладов, чтобы личная часть
+ * не уходила в минус из-за округления.
+ *
+ * Что считается недостачей, зависит от политики: при `individual` личную часть каждый
+ * берёт из своего остатка, при `equalized` — из общего пула.
+ * Больше допуска или нечем погасить — это перерасход, его ловит `isOverAllocated`.
+ */
+function absorbRoundingShortfall(
+    policy: PersonalRemainderPolicy,
+    members: DistributionMember[],
+    shares: Share[],
+): void {
+    if (policy === 'individual') {
+        for (const member of members) {
+            const shortfall = -ownRemainderOf(member, shares);
+            const own = shares.filter((share) => share.memberId === member.memberId);
+            takeFromRelative(shortfall, own);
+        }
+        return;
+    }
+
+    const shortfall = -members.reduce((acc, member) => acc + ownRemainderOf(member, shares), 0);
+    takeFromRelative(shortfall, shares);
+}
+
+function takeFromRelative(shortfall: number, shares: Share[]): void {
+    if (shortfall <= 0 || shortfall > ROUNDING_TOLERANCE_KOPECKS) return;
+
+    const relative = shares
+        .filter((share) => share.isRelative)
+        .sort(
+            (a, b) =>
+                b.kopecks - a.kopecks ||
+                compareIds(a.categoryId, b.categoryId) ||
+                compareIds(a.memberId, b.memberId),
+        );
+
+    if (relative.reduce((acc, share) => acc + share.kopecks, 0) < shortfall) return;
+
+    let left = shortfall;
+    for (const share of relative) {
+        const taken = Math.min(share.kopecks, left);
+        share.kopecks -= taken;
+        left -= taken;
+        if (left === 0) break;
+    }
+}
+
+const compareIds = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
 /**
  * `individual` — каждый оставляет себе свой сырой остаток
