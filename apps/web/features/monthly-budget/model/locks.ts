@@ -1,5 +1,6 @@
-import type { Viewer } from "@/client/core";
-import type { MemberIncome, MonthlyBudget } from "@family-budget/domain/monthly-budget";
+import type { MemberIncome, MonthlyBudget } from '@family-budget/domain/monthly-budget';
+
+import type { Viewer } from '@/client/core';
 
 export type PlanLock = 'closed' | 'foreign';
 export type ReceiptLock = 'foreign';

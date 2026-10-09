@@ -15,7 +15,8 @@ type FamilyContext = RequestContext & {
 
 const NO_STORE = { 'Cache-Control': 'private, no-store' };
 
-const fail = (status: number, body: ServerError) => NextResponse.json(body, { status, headers: NO_STORE });
+const fail = (status: number, body: ServerError) =>
+    NextResponse.json(body, { status, headers: NO_STORE });
 
 export function familyRoute<S extends z.ZodType, Out>(
     schema: S,
@@ -26,7 +27,10 @@ export function familyRoute<S extends z.ZodType, Out>(
             const ctx = await getRequestContext();
 
             if (!ctx.user) {
-                return fail(401, { code: 'unauthorized', message: 'Сессия истекла. Войдите снова' });
+                return fail(401, {
+                    code: 'unauthorized',
+                    message: 'Сессия истекла. Войдите снова',
+                });
             }
             if (!ctx.family) throw new NoFamilyYetError();
 
@@ -34,7 +38,11 @@ export function familyRoute<S extends z.ZodType, Out>(
             if (!parsed.success) {
                 const { formErrors, fieldErrors } = z.flattenError(parsed.error);
                 return NextResponse.json(
-                    { code: 'validation', message: formErrors[0] ?? 'Некорректные данные', fieldErrors },
+                    {
+                        code: 'validation',
+                        message: formErrors[0] ?? 'Некорректные данные',
+                        fieldErrors,
+                    },
                     { status: 422, headers: NO_STORE },
                 );
             }
@@ -50,7 +58,10 @@ export function familyRoute<S extends z.ZodType, Out>(
             }
 
             console.error('[route]', error);
-            return fail(500, { code: 'unexpected', message: 'Не удалось выполнить операцию. Попробуйте снова' });
+            return fail(500, {
+                code: 'unexpected',
+                message: 'Не удалось выполнить операцию. Попробуйте снова',
+            });
         }
     };
 }

@@ -1,7 +1,6 @@
+import type { QueryKey } from '@tanstack/query-core';
 import { comparer, computed, makeObservable } from 'mobx';
 import { Query, type QueryClient } from 'mobx-tanstack-query';
-
-import type { QueryKey } from '@tanstack/query-core';
 
 import { type ClientError, toClientError } from './client-error';
 

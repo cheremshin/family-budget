@@ -30,7 +30,10 @@ export function shiftPeriod(period: Period, months: number): Period {
 
 export const PERIOD_PARAM = 'period';
 
-export function resolvePeriodParam(raw: string | string[] | null | undefined, today: Period): Period {
+export function resolvePeriodParam(
+    raw: string | string[] | null | undefined,
+    today: Period,
+): Period {
     const value = Array.isArray(raw) ? raw[0] : raw;
     if (!value || !/^\d{4}-\d{2}/.test(value)) return today;
     const parsed = periodSchema.safeParse(`${value}-01`);

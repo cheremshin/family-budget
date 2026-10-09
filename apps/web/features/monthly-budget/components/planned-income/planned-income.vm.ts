@@ -6,7 +6,11 @@ import { type Command, type CommandResult, guarded } from '@/client/core';
 
 import type { ReadySource } from '../../model/ports';
 import type { PlannedIncomeFormValues } from './planned-income.form';
-import { type PlannedIncomeView, buildPlannedIncomeView, planLockView } from './planned-income.view';
+import {
+    type PlannedIncomeView,
+    buildPlannedIncomeView,
+    planLockView,
+} from './planned-income.view';
 
 export class PlannedIncomeVM {
     constructor(

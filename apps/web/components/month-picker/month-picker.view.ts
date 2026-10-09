@@ -1,5 +1,6 @@
-import { formatDateWide, formatMonthShort } from '@/lib/i18n';
 import { Period, shiftPeriod } from '@family-budget/domain/shared';
+
+import { formatDateWide, formatMonthShort } from '@/lib/i18n';
 
 export type MonthCell = {
     period: Period;

@@ -14,48 +14,53 @@ type BudgetDistributionWidgetT = {
     className?: string;
 };
 
-export const BudgetDistributionWidget: FC<BudgetDistributionWidgetT> = observer(({ vm, className }) => {
-    const { view } = vm;
+export const BudgetDistributionWidget: FC<BudgetDistributionWidgetT> = observer(
+    ({ vm, className }) => {
+        const { view } = vm;
 
-    switch (view.status) {
-        case 'hidden':
-            return null;
-        case 'empty':
-            return <DistributionEmptyCard message={view.message} className={className} />;
-        case 'month':
-            return (
-                <Card className={className}>
-                    <CardHeader>
-                        <CardTitle className="flex justify-between items-center text-lg gap-2">
-                            Распределение по категориям
-                            {view.isPreview && (
-                                <span className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded-lg">Предпросмотр</span>
-                            )}
-                        </CardTitle>
-                        <CardDescription>
-                            Кто из участников сколько вкладывает в категории
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-4">
-                        <DistributionGrid columns={view.columns} rows={view.rows} />
-                        {view.settlement && <SettlementNote settlement={view.settlement} />}
-                    </CardContent>
-                </Card>
-            );
-        case 'receipt':
-            return (
-                <Card className={className}>
-                    <CardHeader>
-                        <CardTitle className="text-lg">Поступление {view.receipt.amount}</CardTitle>
-                        <CardDescription>
-                            {view.receipt.receivedAt} - {' '}
-                            Как распределяется это поступление
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <DistributionGrid columns={view.columns} rows={view.rows} />
-                    </CardContent>
-                </Card>
-            );
-    }
-});
+        switch (view.status) {
+            case 'hidden':
+                return null;
+            case 'empty':
+                return <DistributionEmptyCard message={view.message} className={className} />;
+            case 'month':
+                return (
+                    <Card className={className}>
+                        <CardHeader>
+                            <CardTitle className="flex justify-between items-center text-lg gap-2">
+                                Распределение по категориям
+                                {view.isPreview && (
+                                    <span className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded-lg">
+                                        Предпросмотр
+                                    </span>
+                                )}
+                            </CardTitle>
+                            <CardDescription>
+                                Кто из участников сколько вкладывает в категории
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-4">
+                            <DistributionGrid columns={view.columns} rows={view.rows} />
+                            {view.settlement && <SettlementNote settlement={view.settlement} />}
+                        </CardContent>
+                    </Card>
+                );
+            case 'receipt':
+                return (
+                    <Card className={className}>
+                        <CardHeader>
+                            <CardTitle className="text-lg">
+                                Поступление {view.receipt.amount}
+                            </CardTitle>
+                            <CardDescription>
+                                {view.receipt.receivedAt} - Как распределяется это поступление
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <DistributionGrid columns={view.columns} rows={view.rows} />
+                        </CardContent>
+                    </Card>
+                );
+        }
+    },
+);

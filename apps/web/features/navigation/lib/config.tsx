@@ -15,13 +15,13 @@ export const useSidebarConfig = () => {
             title: 'FamilyBudget',
             icon: WalletIcon,
             items: [
-                {
-                    id: 'home',
-                    label: 'Главная',
-                    href: '/home',
-                    icon: HomeIcon,
-                    isActive: pathname === '/home',
-                },
+                //{
+                //    id: 'home',
+                //    label: 'Главная',
+                //    href: '/home',
+                //    icon: HomeIcon,
+                //    isActive: pathname === '/home',
+                //},
                 {
                     id: 'incomes',
                     label: 'Доходы',

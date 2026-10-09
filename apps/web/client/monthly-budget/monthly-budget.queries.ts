@@ -13,10 +13,7 @@ export class MonthlyBudgetQuery extends ResourceQuery<MonthlyBudget | null, Mont
             queryClient,
             queryKey: () => cache.key(period()),
             fetch: async ([, , keyPeriod], signal) =>
-                cache.reconcile(
-                    keyPeriod,
-                    await fetchMonthlyBudget(keyPeriod, signal)
-                ),
+                cache.reconcile(keyPeriod, await fetchMonthlyBudget(keyPeriod, signal)),
         });
     }
 }

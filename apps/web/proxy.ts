@@ -1,5 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { incomesProxy } from "./app/(internal)/incomes/_lib/incomes.proxy";
+import { type NextRequest, NextResponse } from 'next/server';
+
+import { incomesProxy } from './app/(internal)/incomes/_lib/incomes.proxy';
 
 export function proxy(request: NextRequest) {
     switch (request.nextUrl.pathname) {

@@ -8,6 +8,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Family, createFamilySchema } from '@family-budget/domain/family';
 
+import { routes } from '@/routes';
+
 import { FamilyContext } from '../contexts/family-context';
 import { createFamilyAction } from '../lib/create-family.action';
 import { steps } from '../steps';
@@ -71,7 +73,7 @@ export const CreateFamilyWizard: FC<PropsT> = ({ onExitAction }) => {
     };
 
     const finishWizard = () => {
-        router.push('/home');
+        router.push(routes.home);
     };
 
     const handleNext = () => {

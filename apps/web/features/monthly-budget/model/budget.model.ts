@@ -1,12 +1,12 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { MonthlyBudget } from '@family-budget/domain/monthly-budget';
 import type { Period } from '@family-budget/domain/shared';
 
 import type { Viewer } from '@/client/core';
 
 import { type BudgetSnapshot, toBudgetSnapshot } from './budget.snapshot';
 import type { BudgetSource, MemberSelection, PeriodSource, ReceiptSelection } from './ports';
-import { MonthlyBudget } from '@family-budget/domain/monthly-budget';
 
 export type BudgetState =
     | { kind: 'loading' }
@@ -24,10 +24,14 @@ export class BudgetModel implements MemberSelection, ReceiptSelection {
     /** При смене периода выбор транша должен сбрасываться */
     @observable.ref private receipt: { period: Period; id: string } | null = null;
 
-    constructor({ source, period, viewer }: {
-        source: BudgetSource,
-        period: PeriodSource,
-        viewer: Viewer,
+    constructor({
+        source,
+        period,
+        viewer,
+    }: {
+        source: BudgetSource;
+        period: PeriodSource;
+        viewer: Viewer;
     }) {
         this.memberId = viewer.userId;
         this.source = source;
@@ -78,7 +82,11 @@ export class BudgetModel implements MemberSelection, ReceiptSelection {
                 };
             case 'ready': {
                 if (resource.data === null) {
-                    return { kind: 'absent', period: selected, isPast: selected < this.period.today };
+                    return {
+                        kind: 'absent',
+                        period: selected,
+                        isPast: selected < this.period.today,
+                    };
                 }
 
                 const snapshot = this.snapshot;

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { FamilyError } from '@family-budget/domain/family';
 
 import { flashMessageService } from '@/lib/flash-message';
+import { routes } from '@/routes';
 
 import { acceptInvite } from '../_lib/accept-invite';
 
@@ -11,7 +12,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ code
 
     try {
         await acceptInvite(code);
-        return NextResponse.redirect(new URL('/home', request.url));
+        return NextResponse.redirect(new URL(routes.home, request.url));
     } catch (error) {
         if (error instanceof FamilyError) {
             await flashMessageService.set({
@@ -19,7 +20,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ code
                 message: error.message,
             });
 
-            return NextResponse.redirect(new URL(`/accept-invite?code=${code}`, request.url));
+            return NextResponse.redirect(new URL(routes.acceptInvite(code), request.url));
         }
 
         throw error;

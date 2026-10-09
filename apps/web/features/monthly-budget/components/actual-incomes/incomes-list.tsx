@@ -1,9 +1,10 @@
 import { FC } from 'react';
 
+import { ChevronRight } from 'lucide-react';
+
 import { cn } from '@family-budget/ui';
 
 import { ReceiptRow } from './actual-incomes.view';
-import { ChevronRight } from 'lucide-react';
 
 type IncomesListT = {
     rows: ReceiptRow[];
@@ -24,9 +25,7 @@ export const IncomesList: FC<IncomesListT> = ({ rows, onSelect }) => {
                     onClick={() => onSelect(row.id)}
                     className={cn(
                         'flex justify-between items-center gap-2 px-4 py-3 rounded-lg',
-                        row.isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'hover:bg-accent',
+                        row.isSelected ? 'bg-primary text-primary-foreground' : 'hover:bg-accent',
                     )}
                 >
                     <span className="font-medium">{row.receivedAt}</span>

@@ -11,22 +11,25 @@ type HydrationBoundaryProps = PropsWithChildren<{ state: DehydratedState }>;
 export function HydrationBoundary({ state, children }: HydrationBoundaryProps) {
     const queryClient = useQueryClient();
 
-    const hydrateFresher = useCallback((config: { allowObserved: boolean }) => {
-        const cache = queryClient.getQueryCache();
-        const queries = state.queries.filter((query) => {
-            const cached = cache.get(query.queryHash);
+    const hydrateFresher = useCallback(
+        (config: { allowObserved: boolean }) => {
+            const cache = queryClient.getQueryCache();
+            const queries = state.queries.filter((query) => {
+                const cached = cache.get(query.queryHash);
 
-            if (!config.allowObserved && cached && cached.getObserversCount() > 0) {
-                return false;
+                if (!config.allowObserved && cached && cached.getObserversCount() > 0) {
+                    return false;
+                }
+
+                return isNewer(query.state.data, cached?.state.data);
+            });
+
+            if (queries.length > 0) {
+                hydrate(queryClient, { mutations: [], queries });
             }
-
-            return isNewer(query.state.data, cached?.state.data);
-        });
-
-        if (queries.length > 0) {
-            hydrate(queryClient, { mutations: [], queries });
-        }
-    }, [queryClient, state]);
+        },
+        [queryClient, state],
+    );
 
     useState(() => hydrateFresher({ allowObserved: false }));
 

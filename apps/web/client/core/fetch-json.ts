@@ -9,7 +9,11 @@ export async function fetchJson<T>(url: string, signal?: AbortSignal): Promise<T
     let response: Response;
 
     try {
-        response = await fetch(url, { signal, cache: 'no-store', headers: { accept: 'application/json' } });
+        response = await fetch(url, {
+            signal,
+            cache: 'no-store',
+            headers: { accept: 'application/json' },
+        });
     } catch (error) {
         if (signal?.aborted) throw error;
         throw toClientError(error);
@@ -22,7 +26,11 @@ export async function fetchJson<T>(url: string, signal?: AbortSignal): Promise<T
     const body = (await response.json().catch(() => null)) as ErrorBody | null;
 
     if (response.status === 422) {
-        throw new ClientError('validation', body?.message ?? 'Некорректные данные', body?.fieldErrors ?? {});
+        throw new ClientError(
+            'validation',
+            body?.message ?? 'Некорректные данные',
+            body?.fieldErrors ?? {},
+        );
     }
 
     if (body?.code && body.message) {

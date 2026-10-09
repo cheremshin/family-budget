@@ -2,10 +2,10 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { PlannedIncomeVM } from './planned-income.vm';
 import { NoPlanCard } from './setup/no-plan-card';
 import { PlanSetupCard } from './setup/plan-setup-card';
 import { PlanSummaryCard } from './summary/plan-summary-card';
-import { PlannedIncomeVM } from './planned-income.vm';
 
 type PlannedIncomeWidgetT = {
     vm: PlannedIncomeVM;

@@ -6,7 +6,11 @@ import { type Command, type CommandResult, guarded } from '@/client/core';
 
 import type { ReadySource, ReceiptSelection } from '../../model/ports';
 import type { IncomeReceiptFormValues } from './actual-incomes.form';
-import { type ActualIncomesView, buildActualIncomesView, receiptLockView } from './actual-incomes.view';
+import {
+    type ActualIncomesView,
+    buildActualIncomesView,
+    receiptLockView,
+} from './actual-incomes.view';
 
 export class ActualIncomesVM {
     constructor(

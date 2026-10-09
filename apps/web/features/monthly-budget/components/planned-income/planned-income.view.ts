@@ -22,9 +22,8 @@ export type PlannedIncomeSummary = {
 export type PlannedIncomeView = {
     lock: PlanLockView;
 } & (
-        | { status: 'no-plan'; memberName: string; }
-        | { status: 'planned'; summary: PlannedIncomeSummary; }
-    );
+    { status: 'no-plan'; memberName: string } | { status: 'planned'; summary: PlannedIncomeSummary }
+);
 
 const LOCK_MESSAGES: Record<PlanLock, string> = {
     closed: 'Месяц закрыт - план нельзя изменить',

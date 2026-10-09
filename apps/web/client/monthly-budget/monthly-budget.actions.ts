@@ -2,7 +2,11 @@
 
 import z from 'zod';
 
-import { addIncomeSchema, addPlannedIncomeSchema, closeMonthlyBudgetSchema } from '@family-budget/domain/monthly-budget';
+import {
+    addIncomeSchema,
+    addPlannedIncomeSchema,
+    closeMonthlyBudgetSchema,
+} from '@family-budget/domain/monthly-budget';
 import { periodSchema } from '@family-budget/domain/shared';
 
 import { monthlyBudgetService } from '@/lib/monthly-budget';

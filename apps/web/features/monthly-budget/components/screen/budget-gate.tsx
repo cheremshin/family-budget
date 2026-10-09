@@ -4,13 +4,14 @@ import { FC, ReactNode } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { BudgetLoading } from '@/features/monthly-budget/components/screen/budget-loading';
+
 import { useBudgetScope } from '../../budget-scope.context';
 import { BudgetErrorCard } from './budget-error.card';
 import { BudgetLayout } from './budget-layout';
 import { CreateBudget } from './create-budget';
 import { ReadyGate } from './ready-gate';
 import { SyncErrorBanner } from './sync-error.banner';
-import { BudgetLoading } from '@/features/monthly-budget/components/screen/budget-loading';
 
 type BudgetGateT = {
     main: ReactNode;

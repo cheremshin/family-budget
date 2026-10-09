@@ -1,6 +1,8 @@
-import { toKopecks } from "@family-budget/domain/shared";
-import type { BudgetSnapshot } from "../../model/budget.snapshot";
-import { formatMoney } from "@/lib/i18n";
+import { toKopecks } from '@family-budget/domain/shared';
+
+import { formatMoney } from '@/lib/i18n';
+
+import type { BudgetSnapshot } from '../../model/budget.snapshot';
 
 export type MemberView = {
     id: string;
@@ -16,7 +18,11 @@ export type MemberSelectView = {
 
 export function buildMemberSelectView(s: BudgetSnapshot): MemberSelectView {
     const incomes = s.budget.memberIncomes;
-    const total = incomes.reduce((acc, member) => (member.plannedAmount === null ? acc : acc + toKopecks(member.plannedAmount)), 0);
+    const total = incomes.reduce(
+        (acc, member) =>
+            member.plannedAmount === null ? acc : acc + toKopecks(member.plannedAmount),
+        0,
+    );
 
     return {
         members: incomes.map((member) => ({

@@ -11,10 +11,18 @@
  *
  * веса >= 0, сумма > 0, иначе исключение
  */
-
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { allocate, fromKopecks, moneySchema, percentOf, signedMoneySchema, sumMoney, toKopecks } from './money';
+
+import {
+    allocate,
+    fromKopecks,
+    moneySchema,
+    percentOf,
+    signedMoneySchema,
+    sumMoney,
+    toKopecks,
+} from './money';
 
 const MAX_KOPECKS = 999_999_999_999;
 
@@ -28,7 +36,9 @@ const weightArbitary = fc.oneof(
 const weightsArgbitary = fc
     .oneof(
         fc.array(weightArbitary, { minLength: 1, maxLength: 6 }),
-        fc.tuple(fc.integer({ min: 1, max: 1_000 }), fc.integer({ min: 1, max: 6 })).map(([weight, count]) => Array.from({ length: count }, () => weight)),
+        fc
+            .tuple(fc.integer({ min: 1, max: 1_000 }), fc.integer({ min: 1, max: 6 }))
+            .map(([weight, count]) => Array.from({ length: count }, () => weight)),
     )
     .filter((weights) => weights.some((w) => w > 0));
 
@@ -51,7 +61,9 @@ describe('конвертация', () => {
         expect(fromKopecks(kopecks)).toBe(expected);
     });
 
-    it.todo('toKopecks на невалидной строке ("1.234", "abc") - вне контракта, защищает moneySchema');
+    it.todo(
+        'toKopecks на невалидной строке ("1.234", "abc") - вне контракта, защищает moneySchema',
+    );
 });
 
 describe('allocate', () => {
@@ -74,7 +86,9 @@ describe('allocate', () => {
 
                 parts.forEach((part, i) => {
                     // |доля - |total| * вес / SUM(весов)| < 1
-                    const diff = BigInt(Math.abs(toKopecks(part))) * weightSum - magnitude * BigInt(weights[i]);
+                    const diff =
+                        BigInt(Math.abs(toKopecks(part))) * weightSum -
+                        magnitude * BigInt(weights[i]);
                     expect(diff < weightSum && -diff < weightSum).toBe(true);
                 });
             }),
@@ -101,7 +115,7 @@ describe('allocate', () => {
                     if (weight === 0) {
                         expect(toKopecks(parts[i])).toBe(0);
                     }
-                })
+                });
             }),
         );
     });

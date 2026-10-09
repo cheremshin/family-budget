@@ -2,8 +2,7 @@ import type { BudgetSnapshot } from '../../model/budget.snapshot';
 import type { CloseBlocker } from '../../model/locks';
 
 export type CloseMonthView =
-    | { status: 'hidden' }
-    | { status: 'available'; isPending: boolean; error: string | null };
+    { status: 'hidden' } | { status: 'available'; isPending: boolean; error: string | null };
 
 const BLOCKER_MESSAGES: Record<CloseBlocker, string> = {
     'not-owner': 'Зафиксировать месяц может только владелец семьи',
