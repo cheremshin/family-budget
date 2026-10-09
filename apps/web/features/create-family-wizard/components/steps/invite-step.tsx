@@ -5,6 +5,7 @@ import { Check, Copy } from 'lucide-react';
 import { Button, Input } from '@family-budget/ui';
 
 import { useCreateFamily } from '../../contexts/family-context';
+import { routes } from '@/routes';
 
 export const InviteStep: FC = () => {
     const { family } = useCreateFamily();
@@ -14,7 +15,7 @@ export const InviteStep: FC = () => {
         return;
     }
 
-    const inviteLink = `${window.location.origin}/accept-invite/${family.invitationCode}`;
+    const inviteLink = new URL(routes.inviteLink(family.invitationCode), window.location.origin).toString();
 
     async function handleCopy() {
         await navigator.clipboard.writeText(inviteLink);

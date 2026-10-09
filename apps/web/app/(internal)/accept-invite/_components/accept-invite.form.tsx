@@ -12,6 +12,7 @@ import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@famil
 
 import { acceptInviteAction } from '../_lib/accept-invite.action';
 import { formSchema } from '../_lib/accept-invite.schema';
+import { routes } from '@/routes';
 
 type PropsT = {
     initialError?: string;
@@ -44,7 +45,7 @@ export const AcceptInviteForm: FC<PropsT> = ({ initialError }) => {
             return;
         }
 
-        router.replace('/home');
+        router.replace(routes.home);
     }
 
     useEffect(() => {

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
         root: path.resolve(__dirname, '../..'),
     },
     transpilePackages: ['@family-budget/domain', '@family-budget/ui', '@family-budget/database'],
+    typedRoutes: true,
 };
 
 export default nextConfig;

@@ -12,6 +12,7 @@ import { Button, Field, FieldError, FieldGroup, FieldLabel, Input } from '@famil
 
 import { signInAction } from '@/app/auth/sign-in/_lib/sign-in.action';
 import { formSchema } from '@/app/auth/sign-in/_lib/sign-in.schema';
+import { routes } from '@/routes';
 
 export const SignInForm: FC = () => {
     const {
@@ -84,7 +85,7 @@ export const SignInForm: FC = () => {
             <div className="flex flex-row justify-start items-center">
                 <div>Нет аккаунта?</div>
                 <Button asChild variant="link">
-                    <Link href="/auth/sign-up" className="max-w-24">
+                    <Link href={routes.signUp} className="max-w-24">
                         Регистрация
                     </Link>
                 </Button>

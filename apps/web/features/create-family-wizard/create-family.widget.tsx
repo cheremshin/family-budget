@@ -9,6 +9,7 @@ import { ArrowRight } from 'lucide-react';
 import { Button, Dialog, DialogContent, buttonVariants, cn } from '@family-budget/ui';
 
 import { CreateFamilyWizard } from './components/create-family-wizard';
+import { routes } from '@/routes';
 
 export const CreateFamilyWidget: FC = () => {
     const [mode, setMode] = useState<'welcome' | 'create'>('welcome');
@@ -34,7 +35,7 @@ export const CreateFamilyWidget: FC = () => {
                                 <ArrowRight />
                             </Button>
                             <Link
-                                href="/accept-invite"
+                                href={routes.acceptInvite()}
                                 className={cn(
                                     buttonVariants({
                                         variant: 'secondary',

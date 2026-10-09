@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { AuthError, authService } from '@/lib/auth';
 import { sessionService } from '@/lib/session';
+import { routes } from '@/routes';
 
 export const signUpAction = async (data: { username: string; password: string }) => {
     try {
@@ -21,5 +22,5 @@ export const signUpAction = async (data: { username: string; password: string })
         };
     }
 
-    redirect('/home');
+    redirect(routes.home);
 };
