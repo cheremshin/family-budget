@@ -15,6 +15,7 @@ type BudgetChange = Pick<MonthlyBudgetChangedEvent, 'familyId' | 'period' | 'ver
 export class MonthlyBudgetLiveSync {
     private source: EventSource | null = null;
     private retainers = 0;
+    private hasConnected = false;
 
     constructor(private readonly queryClient: QueryClient) {}
 
@@ -32,11 +33,10 @@ export class MonthlyBudgetLiveSync {
 
     private open(): void {
         const source = new EventSource(EVENTS_URL);
-        let opened = false;
 
         source.addEventListener('open', () => {
-            if (opened) this.invalidateAll();
-            opened = true;
+            if (this.hasConnected) this.invalidateAll();
+            this.hasConnected = true;
         });
 
         source.addEventListener('monthly-budget.changed', (event) => {

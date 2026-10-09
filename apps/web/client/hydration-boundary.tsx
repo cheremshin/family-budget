@@ -1,6 +1,6 @@
 'use client';
 
-import { type PropsWithChildren, useEffect, useState } from 'react';
+import { type PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
 import { type DehydratedState, hydrate } from '@tanstack/query-core';
 
@@ -11,25 +11,28 @@ type HydrationBoundaryProps = PropsWithChildren<{ state: DehydratedState }>;
 export function HydrationBoundary({ state, children }: HydrationBoundaryProps) {
     const queryClient = useQueryClient();
 
-    useState(() => {
+    const hydrateFresher = useCallback((config: { allowObserved: boolean }) => {
         const cache = queryClient.getQueryCache();
-        const queries = state.queries.filter((query) => !cache.get(query.queryHash));
+        const queries = state.queries.filter((query) => {
+            const cached = cache.get(query.queryHash);
 
-        if (queries.length > 0) {
-            hydrate(queryClient, { mutations: [], queries });
-        }
-    });
+            if (!config.allowObserved && cached && cached.getObserversCount() > 0) {
+                return false;
+            }
 
-    useEffect(() => {
-        const cache = queryClient.getQueryCache();
-        const queries = state.queries.filter((query) =>
-            isNewer(query.state.data, cache.get(query.queryHash)?.state.data),
-        );
+            return isNewer(query.state.data, cached?.state.data);
+        });
 
         if (queries.length > 0) {
             hydrate(queryClient, { mutations: [], queries });
         }
     }, [queryClient, state]);
+
+    useState(() => hydrateFresher({ allowObserved: false }));
+
+    useEffect(() => {
+        hydrateFresher({ allowObserved: true });
+    }, [queryClient, state, hydrateFresher]);
 
     return children;
 }

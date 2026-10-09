@@ -39,12 +39,9 @@ export async function GET(request: Request) {
                 send(`event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`);
             });
 
-            const heartbeat = setInterval(() => send(': ping\n\n'), 25 * 1000);
-
             cleanup = () => {
                 if (isClosed) return;
                 isClosed = true;
-                clearInterval(heartbeat);
                 unsubscribe();
                 try {
                     controller.close();
