@@ -21,11 +21,5 @@ export async function insertMonthlyBudgetItems(
     return await tx
         .insert(schema.monthlyBudgetItems)
         .values(data)
-        .onConflictDoNothing({
-            target: [
-                schema.monthlyBudgetItems.monthlyBudgetId,
-                schema.monthlyBudgetItems.budgetCategoryId,
-            ],
-        })
         .returning();
 }

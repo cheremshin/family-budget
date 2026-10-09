@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { CalendarIcon } from 'lucide-react';
+
 import { cn } from '../../lib/utils';
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
@@ -19,4 +21,31 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
 );
 Input.displayName = 'Input';
 
-export { Input };
+type DateInputProps = React.ComponentProps<typeof Input>;
+
+const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
+    ({ className, ...props }, ref) => {
+        return (
+            <div className="relative">
+                <Input
+                    ref={ref}
+                    type="date"
+                    className={cn(
+                        'pr-10 [&::-webkit-calendar-picker-indicator]:absolute',
+                        '[&::-webkit-calendar-picker-indicator]:inset-0',
+                        '[&::-webkit-calendar-picker-indicator]:h-full',
+                        '[&::-webkit-calendar-picker-indicator]:w-full',
+                        '[&::-webkit-calendar-picker-indicator]:opacity-0',
+                        '[&::-webkit-calendar-picker-indicator]:cursor-pointer',
+                        className,
+                    )}
+                    {...props}
+                />
+                <CalendarIcon className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            </div>
+        );
+    },
+);
+DateInput.displayName = 'DateInput';
+
+export { Input, DateInput };

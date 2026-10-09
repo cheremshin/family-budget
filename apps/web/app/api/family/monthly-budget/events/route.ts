@@ -1,5 +1,5 @@
+import { getRequestContext } from '@/client/request-context';
 import { monthlyBudgetEventBus } from '@/lib/monthly-budget';
-import { getRequestContext } from '@/lib/request-context';
 
 export async function GET(request: Request) {
     const context = await getRequestContext();
@@ -19,22 +19,42 @@ export async function GET(request: Request) {
     const familyId = context.family.id;
     const encoder = new TextEncoder();
 
+    let cleanup = () => {};
+
     const stream = new ReadableStream({
         start(controller) {
+            let isClosed = false;
+
+            const send = (payload: string) => {
+                if (isClosed) return;
+
+                try {
+                    controller.enqueue(encoder.encode(payload));
+                } catch {
+                    cleanup();
+                }
+            };
+
             const unsubscribe = monthlyBudgetEventBus.subscribe(familyId, (event) => {
-                const payload = `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`;
-                controller.enqueue(encoder.encode(payload));
+                send(`event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`);
             });
 
-            const heartbeat = setInterval(() => {
-                controller.enqueue(encoder.encode(': ping\n\n'));
-            }, 25 * 1000);
-
-            request.signal.addEventListener('abort', () => {
-                clearInterval(heartbeat);
+            cleanup = () => {
+                if (isClosed) return;
+                isClosed = true;
                 unsubscribe();
-                controller.close();
-            });
+                try {
+                    controller.close();
+                } catch {
+                    // уже закрыт
+                }
+            };
+
+            request.signal.addEventListener('abort', cleanup);
+            send(': connected\n\n');
+        },
+        cancel() {
+            cleanup();
         },
     });
 
@@ -43,6 +63,7 @@ export async function GET(request: Request) {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache, no-transform',
             Connection: 'keep-alive',
+            'X-Accel-Buffering': 'no',
         },
     });
 }

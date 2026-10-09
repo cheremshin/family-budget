@@ -12,8 +12,8 @@ export type {
     FamilySettings,
     UpdateFamilyInput,
 } from './family.contract';
-export { budgetDivisionTypeOptions } from './family.enums';
-export type { BudgetDivisionType } from './family.enums';
+export { budgetDivisionTypeOptions, personalRemainderPolicyOptions } from './family.enums';
+export type { BudgetDivisionType, PersonalRemainderPolicy } from './family.enums';
 export {
     FamilyAlreadyExistsError,
     FamilyError,

@@ -7,7 +7,6 @@ import { sessionService } from '@/lib/session';
 
 export const signUpAction = async (data: { username: string; password: string }) => {
     try {
-        console.log('biba');
         const user = await authService.signUp(data);
         await sessionService.create({ userId: user.id });
     } catch (error) {

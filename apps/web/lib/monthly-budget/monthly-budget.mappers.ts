@@ -11,16 +11,20 @@ import {
 } from '@family-budget/domain/monthly-budget';
 import { assertContract } from '@family-budget/domain/shared';
 
+import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { MonthlyBudgetWithRelations, PlannedIncomeWithRelations } from './types';
+import { BudgetCategory } from '@family-budget/domain/budget-category';
 
 export function mapToOpenMonthlyBudget(
     budget: MonthlyBudgetWithRelations,
     family: Family,
+    categories: BudgetCategory[],
 ): OpenMonthlyBudget {
     return assertContract(
         monthlyBudgetSchema,
         {
             ...mapToBase(budget, family.settings.budgetDivisionType),
+            items: categories.map(mapCategoryToItem),
             isClosed: false as const,
             memberIncomes: mirrorMembers(family.members, budget),
         },
@@ -36,8 +40,9 @@ export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): Cl
 
     // Вклады не хранятся: все входы заморожены закрытием, поэтому раскладка —
     // чистая функция от уже сохранённого.
-    const { contributions, personalRemainders } = distribute({
+    const { contributions, remainders } = distribute({
         divisionType,
+        personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
         items,
         members: memberIncomes,
     });
@@ -46,10 +51,11 @@ export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): Cl
         monthlyBudgetSchema,
         {
             ...mapToBase(budget, divisionType),
+            items,
             isClosed: true as const,
             memberIncomes,
             contributions,
-            personalRemainders,
+            remainders,
         },
         'mapToClosedMonthlyBudget',
     ) as ClosedMonthlyBudget;
@@ -61,13 +67,23 @@ function mapToBase(budget: MonthlyBudgetWithRelations, divisionType: BudgetDivis
         period: budget.period,
         version: budget.version,
         divisionType,
-        items: budget.items.map(mapToMonthlyBudgetItem),
+        personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
     };
 }
 
-export function mapToMonthlyBudgetItem(item: MonthlyBudgetItemPersist): MonthlyBudgetItem {
+function mapCategoryToItem(category: BudgetCategory): MonthlyBudgetItem {
     return {
-        id: item.id,
+        categoryId: category.id,
+        categoryName: category.name,
+        categoryType: category.type,
+        calculationMode: category.calculationMode,
+        targetAmount: category.targetAmount,
+        sortOrder: category.sortOrder,
+    };
+}
+
+function mapToMonthlyBudgetItem(item: MonthlyBudgetItemPersist): MonthlyBudgetItem {
+    return {
         categoryId: item.budgetCategoryId,
         categoryName: item.categoryName,
         categoryType: item.categoryType,
@@ -77,7 +93,10 @@ export function mapToMonthlyBudgetItem(item: MonthlyBudgetItemPersist): MonthlyB
     };
 }
 
-function mirrorMembers(members: FamilyMember[], budget: MonthlyBudgetWithRelations): MemberIncome[] {
+function mirrorMembers(
+    members: FamilyMember[],
+    budget: MonthlyBudgetWithRelations,
+): MemberIncome[] {
     const byUser = new Map(budget.plannedIncomes.map((income) => [income.userId, income]));
 
     return members.map((member) => {
@@ -101,7 +120,7 @@ function mapToClosedMemberIncome(plannedIncome: PlannedIncomeWithRelations) {
     };
 }
 
-export function mapToIncome(income: IncomePersist): Income {
+function mapToIncome(income: IncomePersist): Income {
     return {
         id: income.id,
         amount: income.amount,

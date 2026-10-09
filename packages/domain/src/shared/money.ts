@@ -1,7 +1,7 @@
 import z from 'zod';
 
 /**
- * Деньги везде — decimal-строка, а не число
+ * Деньги везде - decimal-строка, а не число
  *
  * Повторяет колонку `decimal(12, 2)`: до 10 цифр целой части и до 2 дробной.
  */
@@ -35,11 +35,24 @@ export function sumMoney(amounts: SignedMoney[]): SignedMoney {
     return fromKopecks(amounts.reduce((acc, amount) => acc + toKopecks(amount), 0));
 }
 
+/**
+ * Процент от суммы, половина копейки округляется вверх
+ *
+ * Считается в целых: процент - в сотых долях (`'33.33'` → 3333), произведение в BigInt,
+ * потому что копейки × сотые выходят за точный диапазон Number. Через float было UB:
+ * 0.57% от 50.00 давало 0.28, а 0.69% - 0.35.
+ */
 export function percentOf(total: Money, percent: string): Money {
-    return fromKopecks(Math.round((toKopecks(total) * Number(percent)) / 100));
+    const scaled = BigInt(toKopecks(total)) * BigInt(toKopecks(percent));
+    return fromKopecks(Number((scaled + 5_000n) / 10_000n));
 }
 
-export function allocate(total: Money, weights: number[]): Money[] {
+/**
+ * Делит `total` между `weights` методом наибольших остатков - без потери копеек.
+ *
+ * `total` может быть отрицательным (например, общий пул личных остатков при перерасходе)
+ */
+export function allocate(total: SignedMoney, weights: number[]): SignedMoney[] {
     const totalKopecks = toKopecks(total);
     const weightSum = weights.reduce((acc, weight) => acc + weight, 0);
 
@@ -47,17 +60,20 @@ export function allocate(total: Money, weights: number[]): Money[] {
         throw new Error('allocate: веса должны быть положительны в сумме');
     }
 
-    const exact = weights.map((weight) => (totalKopecks * weight) / weightSum);
+    const sign = totalKopecks < 0 ? -1 : 1;
+    const magnitude = Math.abs(totalKopecks);
+
+    const exact = weights.map((weight) => (magnitude * weight) / weightSum);
     const parts = exact.map(Math.floor);
 
     const byRemainder = exact
         .map((value, index) => ({ index, remainder: value - parts[index] }))
         .sort((a, b) => b.remainder - a.remainder || a.index - b.index);
 
-    let leftover = totalKopecks - parts.reduce((acc, part) => acc + part, 0);
+    let leftover = magnitude - parts.reduce((acc, part) => acc + part, 0);
     for (let i = 0; leftover > 0; i++, leftover--) {
         parts[byRemainder[i].index]++;
     }
 
-    return parts.map(fromKopecks);
+    return parts.map((part) => fromKopecks(sign * part));
 }

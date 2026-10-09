@@ -1,3 +1,4 @@
+import { requireFamily } from '@/client/request-context';
 import {
     PageContainer,
     PageDescription,
@@ -5,7 +6,6 @@ import {
     PageHeaderContent,
     PageTitle,
 } from '@/components/page-layout';
-import { requireFamily } from '@/lib/request-context';
 
 export default async function Page() {
     await requireFamily();

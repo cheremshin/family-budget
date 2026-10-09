@@ -1,2 +1,2 @@
 export { MonthlyBudget } from './monthly-budget';
-export type { BudgetInitialData } from './budget-provider.vm';
+export { BudgetLoading as MonthlyBudgetLoading } from './components/screen/budget-loading';

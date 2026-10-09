@@ -1,8 +1,11 @@
 import z from 'zod';
 
-import { budgetCategoryTypeOptions, calculationModeOptions } from '../budget-category/budget-category.enums';
-import { isoDateSchema, moneySchema, periodSchema } from '../shared';
-import { budgetDivisionTypeOptions } from '../family';
+import {
+    budgetCategoryTypeOptions,
+    calculationModeOptions,
+} from '../budget-category/budget-category.enums';
+import { budgetDivisionTypeOptions, personalRemainderPolicyOptions } from '../family';
+import { isoDateSchema, moneySchema, periodSchema, signedMoneySchema } from '../shared';
 
 // вход
 
@@ -47,13 +50,15 @@ export const contributionSchema = z.object({
     amount: moneySchema,
 });
 
-export const personalRemainderSchema = z.object({
+export const memberRemainderSchema = z.object({
     memberId: z.uuid(),
-    amount: moneySchema,
+    ownRemainder: signedMoneySchema,
+    // неотрицателен — иначе закрытие не прошло бы гвард isOverAllocated
+    personalAmount: moneySchema,
+    settlementAmount: signedMoneySchema,
 });
 
 const monthlyBudgetItemSchema = z.object({
-    id: z.uuid(),
     categoryId: z.uuid(),
     categoryName: z.string().min(1),
     categoryType: z.enum(budgetCategoryTypeOptions),
@@ -66,6 +71,7 @@ const budgetBaseSchema = monthlyBudgetFieldsSchema.extend({
     id: z.uuid(),
     version: z.number().int().positive(),
     divisionType: z.enum(budgetDivisionTypeOptions),
+    personalRemainderPolicy: z.enum(personalRemainderPolicyOptions),
     items: z.array(monthlyBudgetItemSchema),
 });
 
@@ -78,7 +84,7 @@ const closedMonthlyBudgetSchema = budgetBaseSchema.extend({
     isClosed: z.literal(true),
     memberIncomes: z.array(memberIncomeSchema.extend({ plannedAmount: moneySchema })),
     contributions: z.array(contributionSchema),
-    personalRemainders: z.array(personalRemainderSchema),
+    remainders: z.array(memberRemainderSchema),
 });
 
 export const monthlyBudgetSchema = z.discriminatedUnion('isClosed', [
@@ -89,7 +95,6 @@ export const monthlyBudgetSchema = z.discriminatedUnion('isClosed', [
 export type Income = z.infer<typeof incomeSchema>;
 export type MemberIncome = z.infer<typeof memberIncomeSchema>;
 export type Contribution = z.infer<typeof contributionSchema>;
-export type PersonalRemainder = z.infer<typeof personalRemainderSchema>;
 export type MonthlyBudgetItem = z.infer<typeof monthlyBudgetItemSchema>;
 export type OpenMonthlyBudget = z.infer<typeof openMonthlyBudgetSchema>;
 export type ClosedMonthlyBudget = z.infer<typeof closedMonthlyBudgetSchema>;

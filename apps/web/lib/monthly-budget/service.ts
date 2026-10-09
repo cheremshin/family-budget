@@ -1,39 +1,38 @@
 import {
     Executor,
-    NewMonthlyBudgetItem,
-    UpdateMonthlyBudgetItem,
     db,
 } from '@family-budget/database';
 import {
     AddIncomeInput,
     type AddPlannedIncomeInput,
+    CloseMonthlyBudgetInput,
     MonthlyBudget,
     MonthlyBudgetClosedError,
+    MonthlyBudgetHasNoItems,
     MonthlyBudgetNotFound,
     MonthlyBudgetOverAllocated,
     MonthlyBudgetPlanIncomplete,
     PlannedIncomeNotSet,
     distribute,
-    hasOverAllocation,
+    isOverAllocated,
 } from '@family-budget/domain/monthly-budget';
 import { Period } from '@family-budget/domain/shared';
 
 import { familyService, requireFamilyMember, requireFamilyOwner } from '@/lib/family';
 
 import { budgetCategoryService } from '../budget-category';
+import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { mapToClosedMonthlyBudget, mapToOpenMonthlyBudget } from './monthly-budget.mappers';
-import { deleteMonthlyBudgetItem } from './mutations/delete-monthly-budget-item';
 import { insertIncome } from './mutations/insert-income';
 import { insertMonthlyBudgetIfMissing } from './mutations/insert-monthly-budget';
 import { insertMonthlyBudgetItems } from './mutations/insert-monthly-budget-item';
 import { updateMonthlyBudget } from './mutations/update-monthly-budget';
-import { updateMonthlyBudgetItem } from './mutations/update-monthly-budget-item';
 import { upsertPlannedIncome } from './mutations/upsert-planned-income';
 import { getMonthlyBudget as getMonthlyBudgetRow } from './queries/get-monthly-budget';
 import { getPlannedIncome } from './queries/get-planned-income';
 import { monthlyBudgetEventBus } from './realtime/bus';
 import { createMonthlyBudgetChangedEvent } from './realtime/events';
-import { EnsureMonthlyBudgetParams } from './types';
+import { CreateMonthlyBudgetParams } from './types';
 
 export async function getMonthlyBudget(
     familyId: string,
@@ -47,7 +46,10 @@ export async function getMonthlyBudget(
     // Закрытый месяц состав и правило деления несет в снимке.
     if (row.isClosed) return mapToClosedMonthlyBudget(row);
 
-    return mapToOpenMonthlyBudget(row, await familyService.requireFamily(familyId, tx));
+    const family = await familyService.requireFamily(familyId, tx);
+    const categories = await budgetCategoryService.getFamilyCategories(familyId, tx);
+
+    return mapToOpenMonthlyBudget(row, family, categories);
 }
 
 export async function requireMonthlyBudget(
@@ -64,21 +66,12 @@ export async function requireMonthlyBudget(
     return budget;
 }
 
-export async function ensureMonthlyBudget(
-    params: EnsureMonthlyBudgetParams,
+export async function createMonthlyBudget(
+    params: CreateMonthlyBudgetParams,
     tx: Executor = db,
 ): Promise<MonthlyBudget> {
     await insertMonthlyBudgetIfMissing(params, tx);
-
-    const budget = await requireMonthlyBudget(params.familyId, params.period, tx);
-
-    if (budget.isClosed) {
-        return budget;
-    }
-
-    const changed = await syncMonthlyBudgetItems(budget, params.familyId, tx);
-
-    return changed ? await requireMonthlyBudget(params.familyId, params.period, tx) : budget;
+    return await requireMonthlyBudget(params.familyId, params.period, tx);
 }
 
 export async function setPlannedIncome(
@@ -88,7 +81,7 @@ export async function setPlannedIncome(
     const familyId = await requireFamilyMember(userId);
 
     const budget = await db.transaction(async (tx) => {
-        const monthlyBudget = await ensureMonthlyBudget({ familyId, period: input.period }, tx);
+        const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
 
         if (monthlyBudget.isClosed) {
             throw new MonthlyBudgetClosedError();
@@ -119,7 +112,7 @@ export async function addActualIncome(
     const familyId = await requireFamilyMember(userId);
 
     const budget = await db.transaction(async (tx) => {
-        const monthlyBudget = await ensureMonthlyBudget({ familyId, period: input.period }, tx);
+        const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
         const plannedIncome = await getPlannedIncome(monthlyBudget.id, userId, tx);
 
         if (!plannedIncome) {
@@ -144,11 +137,11 @@ export async function addActualIncome(
     return budget;
 }
 
-export async function closeMonthlyBudget(userId: string, period: Period): Promise<MonthlyBudget> {
+export async function closeMonthlyBudget(userId: string, input: CloseMonthlyBudgetInput): Promise<MonthlyBudget> {
     const familyId = await requireFamilyOwner(userId);
 
     const budget = await db.transaction(async (tx) => {
-        const monthlyBudget = await ensureMonthlyBudget({ familyId, period }, tx);
+        const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
 
         if (monthlyBudget.isClosed) {
             throw new MonthlyBudgetClosedError();
@@ -164,10 +157,32 @@ export async function closeMonthlyBudget(userId: string, period: Period): Promis
         const family = await familyService.requireFamily(familyId, tx);
         const divisionType = family.settings.budgetDivisionType;
 
-        const distribution = distribute({ divisionType, items: monthlyBudget.items, members });
-        if (hasOverAllocation(distribution)) {
+        const distribution = distribute({
+            divisionType,
+            personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
+            items: monthlyBudget.items,
+            members,
+        });
+        if (isOverAllocated(distribution)) {
             throw new MonthlyBudgetOverAllocated();
         }
+
+        if (monthlyBudget.items.length === 0) {
+            throw new MonthlyBudgetHasNoItems();
+        }
+
+        await insertMonthlyBudgetItems(
+            monthlyBudget.items.map((item) => ({
+                monthlyBudgetId: monthlyBudget.id,
+                budgetCategoryId: item.categoryId,
+                categoryName: item.categoryName,
+                categoryType: item.categoryType,
+                calculationMode: item.calculationMode,
+                targetAmount: item.targetAmount,
+                sortOrder: item.sortOrder,
+            })),
+            tx,
+        );
 
         await updateMonthlyBudget(
             monthlyBudget.id,
@@ -179,86 +194,12 @@ export async function closeMonthlyBudget(userId: string, period: Period): Promis
             tx,
         );
 
-        return await requireMonthlyBudget(familyId, period, tx);
+        return await requireMonthlyBudget(familyId, input.period, tx);
     });
 
     publishMonthlyBudgetChanged(familyId, budget);
 
     return budget;
-}
-
-async function syncMonthlyBudgetItems(
-    budget: MonthlyBudget,
-    familyId: string,
-    tx: Executor = db,
-): Promise<boolean> {
-    const activeCategories = await budgetCategoryService.getFamilyCategories(familyId, tx);
-
-    if (activeCategories.length === 0) {
-        throw new Error(`Family [${familyId}] has no active categories`);
-    }
-
-    const itemByCategory = new Map(budget.items.map((item) => [item.categoryId, item]));
-    const activeCategoryIds = new Set(activeCategories.map((category) => category.id));
-
-    const missing: NewMonthlyBudgetItem[] = [];
-    const outdated: Array<{ id: string; data: UpdateMonthlyBudgetItem }> = [];
-
-    for (const category of activeCategories) {
-        const item = itemByCategory.get(category.id);
-
-        if (!item) {
-            missing.push({
-                monthlyBudgetId: budget.id,
-                budgetCategoryId: category.id,
-                categoryName: category.name,
-                categoryType: category.type,
-                calculationMode: category.calculationMode,
-                targetAmount: category.targetAmount,
-                sortOrder: category.sortOrder,
-            });
-            continue;
-        }
-
-        if (
-            item.categoryName !== category.name ||
-            item.categoryType !== category.type ||
-            item.calculationMode !== category.calculationMode ||
-            item.targetAmount !== category.targetAmount ||
-            item.sortOrder !== category.sortOrder
-        ) {
-            outdated.push({
-                id: item.id,
-                data: {
-                    categoryName: category.name,
-                    categoryType: category.type,
-                    calculationMode: category.calculationMode,
-                    targetAmount: category.targetAmount,
-                    sortOrder: category.sortOrder,
-                },
-            });
-        }
-    }
-
-    const orphaned = budget.items.filter((item) => !activeCategoryIds.has(item.categoryId));
-
-    if (missing.length === 0 && outdated.length === 0 && orphaned.length === 0) {
-        return false;
-    }
-
-    if (missing.length > 0) {
-        await insertMonthlyBudgetItems(missing, tx);
-    }
-
-    for (const { id, data } of outdated) {
-        await updateMonthlyBudgetItem(id, data, tx);
-    }
-
-    for (const item of orphaned) {
-        await deleteMonthlyBudgetItem(item.id, tx);
-    }
-
-    return true;
 }
 
 function publishMonthlyBudgetChanged(familyId: string, budget: MonthlyBudget): void {

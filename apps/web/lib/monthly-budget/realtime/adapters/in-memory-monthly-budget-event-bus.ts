@@ -1,5 +1,6 @@
+import type { MonthlyBudgetChangedEvent } from '@family-budget/domain/monthly-budget';
+
 import { MonthlyBudgetEventBus, MonthlyBudgetEventListener } from '../bus';
-import { MonthlyBudgetChangedEvent } from '../types';
 
 export class InMemoryMonthlyBudgetEventBus implements MonthlyBudgetEventBus {
     private readonly listeners = new Map<string, Set<MonthlyBudgetEventListener>>();

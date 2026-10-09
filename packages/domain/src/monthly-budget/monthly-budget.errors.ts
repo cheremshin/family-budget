@@ -26,6 +26,12 @@ export class MonthlyBudgetOverAllocated extends MonthlyBudgetError {
     }
 }
 
+export class MonthlyBudgetHasNoItems extends MonthlyBudgetError {
+    constructor() {
+        super(`В месяце нет категорий, невозможно закрыть`);
+    }
+}
+
 export class PlannedIncomeNotSet extends MonthlyBudgetError {
     constructor() {
         super(`За указанный период нет запланированных доходов от пользователя`);

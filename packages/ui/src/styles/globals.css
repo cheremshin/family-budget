@@ -113,3 +113,12 @@
     --badge-system-foreground: oklch(90% 0.15 58.318);
     --badge-system-border: oklch(40% 0.12 95.746);
 }
+
+@keyframes spinner-appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

@@ -1,16 +1,31 @@
-import { loadBudgetData } from '@/app/(internal)/incomes/_lib/budget.loader';
+import { dehydrate } from '@tanstack/query-core';
+
+import { requireFamily, requireUser } from '@/client/request-context';
 import {
     PageContainer,
     PageContent,
     PageDescription,
     PageHeader,
+    PageHeaderActions,
     PageHeaderContent,
     PageTitle,
 } from '@/components/page-layout';
-import { MonthlyBudget } from '@/features/monthly-budget/monthly-budget';
+import { MonthlyBudget, MonthlyBudgetLoading } from '@/features/monthly-budget';
+import { getCurrentPeriod } from '@/lib/clock';
 
-export default async function Page() {
-    const { userId, familyId, monthlyBudget } = await loadBudgetData();
+import { toViewer } from '../_lib/viewer';
+import { MonthNavigation } from '@/features/month-navigation';
+import { Period, PERIOD_PARAM, resolvePeriodParam } from '@family-budget/domain/shared';
+import { Suspense } from 'react';
+import { createQueryClient, Viewer } from '@/client/core';
+import { monthlyBudgetPrefetch } from '@/client/monthly-budget/server';
+
+export default async function Page({ searchParams }: PageProps<'/incomes'>) {
+    const [user, family] = [await requireUser(), await requireFamily()];
+    const viewer = toViewer(user, family);
+    const today = getCurrentPeriod();
+
+    const period = resolvePeriodParam((await searchParams)[PERIOD_PARAM], today);
 
     return (
         <PageContainer>
@@ -21,14 +36,22 @@ export default async function Page() {
                         Планирование и распределение семейного бюджета
                     </PageDescription>
                 </PageHeaderContent>
+                <PageHeaderActions>
+                    <MonthNavigation today={today} />
+                </PageHeaderActions>
             </PageHeader>
             <PageContent>
-                <MonthlyBudget
-                    familyId={familyId}
-                    currentUserId={userId}
-                    initialData={{ monthlyBudget }}
-                />
+                <Suspense fallback={<MonthlyBudgetLoading />}>
+                    <BudgetData viewer={viewer} today={today} period={period} />
+                </Suspense>
             </PageContent>
         </PageContainer>
     );
+}
+
+async function BudgetData({ viewer, today, period }: { viewer: Viewer, today: Period; period: Period }) {
+    const queryClient = createQueryClient();
+    await queryClient.prefetchQuery(monthlyBudgetPrefetch(viewer.familyId, period));
+
+    return <MonthlyBudget snapshot={dehydrate(queryClient)} viewer={viewer} today={today} />;
 }

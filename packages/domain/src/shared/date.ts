@@ -21,7 +21,20 @@ export function toPeriod(date: Date): Period {
     return `${toIsoDate(date).slice(0, 7)}-01`;
 }
 
+export const toStartOfYear = (period: Period): Period => `${period.slice(0, 4)}-01-01`;
+
 export function shiftPeriod(period: Period, months: number): Period {
     const [year, month] = period.split('-').map(Number);
     return toPeriod(new Date(year, month - 1 + months, 1));
 }
+
+export const PERIOD_PARAM = 'period';
+
+export function resolvePeriodParam(raw: string | string[] | null | undefined, today: Period): Period {
+    const value = Array.isArray(raw) ? raw[0] : raw;
+    if (!value || !/^\d{4}-\d{2}/.test(value)) return today;
+    const parsed = periodSchema.safeParse(`${value}-01`);
+    return parsed.success ? parsed.data : today;
+}
+
+export const toPeriodParam = (period: Period): string => period.slice(0, 7);

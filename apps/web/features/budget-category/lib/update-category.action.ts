@@ -6,8 +6,8 @@ import z from 'zod';
 
 import { updateCategorySchema } from '@family-budget/domain/budget-category';
 
+import { familyActionClient } from '@/client/request-context';
 import { budgetCategoryService } from '@/lib/budget-category';
-import { familyActionClient } from '@/lib/request-context';
 
 export const updateCategoryAction = familyActionClient
     .inputSchema(updateCategorySchema)
