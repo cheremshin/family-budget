@@ -22,7 +22,7 @@ export const getMonthlyBudgetAction = familyActionClient
 export const createMonthlyBudget = familyActionClient
     .inputSchema(z.object({ period: periodSchema }))
     .action(async ({ ctx, parsedInput }) =>
-        monthlyBudgetService.ensureMonthlyBudget({
+        monthlyBudgetService.createMonthlyBudget({
             familyId: ctx.family.id,
             period: parsedInput.period,
         }),

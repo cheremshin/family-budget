@@ -37,6 +37,7 @@ export {
     MonthlyBudgetNotFound,
     MonthlyBudgetOverAllocated,
     MonthlyBudgetPlanIncomplete,
+    MonthlyBudgetHasNoItems,
     PlannedIncomeNotSet,
 } from './monthly-budget.errors';
 export { monthlyBudgetChangedEventSchema } from './monthly-budget.events';

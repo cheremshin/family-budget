@@ -7,7 +7,7 @@ import {
 } from '@family-budget/database';
 import { Period } from '@family-budget/domain/shared';
 
-export type EnsureMonthlyBudgetParams = {
+export type CreateMonthlyBudgetParams = {
     familyId: string;
     period: Period;
 };

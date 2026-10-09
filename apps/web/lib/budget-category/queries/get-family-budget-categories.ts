@@ -16,6 +16,7 @@ export async function getFamilyBudgetCategories(
         },
         orderBy: {
             sortOrder: 'asc',
+            id: 'asc',
         },
     });
 }

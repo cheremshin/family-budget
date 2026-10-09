@@ -59,7 +59,6 @@ export const memberRemainderSchema = z.object({
 });
 
 const monthlyBudgetItemSchema = z.object({
-    id: z.uuid(),
     categoryId: z.uuid(),
     categoryName: z.string().min(1),
     categoryType: z.enum(budgetCategoryTypeOptions),
