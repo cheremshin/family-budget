@@ -4,30 +4,22 @@ import { observer } from 'mobx-react-lite';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@family-budget/ui';
 
-import { MemberSelect } from './member-select';
-import { MemberSelectSkeleton } from './member-select.skeleton';
-import type { MembersStore } from './members.store';
+import { MemberList } from './member-list';
+import type { MemberSelectVM } from './member-select.vm';
 
 type MemberSelectWidgetT = {
-    store: MembersStore;
+    vm: MemberSelectVM;
     className?: string;
 };
 
-export const MembersSelectWidget: FC<MemberSelectWidgetT> = observer(({ store, className }) => {
-    const { view } = store;
-    if (view.status === 'loading') {
-        return <MemberSelectSkeleton className={className} />;
-    }
-
-    return (
-        <Card className={className}>
-            <CardHeader>
-                <CardTitle className="text-lg">Участники</CardTitle>
-                <CardDescription>Планирование на текущий месяц</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6 p-3">
-                <MemberSelect members={view.members} onSelect={store.select} />
-            </CardContent>
-        </Card>
-    );
-});
+export const MemberSelectWidget: FC<MemberSelectWidgetT> = observer(({ vm, className }) => (
+    <Card className={className}>
+        <CardHeader>
+            <CardTitle className="text-lg">Участники</CardTitle>
+            <CardDescription>Планирование на текущий месяц</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-6 p-3">
+            <MemberList members={vm.view.members} onSelect={vm.select} />
+        </CardContent>
+    </Card>
+));

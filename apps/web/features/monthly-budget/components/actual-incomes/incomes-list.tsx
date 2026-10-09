@@ -1,16 +1,9 @@
 import { FC } from 'react';
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-    cn,
-} from '@family-budget/ui';
+import { cn } from '@family-budget/ui';
 
 import { ReceiptRow } from './actual-incomes.view';
+import { ChevronRight } from 'lucide-react';
 
 type IncomesListT = {
     rows: ReceiptRow[];
@@ -19,25 +12,30 @@ type IncomesListT = {
 
 export const IncomesList: FC<IncomesListT> = ({ rows, onSelect }) => {
     return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead className="w-25">Дата поступления</TableHead>
-                    <TableHead className="text-right">Сумма</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {rows.map((row) => (
-                    <TableRow
-                        key={row.id}
-                        onClick={() => onSelect(row.id)}
-                        className={cn('cursor-pointer', row.isSelected && 'bg-accent')}
-                    >
-                        <TableCell>{row.receivedAt}</TableCell>
-                        <TableCell className="text-right">{row.amount}</TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+        <div className="flex flex-col justify-center gap-2">
+            <div className="flex justify-between px-4 text-xs text-muted-foreground">
+                <span>Дата поступления</span>
+                <span>Сумма</span>
+            </div>
+            {rows.map((row) => (
+                <button
+                    key={row.id}
+                    type="button"
+                    onClick={() => onSelect(row.id)}
+                    className={cn(
+                        'flex justify-between items-center gap-2 px-4 py-3 rounded-lg',
+                        row.isSelected
+                            ? 'bg-primary text-primary-foreground'
+                            : 'hover:bg-accent',
+                    )}
+                >
+                    <span className="font-medium">{row.receivedAt}</span>
+                    <span className="flex items-center min-w-0 gap-2">
+                        <span className="text-md font-medium">{row.amount}</span>
+                        <ChevronRight className="w-5" />
+                    </span>
+                </button>
+            ))}
+        </div>
     );
 };

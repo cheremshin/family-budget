@@ -24,7 +24,7 @@ export const Member: FC<MemberT> = ({
         onClick={onSelect}
         className={cn(
             'w-full flex justify-between p-4 rounded-lg',
-            isSelected ? 'bg-primary text-primary-foreground' : 'bg-card',
+            isSelected ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-accent',
             className,
         )}
     >
