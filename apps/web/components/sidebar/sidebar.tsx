@@ -28,7 +28,7 @@ export const Sidebar: FC<ComponentProps<'div'>> = ({ children, className, ...pro
             <div className="fixed inset-y-0 left-0 z-10 flex h-svh w-(--sidebar-width)">
                 <div
                     className={cn(
-                        'w-full h-full flex flex-col border-border border-r-[1] bg-(--sidebar) color-(--sidebar-foregorund)',
+                        'w-full h-full flex flex-col border-border border-r bg-(--sidebar) color-(--sidebar-foregorund)',
                         className,
                     )}
                     {...props}
@@ -102,7 +102,7 @@ export const SidebarNavigationMenuItem: FC<
 
 export const SidebarFooter: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
     return (
-        <div className={cn('p-6 border-border border-t-[1]', className)} {...props}>
+        <div className={cn('p-6 border-border border-t', className)} {...props}>
             <Logout className="w-full justify-start gap-2" />
         </div>
     );
