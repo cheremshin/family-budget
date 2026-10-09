@@ -9,16 +9,6 @@ import { monthlyBudgetService } from '@/lib/monthly-budget';
 
 import { familyActionClient } from '../request-context';
 
-export const getMonthlyBudgetAction = familyActionClient
-    .inputSchema(z.object({ period: periodSchema }))
-    .action(async ({ ctx, parsedInput }) => {
-        const budget = await monthlyBudgetService.getMonthlyBudget(
-            ctx.family.id,
-            parsedInput.period,
-        );
-        return budget ?? null;
-    });
-
 export const createMonthlyBudget = familyActionClient
     .inputSchema(z.object({ period: periodSchema }))
     .action(async ({ ctx, parsedInput }) =>

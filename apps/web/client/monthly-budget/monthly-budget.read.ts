@@ -1,17 +1,12 @@
-import { MonthlyBudget } from '@family-budget/domain/monthly-budget';
-import { Period } from '@family-budget/domain/shared';
+import { type MonthlyBudget, monthlyBudgetSchema } from '@family-budget/domain/monthly-budget';
+import { assertContract, type Period } from '@family-budget/domain/shared';
 
-import { callAction } from '../core';
-import { getMonthlyBudgetAction } from './monthly-budget.actions';
-import { monthlyBudgetKeys } from './monthly-budget.cache';
+import { fetchJson } from '../core';
 
-export function fetchMonthlyBudget(period: Period): Promise<MonthlyBudget | null> {
-    return callAction(getMonthlyBudgetAction, { period });
-}
+const BUDGET_URL = '/api/family/monthly-budget';
+const budgetOrNull = monthlyBudgetSchema.nullable();
 
-export function monthlyBudgetPrefetch(familyId: string, period: Period) {
-    return {
-        queryKey: monthlyBudgetKeys.period(familyId, period),
-        queryFn: () => fetchMonthlyBudget(period),
-    };
+export async function fetchMonthlyBudget(period: Period, signal?: AbortSignal): Promise<MonthlyBudget | null> {
+    const budget = await fetchJson<MonthlyBudget | null>(`${BUDGET_URL}?period=${period}`, signal);
+    return assertContract(budgetOrNull, budget, `GET ${BUDGET_URL}`);
 }
