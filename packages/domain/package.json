@@ -13,6 +13,7 @@
     "scripts": {
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
+        "test": "vitest run",
         "lint:fix": "eslint --fix"
     },
     "dependencies": {
@@ -20,6 +21,9 @@
     },
     "devDependencies": {
         "typescript": "catalog:",
-        "@types/node": "catalog:"
+        "@types/node": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:",
+        "fast-check": "catalog:"
     }
 }

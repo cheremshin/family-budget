@@ -12,7 +12,8 @@
         "format:check": "prettier --check .",
         "lint": "pnpm -r lint",
         "lint:fix": "pnpm -r lint:fix",
-        "typecheck": "pnpm -r typecheck"
+        "typecheck": "pnpm -r typecheck",
+        "test": "pnpm -r test"
     },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^6.0.2",

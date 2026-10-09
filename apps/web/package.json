@@ -4,10 +4,12 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
+        "dev:profile": "NEXT_PUBLIC_DEBUG_QUERY=1 NEXT_PUBLIC_DEBUG_MARKS=1 DEBUG_TIMING=1 DEBUG_SQL=1 NODE_OPTIONS=--inspect next dev",
         "build": "next build",
         "start": "next start",
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
+        "test": "vitest run",
         "lint:fix": "eslint --fix"
     },
     "dependencies": {
@@ -22,7 +24,7 @@
         "mobx": "^6.12.4",
         "mobx-react-lite": "4.1.0",
         "mobx-tanstack-query": "^7.2.2",
-        "next": "16.2.9",
+        "next": "16.3.6",
         "next-safe-action": "^8.5.4",
         "react": "catalog:",
         "react-dom": "catalog:",
@@ -36,8 +38,10 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "eslint": "catalog:",
-        "eslint-config-next": "16.2.9",
+        "eslint-config-next": "16.3.6",
         "tailwindcss": "^4",
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
     }
 }
