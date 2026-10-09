@@ -45,10 +45,6 @@ export abstract class MutationCommand<In, Out> implements Command<In, Out> {
         this.mutation.reset();
     }
 
-    destroy(): void {
-        this.mutation.destroy();
-    }
-
     private async execute(input: In): Promise<CommandResult<Out>> {
         try {
             return await runCommand(() =>

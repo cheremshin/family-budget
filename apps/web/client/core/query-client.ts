@@ -20,6 +20,7 @@ export function createQueryClient(): QueryClient {
                     : (failureCount, error) => failureCount < 2 && toClientError(error).isRetryable,
             },
             mutations: {
+                lazy: true,
                 throwOnError: true,
             },
         },
