@@ -1,10 +1,13 @@
 'use client';
 
-import { useSelectedPeriod } from "@/client/month-param";
-import { Period } from "@family-budget/domain/shared";
-import { FC } from "react";
-import { useMonthNavigation } from "./use-month-navigation";
-import { MonthPicker } from "@/components/month-picker";
+import { FC } from 'react';
+
+import { Period } from '@family-budget/domain/shared';
+
+import { useSelectedPeriod } from '@/client/month-param';
+import { MonthPicker } from '@/components/month-picker';
+
+import { useMonthNavigation } from './use-month-navigation';
 
 type MonthNavigationProps = {
     today: Period;

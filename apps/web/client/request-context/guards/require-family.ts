@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 
-import { getRequestContext } from '../get-request-context';
 import { routes } from '@/routes';
+
+import { getRequestContext } from '../get-request-context';
 
 export async function requireFamily() {
     const ctx = await getRequestContext();

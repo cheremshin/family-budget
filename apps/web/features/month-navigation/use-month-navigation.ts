@@ -1,7 +1,8 @@
 'use client';
 
-import { PERIOD_PARAM, type Period, toPeriodParam } from "@family-budget/domain/shared";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+
+import { PERIOD_PARAM, type Period, toPeriodParam } from '@family-budget/domain/shared';
 
 export function useMonthNavigation(param = PERIOD_PARAM): (period: Period) => void {
     return useCallback(

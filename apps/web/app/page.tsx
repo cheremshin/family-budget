@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Button } from '@family-budget/ui';
+
 import { routes } from '@/routes';
 
 export default function Landing() {

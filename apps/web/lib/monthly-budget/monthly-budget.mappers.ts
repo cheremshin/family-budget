@@ -1,4 +1,5 @@
 import { IncomePersist, MonthlyBudgetItemPersist } from '@family-budget/database';
+import { BudgetCategory } from '@family-budget/domain/budget-category';
 import { BudgetDivisionType, Family, FamilyMember } from '@family-budget/domain/family';
 import {
     ClosedMonthlyBudget,
@@ -13,7 +14,6 @@ import { assertContract } from '@family-budget/domain/shared';
 
 import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { MonthlyBudgetWithRelations, PlannedIncomeWithRelations } from './types';
-import { BudgetCategory } from '@family-budget/domain/budget-category';
 
 export function mapToOpenMonthlyBudget(
     budget: MonthlyBudgetWithRelations,

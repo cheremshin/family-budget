@@ -16,11 +16,13 @@ type CreateBudgetT = {
 };
 
 export const CreateBudget: FC<CreateBudgetT> = observer(({ period, isPast }) => {
-    const vm = useScopeVM((scope) => new CreateBudgetVM(period, isPast, scope.commands.createBudget));
+    const vm = useScopeVM(
+        (scope) => new CreateBudgetVM(period, isPast, scope.commands.createBudget),
+    );
     const { view } = vm;
 
     return (
-        <div className='relative'>
+        <div className="relative">
             <CreateBudgetCard
                 isPast={view.isPast}
                 isCreating={view.isCreating}

@@ -1,6 +1,8 @@
-import { getCurrentPeriod } from "@/lib/clock";
-import { PERIOD_PARAM, resolvePeriodParam, toPeriodParam } from "@family-budget/domain/shared";
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from 'next/server';
+
+import { PERIOD_PARAM, resolvePeriodParam, toPeriodParam } from '@family-budget/domain/shared';
+
+import { getCurrentPeriod } from '@/lib/clock';
 
 export function incomesProxy(request: NextRequest): NextResponse {
     const url = request.nextUrl;

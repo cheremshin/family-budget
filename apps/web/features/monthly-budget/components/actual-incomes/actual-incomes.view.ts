@@ -16,7 +16,6 @@ export type ActualIncomesView =
     | { status: 'hidden' }
     | { status: 'ready'; rows: ReceiptRow[]; isPlanMode: boolean; lock: ReceiptsLockView };
 
-
 const FOREIGN_MESSAGE = 'Добавить поступление может только его получатель';
 
 export function receiptLockView(lock: ReceiptLock | null): ReceiptsLockView {

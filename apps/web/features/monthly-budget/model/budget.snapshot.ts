@@ -40,7 +40,13 @@ type SnapshotInput = {
     receiptId: string | null;
 };
 
-export function toBudgetSnapshot({ budget, viewer, today, memberId, receiptId }: SnapshotInput): BudgetSnapshot {
+export function toBudgetSnapshot({
+    budget,
+    viewer,
+    today,
+    memberId,
+    receiptId,
+}: SnapshotInput): BudgetSnapshot {
     const members: MemberIncome[] = budget.memberIncomes;
 
     const member =

@@ -1,7 +1,9 @@
-import type { ResourceState } from "@/client/core";
-import type { MonthlyBudget } from "@family-budget/domain/monthly-budget";
-import type { Period } from "@family-budget/domain/shared";
-import type { BudgetSnapshot } from "./budget.snapshot";
+import type { MonthlyBudget } from '@family-budget/domain/monthly-budget';
+import type { Period } from '@family-budget/domain/shared';
+
+import type { ResourceState } from '@/client/core';
+
+import type { BudgetSnapshot } from './budget.snapshot';
 
 export interface PeriodSource {
     readonly selected: Period;

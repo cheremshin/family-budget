@@ -18,8 +18,5 @@ export async function insertMonthlyBudgetItems(
     data: NewMonthlyBudgetItem[],
     tx: Executor = db,
 ): Promise<MonthlyBudgetItemPersist[]> {
-    return await tx
-        .insert(schema.monthlyBudgetItems)
-        .values(data)
-        .returning();
+    return await tx.insert(schema.monthlyBudgetItems).values(data).returning();
 }

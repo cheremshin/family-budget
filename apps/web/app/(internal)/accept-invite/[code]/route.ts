@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 import { FamilyError } from '@family-budget/domain/family';
 
 import { flashMessageService } from '@/lib/flash-message';
+import { routes } from '@/routes';
 
 import { acceptInvite } from '../_lib/accept-invite';
-import { routes } from '@/routes';
 
 export async function GET(request: Request, { params }: { params: Promise<{ code: string }> }) {
     const { code } = await params;

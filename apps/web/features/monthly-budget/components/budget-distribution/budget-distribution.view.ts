@@ -118,7 +118,10 @@ function monthView(
     columns: DistributionColumn[],
 ): BudgetDistributionView {
     const contributions = new Map(
-        distribution.contributions.map((item) => [`${item.memberId}:${item.categoryId}`, item.amount]),
+        distribution.contributions.map((item) => [
+            `${item.memberId}:${item.categoryId}`,
+            item.amount,
+        ]),
     );
     const personal = new Map(
         distribution.remainders.map((item) => [item.memberId, item.personalAmount]),
@@ -166,7 +169,8 @@ function receiptView(
     const share = memberShareOf(distribution, s.member);
     if (!column || !share) return { status: 'hidden' };
 
-    if (share.allocation.kind === 'unavailable') return { status: 'empty', message: OVER_ALLOCATED };
+    if (share.allocation.kind === 'unavailable')
+        return { status: 'empty', message: OVER_ALLOCATED };
 
     const allocation = share.allocation.receipts.find((item) => item.receiptId === receipt.id);
     if (!allocation) return { status: 'empty', message: NO_ALLOCATION };
@@ -225,7 +229,10 @@ function modeHint(item: MonthlyBudgetItem): string {
         : 'фиксированная сумма';
 }
 
-function settlementOf(distribution: DistributionResult, columns: DistributionColumn[]): SettlementView {
+function settlementOf(
+    distribution: DistributionResult,
+    columns: DistributionColumn[],
+): SettlementView {
     const debtor = distribution.remainders.find((item) => toKopecks(item.settlementAmount) > 0);
     const creditor = distribution.remainders.find((item) => toKopecks(item.settlementAmount) < 0);
     if (!debtor || !creditor) return null;

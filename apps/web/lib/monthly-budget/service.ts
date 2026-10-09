@@ -1,7 +1,4 @@
-import {
-    Executor,
-    db,
-} from '@family-budget/database';
+import { Executor, db } from '@family-budget/database';
 import {
     AddIncomeInput,
     type AddPlannedIncomeInput,
@@ -137,7 +134,10 @@ export async function addActualIncome(
     return budget;
 }
 
-export async function closeMonthlyBudget(userId: string, input: CloseMonthlyBudgetInput): Promise<MonthlyBudget> {
+export async function closeMonthlyBudget(
+    userId: string,
+    input: CloseMonthlyBudgetInput,
+): Promise<MonthlyBudget> {
     const familyId = await requireFamilyOwner(userId);
 
     const budget = await db.transaction(async (tx) => {

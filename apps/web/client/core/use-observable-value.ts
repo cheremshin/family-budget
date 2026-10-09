@@ -1,7 +1,8 @@
 'use client';
 
-import { observable, runInAction, type IObservableValue } from "mobx";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from 'react';
+
+import { type IObservableValue, observable, runInAction } from 'mobx';
 
 export function useObservableValue<T>(value: T): { get(): T } {
     const [box] = useState<IObservableValue<T>>(() => observable.box(value, { deep: false }));

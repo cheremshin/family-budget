@@ -1,5 +1,11 @@
+import { Suspense } from 'react';
+
 import { dehydrate } from '@tanstack/query-core';
 
+import { PERIOD_PARAM, Period, resolvePeriodParam } from '@family-budget/domain/shared';
+
+import { Viewer, createQueryClient } from '@/client/core';
+import { monthlyBudgetPrefetch } from '@/client/monthly-budget/server';
 import { requireFamily, requireUser } from '@/client/request-context';
 import {
     PageContainer,
@@ -10,15 +16,11 @@ import {
     PageHeaderContent,
     PageTitle,
 } from '@/components/page-layout';
+import { MonthNavigation } from '@/features/month-navigation';
 import { MonthlyBudget, MonthlyBudgetLoading } from '@/features/monthly-budget';
 import { getCurrentPeriod } from '@/lib/clock';
 
 import { toViewer } from '../_lib/viewer';
-import { MonthNavigation } from '@/features/month-navigation';
-import { Period, PERIOD_PARAM, resolvePeriodParam } from '@family-budget/domain/shared';
-import { Suspense } from 'react';
-import { createQueryClient, Viewer } from '@/client/core';
-import { monthlyBudgetPrefetch } from '@/client/monthly-budget/server';
 
 export default async function Page({ searchParams }: PageProps<'/incomes'>) {
     const [user, family] = [await requireUser(), await requireFamily()];
@@ -49,7 +51,15 @@ export default async function Page({ searchParams }: PageProps<'/incomes'>) {
     );
 }
 
-async function BudgetData({ viewer, today, period }: { viewer: Viewer, today: Period; period: Period }) {
+async function BudgetData({
+    viewer,
+    today,
+    period,
+}: {
+    viewer: Viewer;
+    today: Period;
+    period: Period;
+}) {
     const queryClient = createQueryClient();
     await queryClient.prefetchQuery(monthlyBudgetPrefetch(viewer.familyId, period));
 

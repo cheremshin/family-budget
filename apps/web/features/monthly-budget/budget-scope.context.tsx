@@ -1,12 +1,15 @@
 'use client';
 
-import { createContext, use, useEffect, useState, type PropsWithChildren } from "react";
-import { createBudgetAdapters, createBudgetScope, type BudgetScope } from "./budget-scope";
-import type { PeriodSource, ReadySource } from "./model/ports";
-import { useObservableValue, type Viewer } from "@/client/core";
-import type { Period } from "@family-budget/domain/shared";
-import { useQueryClient } from "@/client/container";
-import { useSelectedPeriod } from "@/client/month-param";
+import { type PropsWithChildren, createContext, use, useEffect, useState } from 'react';
+
+import type { Period } from '@family-budget/domain/shared';
+
+import { useQueryClient } from '@/client/container';
+import { type Viewer, useObservableValue } from '@/client/core';
+import { useSelectedPeriod } from '@/client/month-param';
+
+import { type BudgetScope, createBudgetAdapters, createBudgetScope } from './budget-scope';
+import type { PeriodSource, ReadySource } from './model/ports';
 
 const ScopeContext = createContext<BudgetScope | null>(null);
 const ReadyContext = createContext<ReadySource | null>(null);
@@ -24,15 +27,7 @@ export function BudgetScopeProvider({ viewer, today, children }: BudgetScopeProv
             },
             today,
         };
-        return createBudgetScope(
-            createBudgetAdapters(
-                queryClient,
-                viewer,
-                period
-            ),
-            viewer,
-            period,
-        );
+        return createBudgetScope(createBudgetAdapters(queryClient, viewer, period), viewer, period);
     });
 
     useEffect(() => scope.activate(), [scope]);
@@ -43,7 +38,7 @@ export function BudgetScopeProvider({ viewer, today, children }: BudgetScopeProv
 type ReadyProviderT = PropsWithChildren<{ value: ReadySource }>;
 
 export function ReadyProvider({ value, children }: ReadyProviderT) {
-    return <ReadyContext value={value}>{children}</ReadyContext>
+    return <ReadyContext value={value}>{children}</ReadyContext>;
 }
 
 export function useBudgetScope(): BudgetScope {

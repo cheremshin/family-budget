@@ -8,12 +8,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Family, createFamilySchema } from '@family-budget/domain/family';
 
+import { routes } from '@/routes';
+
 import { FamilyContext } from '../contexts/family-context';
 import { createFamilyAction } from '../lib/create-family.action';
 import { steps } from '../steps';
 import { CreateFamilyForm } from '../types';
 import { WizardNavigation } from './wizard-navigation';
-import { routes } from '@/routes';
 
 type PropsT = {
     onExitAction: () => void;

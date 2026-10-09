@@ -9,6 +9,7 @@ const pages = {
 
 export const routes = {
     ...pages,
-    acceptInvite: (code?: string): Route => (code ? `/accept-invite?${new URLSearchParams({ code })}` : 'accept/invite') as Route,
+    acceptInvite: (code?: string): Route =>
+        (code ? `/accept-invite?${new URLSearchParams({ code })}` : 'accept/invite') as Route,
     inviteLink: (code: string): Route => `/accept-invite/${encodeURIComponent(code)}` as Route,
 };

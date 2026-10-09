@@ -7,7 +7,6 @@
  * Гонять под двумя поясами: `pnpm test:tz` - если перейти на toISOString() (UTC),
  * в поясе +07 граница суток уедет и тесты упадут.
  */
-
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 
