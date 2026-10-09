@@ -1,5 +1,5 @@
 export { MonthlyBudgetCache, type MonthlyBudgetDeps } from './monthly-budget.cache';
-export { type BudgetState, MonthlyBudgetQuery } from './monthly-budget.queries';
+export { MonthlyBudgetQuery } from './monthly-budget.queries';
 export {
     AddIncomeCommand,
     CreateBudgetCommand,
