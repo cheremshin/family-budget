@@ -4,11 +4,10 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "dev:profile": "NEXT_PUBLIC_DEBUG_QUERY=1 NEXT_PUBLIC_DEBUG_MARKS=1 DEBUG_TIMING=1 DEBUG_SQL=1 NODE_OPTIONS=--inspect next dev",
+        "dev:profile": "next dev --inspect",
         "build": "next build",
-        "start": "next start",
         "lint": "eslint",
-        "typecheck": "tsc --noEmit",
+        "typecheck": "next typegen && tsc --noEmit",
         "test": "vitest run",
         "lint:fix": "eslint --fix"
     },
