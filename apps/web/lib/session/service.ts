@@ -6,8 +6,12 @@ import { SignJWT, jwtVerify } from 'jose';
 import { v4 as uuidv4 } from 'uuid';
 
 import { COOKIE_KEY, SESSION_COOKIE_OPTIONS } from './configuration/cookie-options';
-import { secret } from './configuration/secret';
+import { getSessionSecret } from './configuration/secret';
 import { Session } from './types';
+
+export function assertConfigured(): void {
+    getSessionSecret();
+}
 
 export async function create(data: { userId: string }): Promise<void> {
     const token = await new SignJWT()
@@ -17,7 +21,7 @@ export async function create(data: { userId: string }): Promise<void> {
         .setIssuer('family-budget')
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('30d')
-        .sign(secret);
+        .sign(getSessionSecret());
 
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_KEY, token, SESSION_COOKIE_OPTIONS);
@@ -33,6 +37,7 @@ export const get = cache(async (): Promise<Session | null> => {
     const cookie = cookieStore.get(COOKIE_KEY);
     if (!cookie) return null;
 
+    const secret = getSessionSecret();
     try {
         const { payload } = await jwtVerify(cookie.value, secret, {
             issuer: 'family-budget',
