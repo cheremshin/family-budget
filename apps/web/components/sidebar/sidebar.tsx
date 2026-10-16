@@ -2,7 +2,9 @@
 
 import { CSSProperties, ComponentProps, FC } from 'react';
 
-import Link, { LinkProps } from 'next/link';
+import { Route } from 'next';
+
+import Link from 'next/link';
 
 import { LucideIcon } from 'lucide-react';
 
@@ -77,7 +79,7 @@ export const SidebarNavigationMenu: FC<
 };
 
 export const SidebarNavigationMenuItem: FC<
-    { isActive: boolean | undefined } & LinkProps & ComponentProps<'a'>
+    { isActive: boolean | undefined; href: Route } & Omit<ComponentProps<'a'>, 'href'>
 > = ({ isActive, className, href, children, ...props }) => {
     const classes = cn(
         buttonVariants({
