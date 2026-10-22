@@ -61,6 +61,15 @@ describe('конвертация', () => {
         expect(fromKopecks(kopecks)).toBe(expected);
     });
 
+    it.each([
+        ['1.5', 150],
+        ['-0.5', -50],
+        ['7', 700],
+        ['0.05', 5],
+    ])('toKopecks(%j) → %s: одна цифра после точки - десятки копеек', (amount, expected) => {
+        expect(toKopecks(amount)).toBe(expected);
+    });
+
     it.todo(
         'toKopecks на невалидной строке ("1.234", "abc") - вне контракта, защищает moneySchema',
     );
@@ -194,11 +203,17 @@ describe('moneySchema: что считается деньгами', () => {
         },
     );
 
-    it.each(['-1.50', '-0.01', '0'])('signedMoneySchema принимает %j', (value) => {
-        expect(signedMoneySchema.safeParse(value).success).toBe(true);
-    });
+    it.each(['-1.50', '-0.01', '0', ' -12.5 ', '-9999999999.99'])(
+        'signedMoneySchema принимает %j',
+        (value) => {
+            expect(signedMoneySchema.safeParse(value).success).toBe(true);
+        },
+    );
 
-    it.each(['--1', '-', '+1'])('signedMoneySchema отвергает %j', (value) => {
-        expect(signedMoneySchema.safeParse(value).success).toBe(false);
-    });
+    it.each(['--1', '-', '+1', '-1.555', '-10000000000', '1.5x'])(
+        'signedMoneySchema отвергает %j',
+        (value) => {
+            expect(signedMoneySchema.safeParse(value).success).toBe(false);
+        },
+    );
 });

@@ -14,6 +14,7 @@
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
         "test": "vitest run",
+        "test:mutation": "stryker run",
         "lint:fix": "eslint --fix"
     },
     "dependencies": {
@@ -24,6 +25,7 @@
         "@types/node": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:",
-        "fast-check": "catalog:"
+        "fast-check": "catalog:",
+        "@stryker-mutator/core": "catalog:"
     }
 }

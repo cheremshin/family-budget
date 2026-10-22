@@ -44,11 +44,7 @@ export type DistributionResult = {
     remainders: MemberRemainder[];
 };
 
-/**
- * Расчет, кто сколько вкладывает в каждую категорию и сколько остается на личные расходы
- *
- * Сервер должен вызывать эту функцию при закрытии месяца, а клиент для предпросмотра
- */
+/** Кто сколько вкладывает в каждую категорию и что остаётся лично - docs/domain/distribution.md */
 export function distribute({
     divisionType,
     personalRemainderPolicy,
@@ -59,7 +55,7 @@ export function distribute({
         return { contributions: [], remainders: [] };
     }
 
-    const orderedMembers = [...members].sort((a, b) => a.memberId.localeCompare(b.memberId));
+    const orderedMembers = [...members].sort((a, b) => compareIds(a.memberId, b.memberId));
     const totalPlanned = sumMoney(orderedMembers.map((member) => member.plannedAmount));
     const proportional = orderedMembers.map((member) => toKopecks(member.plannedAmount));
 
@@ -116,9 +112,7 @@ export function distribute({
 
 /**
  * Недостача, которую считаем погрешностью округления, а не перерасходом
- *
- * Процентные категории округляются каждая отдельно, поэтому даже ровно 100% дохода
- * в сумме могут потребовать на копейки больше самого дохода.
+ * (distribution.md, «Округление»)
  */
 export const ROUNDING_TOLERANCE_KOPECKS = 100;
 
@@ -136,14 +130,7 @@ function ownRemainderOf(member: DistributionMember, shares: Share[]): number {
     return toKopecks(member.plannedAmount) - spent;
 }
 
-/**
- * Гасит недостачу в пределах допуска за счёт процентных вкладов, чтобы личная часть
- * не уходила в минус из-за округления.
- *
- * Что считается недостачей, зависит от политики: при `individual` личную часть каждый
- * берёт из своего остатка, при `equalized` — из общего пула.
- * Больше допуска или нечем погасить — это перерасход, его ловит `isOverAllocated`.
- */
+/** Гасит недостачу округления за счёт процентных вкладов (distribution.md, «Округление») */
 function absorbRoundingShortfall(
     policy: PersonalRemainderPolicy,
     members: DistributionMember[],
@@ -187,10 +174,7 @@ function takeFromRelative(shortfall: number, shares: Share[]): void {
 
 const compareIds = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
-/**
- * `individual` — каждый оставляет себе свой сырой остаток
- * `equalized` — остатки складываются в общий пул и делятся поровну (методом наибольших остатков)
- */
+/** Личная часть по политике остатка (distribution.md, «Две независимые оси») */
 function resolvePersonalAmounts(
     policy: PersonalRemainderPolicy,
     ownRemainders: Array<{ memberId: string; ownRemainder: SignedMoney }>,
@@ -229,19 +213,8 @@ export type ReceiptAllocationResult =
     | { kind: 'allocated'; receipts: ReceiptAllocation[] };
 
 /**
- * Разбивка поступления: сколько из своих денег уходит в каждую категорию и сколько
- * остается лично
- *
- * Веса — `Σ вкладов + ownRemainder`, что в точности равно плановому доходу участника,
- * поэтому по мере поступления доходов суммы сходятся к обязательствам. Каждый чек делится
- * независимо, так что внутри чека сумма частей точная, а по нескольким траншам итог может
- * разойтись с обязательством на копейку.
- *
- * Трансфер по политике (`settlementAmount`) в разбивку не входит: он известен, как только
- * заданы планы, и от уже полученного не зависит.
- *
- * `ownRemainder < 0` — своих денег не хватает даже на собственную долю категорий: личный
- * вес зажимается в ноль, весь чек расходится по категориям, недостачу закрывает трансфер.
+ * Сколько из транша уходит в каждую категорию и сколько лично
+ * (distribution.md, «Разбивка поступления»)
  */
 export function allocateReceipts({
     remainder,

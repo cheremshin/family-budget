@@ -5,7 +5,14 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
     tseslint.configs.recommended,
     {
-        ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**', '**/migrations/**'],
+        ignores: [
+            '**/node_modules/**',
+            '**/dist/**',
+            '**/.next/**',
+            '**/migrations/**',
+            '**/.stryker-tmp/**',
+            '**/reports/**',
+        ],
     },
     eslintConfigPrettier,
     {
