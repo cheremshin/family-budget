@@ -23,6 +23,7 @@ import { mapToClosedMonthlyBudget, mapToOpenMonthlyBudget } from './monthly-budg
 import { insertIncome } from './mutations/insert-income';
 import { insertMonthlyBudgetIfMissing } from './mutations/insert-monthly-budget';
 import { insertMonthlyBudgetItems } from './mutations/insert-monthly-budget-item';
+import { touchMonthlyBudget } from './mutations/touch-monthly-budget';
 import { updateMonthlyBudget } from './mutations/update-monthly-budget';
 import { upsertPlannedIncome } from './mutations/upsert-planned-income';
 import { getMonthlyBudget as getMonthlyBudgetRow } from './queries/get-monthly-budget';
@@ -93,7 +94,7 @@ export async function setPlannedIncome(
             tx,
         );
 
-        await updateMonthlyBudget(monthlyBudget.id, { version: monthlyBudget.version + 1 }, tx);
+        await touchMonthlyBudget(monthlyBudget.id, tx);
         return await requireMonthlyBudget(familyId, input.period, tx);
     });
 
@@ -125,7 +126,7 @@ export async function addActualIncome(
             tx,
         );
 
-        await updateMonthlyBudget(monthlyBudget.id, { version: monthlyBudget.version + 1 }, tx);
+        await touchMonthlyBudget(monthlyBudget.id, tx);
         return await requireMonthlyBudget(familyId, input.period, tx);
     });
 
@@ -186,11 +187,7 @@ export async function closeMonthlyBudget(
 
         await updateMonthlyBudget(
             monthlyBudget.id,
-            {
-                isClosed: true,
-                budgetDivisionType: divisionType,
-                version: monthlyBudget.version + 1,
-            },
+            { isClosed: true, budgetDivisionType: divisionType },
             tx,
         );
 
