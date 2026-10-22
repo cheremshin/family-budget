@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
     output: 'standalone',
     outputFileTracingRoot: path.resolve(__dirname, '../..'),
     poweredByHeader: false,
+    agentRules: false,
     async headers() {
         return [{ source: '/:path*', headers: securityHeaders }];
     },
