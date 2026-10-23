@@ -18,6 +18,7 @@ import { userService } from '@/lib/user';
 
 import { mapToFamily } from './family.mappers';
 import { requireFamilyMember } from './guards/require-family-member';
+import { requireFamilyOwner } from './guards/require-family-owner';
 import { insertFamily } from './mutations/insert-family';
 import { insertFamilySettings } from './mutations/insert-family-settings';
 import { lockFamilyByInvitationCode } from './mutations/lock-family-by-invitation-code';
@@ -26,7 +27,6 @@ import { updateFamilySettings } from './mutations/update-family-settings';
 import { getFamily as getFamilyRow } from './queries/get-family';
 import { getFamilyMembers } from './queries/get-family-members';
 import { generateInvitationCode } from './utils/generate-invitation-code';
-import { requireFamilyOwner } from '@/lib/family/guards/require-family-owner';
 
 export async function getFamily(id: string, tx: Executor = db): Promise<Family | undefined> {
     const row = await getFamilyRow(id, tx);
@@ -126,7 +126,11 @@ export async function updateInvitationCode(userId: string): Promise<string> {
 }
 
 export async function saveSettings(userId: string, input: UpdateFamilyInput): Promise<Family> {
-    const familyId = await requireFamilyOwner(userId);
+    // Лимит участников - только владелец; остальное правит любой участник (rules.md, «Семья»)
+    const familyId =
+        input.maxMembers === undefined
+            ? await requireFamilyMember(userId)
+            : await requireFamilyOwner(userId);
 
     return await db.transaction(async (tx) => {
         await updateFamily(familyId, { name: input.name, maxMembers: input.maxMembers }, tx);
