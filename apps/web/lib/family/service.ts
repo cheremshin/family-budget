@@ -26,6 +26,7 @@ import { updateFamilySettings } from './mutations/update-family-settings';
 import { getFamily as getFamilyRow } from './queries/get-family';
 import { getFamilyMembers } from './queries/get-family-members';
 import { generateInvitationCode } from './utils/generate-invitation-code';
+import { requireFamilyOwner } from '@/lib/family/guards/require-family-owner';
 
 export async function getFamily(id: string, tx: Executor = db): Promise<Family | undefined> {
     const row = await getFamilyRow(id, tx);
@@ -125,7 +126,7 @@ export async function updateInvitationCode(userId: string): Promise<string> {
 }
 
 export async function saveSettings(userId: string, input: UpdateFamilyInput): Promise<Family> {
-    const familyId = await requireFamilyMember(userId);
+    const familyId = await requireFamilyOwner(userId);
 
     return await db.transaction(async (tx) => {
         await updateFamily(familyId, { name: input.name, maxMembers: input.maxMembers }, tx);
