@@ -46,6 +46,10 @@ export const monthlyBudgets = pgTable(
             sql`${table.isClosed} = false OR ${table.budgetDivisionType} IS NOT NULL`,
         ),
         check(
+            `${TABLE_NAME}__closed_has_policy_check`,
+            sql`${table.isClosed} = false OR ${table.personalRemainderPolicy} IS NOT NULL`,
+        ),
+        check(
             `${TABLE_NAME}__created_at_not_in_future_check`,
             sql`${table.createdAt} <= CURRENT_TIMESTAMP`,
         ),

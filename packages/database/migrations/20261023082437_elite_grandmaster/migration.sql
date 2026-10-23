@@ -1,0 +1,1 @@
+ALTER TABLE "monthly_budget" ADD CONSTRAINT "monthly_budget__closed_has_policy_check" CHECK ("is_closed" = false OR "personal_remainder_policy" IS NOT NULL);

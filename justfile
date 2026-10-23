@@ -98,8 +98,3 @@ _confirm-dirty:
         read -rp "Рабочее дерево грязное ({{sha}}). Продолжить? [y/N] " a
         [[ "$a" == y ]] || exit 1
     fi
-
-# Одноразовый скрипт переноса итогов закрытых месяцев
-backfill-closed-months *args: db
-    scripts/with-db-env.sh migrate pnpm --filter @family-budget/database \
-        exec tsx scripts/20261024120000-backfill-closed-month-results.ts {{args}}
