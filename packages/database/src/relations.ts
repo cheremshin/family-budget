@@ -81,6 +81,14 @@ export const relations = defineRelations(schema, (r) => ({
             from: r.monthlyBudgets.id,
             to: r.plannedIncomes.monthlyBudgetId,
         }),
+        contributions: r.many.monthlyBudgetContributions({
+            from: r.monthlyBudgets.id,
+            to: r.monthlyBudgetContributions.monthlyBudgetId,
+        }),
+        remainders: r.many.monthlyBudgetRemainders({
+            from: r.monthlyBudgets.id,
+            to: r.monthlyBudgetRemainders.monthlyBudgetId,
+        }),
     },
 
     monthlyBudgetItems: {

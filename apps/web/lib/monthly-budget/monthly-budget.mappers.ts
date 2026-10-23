@@ -1,18 +1,21 @@
 import { IncomePersist, MonthlyBudgetItemPersist } from '@family-budget/database';
 import { BudgetCategory } from '@family-budget/domain/budget-category';
-import { BudgetDivisionType, Family, FamilyMember, PersonalRemainderPolicy } from '@family-budget/domain/family';
+import {
+    BudgetDivisionType,
+    Family,
+    FamilyMember,
+    PersonalRemainderPolicy,
+} from '@family-budget/domain/family';
 import {
     ClosedMonthlyBudget,
     Income,
     MemberIncome,
     MonthlyBudgetItem,
     OpenMonthlyBudget,
-    distribute,
     monthlyBudgetSchema,
 } from '@family-budget/domain/monthly-budget';
 import { assertContract } from '@family-budget/domain/shared';
 
-import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { MonthlyBudgetWithRelations, PlannedIncomeWithRelations } from './types';
 
 export function mapToOpenMonthlyBudget(
@@ -37,29 +40,28 @@ export function mapToOpenMonthlyBudget(
 }
 
 export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): ClosedMonthlyBudget {
-    const divisionType = budget.budgetDivisionType!;
-
-    const memberIncomes = budget.plannedIncomes.map(mapToClosedMemberIncome);
-    const items = budget.items.map(mapToMonthlyBudgetItem);
-
-    // Вклады не хранятся: все входы заморожены закрытием, поэтому раскладка —
-    // чистая функция от уже сохранённого.
-    const { contributions, remainders } = distribute({
-        divisionType,
-        personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
-        items,
-        members: memberIncomes,
-    });
+    if (budget.personalRemainderPolicy === null || budget.remainders.length === 0) {
+        throw new Error(`[mapToClosedMonthlyBudget] у закрытого месяца ${budget.id} нет итога`);
+    }
 
     return assertContract(
         monthlyBudgetSchema,
         {
-            ...mapToBase(budget, divisionType, PERSONAL_REMAINDER_POLICY),
-            items,
+            ...mapToBase(budget, budget.budgetDivisionType!, budget.personalRemainderPolicy),
+            items: budget.items.map(mapToMonthlyBudgetItem),
             isClosed: true as const,
-            memberIncomes,
-            contributions,
-            remainders,
+            memberIncomes: budget.plannedIncomes.map(mapToClosedMemberIncome),
+            contributions: budget.contributions.map((contribution) => ({
+                memberId: contribution.memberId,
+                categoryId: contribution.categoryId,
+                amount: contribution.amount,
+            })),
+            remainders: budget.remainders.map((remainder) => ({
+                memberId: remainder.memberId,
+                ownRemainder: remainder.ownRemainder,
+                personalAmount: remainder.personalAmount,
+                settlementAmount: remainder.settlementAmount,
+            })),
         },
         'mapToClosedMonthlyBudget',
     ) as ClosedMonthlyBudget;

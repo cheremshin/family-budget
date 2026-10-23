@@ -1,7 +1,9 @@
-import {
+import type {
     IncomePersist,
+    MonthlyBudgetContributionPersist,
     MonthlyBudgetItemPersist,
-    type MonthlyBudgetPersist,
+    MonthlyBudgetPersist,
+    MonthlyBudgetRemainderPersist,
     PlannedIncomePersist,
     UserPersist,
 } from '@family-budget/database';
@@ -20,4 +22,6 @@ export type PlannedIncomeWithRelations = PlannedIncomePersist & {
 export type MonthlyBudgetWithRelations = MonthlyBudgetPersist & {
     items: MonthlyBudgetItemPersist[];
     plannedIncomes: PlannedIncomeWithRelations[];
+    contributions: MonthlyBudgetContributionPersist[];
+    remainders: MonthlyBudgetRemainderPersist[];
 };

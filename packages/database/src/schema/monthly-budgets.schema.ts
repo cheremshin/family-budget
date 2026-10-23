@@ -14,6 +14,7 @@ import {
 import { auditColumns } from '../utils/audit-columns';
 import { budgetDivisionType } from './budget-division.enum';
 import { families } from './families.schema';
+import { personalRemainderPolicy } from './personal-remainder-policy.enum';
 
 const TABLE_NAME = 'monthly_budget';
 
@@ -27,6 +28,7 @@ export const monthlyBudgets = pgTable(
         isClosed: boolean('is_closed').notNull().default(false),
         version: integer('version').notNull().default(1),
         budgetDivisionType: budgetDivisionType('budget_division_type'),
+        personalRemainderPolicy: personalRemainderPolicy('personal_remainder_policy'),
 
         createdAt: auditColumns.createdAt,
     },

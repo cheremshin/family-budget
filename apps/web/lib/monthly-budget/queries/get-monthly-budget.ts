@@ -30,6 +30,12 @@ export async function getMonthlyBudget(
                     },
                 },
             },
+            contributions: {
+                orderBy: { memberId: 'asc', categoryId: 'asc' },
+            },
+            remainders: {
+                orderBy: { memberId: 'asc' },
+            },
         },
     });
 }

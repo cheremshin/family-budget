@@ -5,7 +5,9 @@ import {
     families,
     familySettings,
     incomes,
+    monthlyBudgetContributions,
     monthlyBudgetItems,
+    monthlyBudgetRemainders,
     monthlyBudgets,
     plannedIncomes,
     users,
@@ -44,3 +46,9 @@ export type UpdatePlannedIncome = InferUpdateModel<NewPlannedIncome, 'id'>;
 export type IncomePersist = InferSelectModel<typeof incomes>;
 export type NewIncome = InferInsertModel<typeof incomes>;
 export type UpdateIncome = InferUpdateModel<NewIncome, 'id'>;
+
+export type MonthlyBudgetContributionPersist = InferSelectModel<typeof monthlyBudgetContributions>;
+export type NewMonthlyBudgetContribution = InferInsertModel<typeof monthlyBudgetContributions>;
+
+export type MonthlyBudgetRemainderPersist = InferSelectModel<typeof monthlyBudgetRemainders>;
+export type NewMonthlyBudgetRemainder = InferInsertModel<typeof monthlyBudgetRemainders>;

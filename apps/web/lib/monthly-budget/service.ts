@@ -18,11 +18,11 @@ import { Period } from '@family-budget/domain/shared';
 import { familyService, requireFamilyMember, requireFamilyOwner } from '@/lib/family';
 
 import { budgetCategoryService } from '../budget-category';
-import { PERSONAL_REMAINDER_POLICY } from './configuration/personal-remainder-policy';
 import { mapToClosedMonthlyBudget, mapToOpenMonthlyBudget } from './monthly-budget.mappers';
 import { insertIncome } from './mutations/insert-income';
 import { insertMonthlyBudgetIfMissing } from './mutations/insert-monthly-budget';
 import { insertMonthlyBudgetItems } from './mutations/insert-monthly-budget-item';
+import { insertMonthlyBudgetResult } from './mutations/insert-monthly-budget-result';
 import { touchMonthlyBudget } from './mutations/touch-monthly-budget';
 import { updateMonthlyBudget } from './mutations/update-monthly-budget';
 import { upsertPlannedIncome } from './mutations/upsert-planned-income';
@@ -64,7 +64,9 @@ export async function requireMonthlyBudget(
     return budget;
 }
 
-export async function createMonthlyBudget(params: CreateMonthlyBudgetParams): Promise<MonthlyBudget> {
+export async function createMonthlyBudget(
+    params: CreateMonthlyBudgetParams,
+): Promise<MonthlyBudget> {
     const { budget, isCreated } = await db.transaction(async (tx) => {
         const inserted = await insertMonthlyBudgetIfMissing(params, tx);
         const budget = await requireMonthlyBudget(params.familyId, params.period, tx);
@@ -159,12 +161,9 @@ export async function closeMonthlyBudget(
             return { memberId: member.memberId, plannedAmount: member.plannedAmount };
         });
 
-        const family = await familyService.requireFamily(familyId, tx);
-        const divisionType = family.settings.budgetDivisionType;
-
         const distribution = distribute({
-            divisionType,
-            personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
+            divisionType: monthlyBudget.divisionType,
+            personalRemainderPolicy: monthlyBudget.personalRemainderPolicy,
             items: monthlyBudget.items,
             members,
         });
@@ -189,9 +188,18 @@ export async function closeMonthlyBudget(
             tx,
         );
 
+        const memberNames = new Map(
+            monthlyBudget.memberIncomes.map((member) => [member.memberId, member.memberName]),
+        );
+        await insertMonthlyBudgetResult(monthlyBudget.id, distribution, memberNames, tx);
+
         await updateMonthlyBudget(
             monthlyBudget.id,
-            { isClosed: true, budgetDivisionType: divisionType },
+            {
+                isClosed: true,
+                budgetDivisionType: monthlyBudget.divisionType,
+                personalRemainderPolicy: monthlyBudget.personalRemainderPolicy,
+            },
             tx,
         );
 
