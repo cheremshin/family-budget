@@ -75,6 +75,21 @@ db-restore file:
 db-reset:
     docker compose --profile app down -v
 
+db-copy name="family_budget_dev":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just db-backup
+    f="$(ls -1t backups/*.dump | head -1)"
+    pg() { docker compose exec -T -e NAME={{name}} postgres sh -euc "$1"; }
+    pg 'dropdb -U "$POSTGRES_USER" --if-exists "$NAME"'
+    pg 'createdb -U "$POSTGRES_USER" -O "$MIGRATE_DB_USER" "$NAME"'
+    pg 'psql -U "$POSTGRES_USER" -d "$NAME" -v ON_ERROR_STOP=1 -v db="$NAME" \
+        -v migrate_user="$MIGRATE_DB_USER" -v app_user="$APP_DB_USER"' \
+        < docker/postgres/database-grants.sql
+    pg 'pg_restore -U "$POSTGRES_USER" -d "$NAME" --role "$MIGRATE_DB_USER" \
+        --no-owner --single-transaction' < "$f"
+    echo "готово: DB_NAME={{name}} just dev"
+
 [private]
 _confirm-dirty:
     #!/usr/bin/env bash

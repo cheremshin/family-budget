@@ -1,0 +1,3 @@
+CREATE TYPE "personal_remainder_policy" AS ENUM('individual', 'equalized');--> statement-breakpoint
+ALTER TABLE "family_settings" ADD COLUMN "personal_remainder_policy" "personal_remainder_policy" DEFAULT 'equalized'::"personal_remainder_policy" NOT NULL;--> statement-breakpoint
+ALTER TABLE "planned_incomes" DROP CONSTRAINT "planned_incomes_user_id_fk", ADD CONSTRAINT "planned_incomes_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT;

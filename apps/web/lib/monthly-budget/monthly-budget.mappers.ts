@@ -1,6 +1,6 @@
 import { IncomePersist, MonthlyBudgetItemPersist } from '@family-budget/database';
 import { BudgetCategory } from '@family-budget/domain/budget-category';
-import { BudgetDivisionType, Family, FamilyMember } from '@family-budget/domain/family';
+import { BudgetDivisionType, Family, FamilyMember, PersonalRemainderPolicy } from '@family-budget/domain/family';
 import {
     ClosedMonthlyBudget,
     Income,
@@ -23,7 +23,11 @@ export function mapToOpenMonthlyBudget(
     return assertContract(
         monthlyBudgetSchema,
         {
-            ...mapToBase(budget, family.settings.budgetDivisionType),
+            ...mapToBase(
+                budget,
+                family.settings.budgetDivisionType,
+                family.settings.personalRemainderPolicy,
+            ),
             items: categories.map(mapCategoryToItem),
             isClosed: false as const,
             memberIncomes: mirrorMembers(family.members, budget),
@@ -50,7 +54,7 @@ export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): Cl
     return assertContract(
         monthlyBudgetSchema,
         {
-            ...mapToBase(budget, divisionType),
+            ...mapToBase(budget, divisionType, PERSONAL_REMAINDER_POLICY),
             items,
             isClosed: true as const,
             memberIncomes,
@@ -61,13 +65,17 @@ export function mapToClosedMonthlyBudget(budget: MonthlyBudgetWithRelations): Cl
     ) as ClosedMonthlyBudget;
 }
 
-function mapToBase(budget: MonthlyBudgetWithRelations, divisionType: BudgetDivisionType) {
+function mapToBase(
+    budget: MonthlyBudgetWithRelations,
+    divisionType: BudgetDivisionType,
+    personalRemainderPolicy: PersonalRemainderPolicy,
+) {
     return {
         id: budget.id,
         period: budget.period,
         version: budget.version,
         divisionType,
-        personalRemainderPolicy: PERSONAL_REMAINDER_POLICY,
+        personalRemainderPolicy: personalRemainderPolicy,
     };
 }
 

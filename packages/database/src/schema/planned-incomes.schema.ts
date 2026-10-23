@@ -38,7 +38,7 @@ export const plannedIncomes = pgTable(
             name: `${TABLE_NAME}_user_id_fk`,
             columns: [table.userId],
             foreignColumns: [users.id],
-        }).onDelete('cascade'),
+        }).onDelete('restrict'),
 
         uniqueIndex(`${TABLE_NAME}__single_user_monthly_plan`).on(
             table.monthlyBudgetId,

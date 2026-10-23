@@ -22,5 +22,7 @@ case "$role" in
         ;;
 esac
 
-export DATABASE_URL="postgres://${db_user}:${db_pass}@localhost:${POSTGRES_PORT:-5432}/${POSTGRES_DB}"
+db_name="${DB_NAME:-$POSTGRES_DB}"
+
+export DATABASE_URL="postgres://${db_user}:${db_pass}@localhost:${POSTGRES_PORT:-5432}/${db_name}"
 exec "$@"

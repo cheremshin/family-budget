@@ -9,6 +9,7 @@ export async function getFamily(id: string, tx: Executor = db) {
             settings: {
                 columns: {
                     budgetDivisionType: true,
+                    personalRemainderPolicy: true,
                 },
             },
             members: {

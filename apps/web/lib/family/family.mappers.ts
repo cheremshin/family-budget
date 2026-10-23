@@ -14,6 +14,7 @@ export function mapToFamily(family: FamilyWithRelations): Family {
             ownerId: family.ownerId,
             settings: {
                 budgetDivisionType: family.settings.budgetDivisionType,
+                personalRemainderPolicy: family.settings.personalRemainderPolicy,
             },
             members: family.members.map((member) => ({
                 id: member.id,

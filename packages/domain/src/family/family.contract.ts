@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { budgetDivisionTypeOptions } from './family.enums';
+import { budgetDivisionTypeOptions, personalRemainderPolicyOptions } from './family.enums';
 
 // вход
 
@@ -24,9 +24,11 @@ export const updateFamilySchema = familyFieldsSchema
 export type CreateFamilyInput = z.infer<typeof createFamilySchema>;
 export type UpdateFamilyInput = z.infer<typeof updateFamilySchema>;
 
-// выход
+// выходshape
 
-export const familySettingsSchema = familySettingsFieldsSchema;
+export const familySettingsSchema = familySettingsFieldsSchema.extend({
+    personalRemainderPolicy: z.enum(personalRemainderPolicyOptions),
+});
 
 export const familyMemberSchema = z.object({
     id: z.uuid(),
