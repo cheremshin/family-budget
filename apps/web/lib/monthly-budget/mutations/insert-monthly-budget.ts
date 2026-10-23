@@ -9,7 +9,7 @@ import {
 export async function insertMonthlyBudgetIfMissing(
     data: NewMonthlyBudget,
     tx: Executor = db,
-): Promise<MonthlyBudgetPersist> {
+): Promise<MonthlyBudgetPersist | undefined> {
     const [row] = await tx
         .insert(schema.monthlyBudgets)
         .values(data)

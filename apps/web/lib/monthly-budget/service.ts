@@ -64,12 +64,16 @@ export async function requireMonthlyBudget(
     return budget;
 }
 
-export async function createMonthlyBudget(
-    params: CreateMonthlyBudgetParams,
-    tx: Executor = db,
-): Promise<MonthlyBudget> {
-    await insertMonthlyBudgetIfMissing(params, tx);
-    return await requireMonthlyBudget(params.familyId, params.period, tx);
+export async function createMonthlyBudget(params: CreateMonthlyBudgetParams): Promise<MonthlyBudget> {
+    const { budget, isCreated } = await db.transaction(async (tx) => {
+        const inserted = await insertMonthlyBudgetIfMissing(params, tx);
+        const budget = await requireMonthlyBudget(params.familyId, params.period, tx);
+        return { budget, isCreated: inserted !== undefined };
+    });
+
+    if (isCreated) publishMonthlyBudgetChanged(params.familyId, budget);
+
+    return budget;
 }
 
 export async function setPlannedIncome(
