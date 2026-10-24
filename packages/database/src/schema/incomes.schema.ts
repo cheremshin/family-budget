@@ -18,7 +18,8 @@ export const incomes = pgTable(
     TABLE_NAME,
     {
         id: uuid('id').defaultRandom().primaryKey(),
-        plannedIncomesId: uuid('planned_incomes_id').notNull(),
+        monthlyBudgetId: uuid('monthly_budget_id').notNull(),
+        userId: uuid('user_id').notNull(),
 
         amount: decimal('amount', {
             precision: 12,
@@ -29,12 +30,12 @@ export const incomes = pgTable(
     },
     (table): PgTableExtraConfigValue[] => [
         foreignKey({
-            name: `${TABLE_NAME}__planned_income_id_fk`,
-            columns: [table.plannedIncomesId],
-            foreignColumns: [plannedIncomes.id],
+            name: `${TABLE_NAME}__planned_income_fk`,
+            columns: [table.monthlyBudgetId, table.userId],
+            foreignColumns: [plannedIncomes.monthlyBudgetId, plannedIncomes.userId],
         }).onDelete('cascade'),
 
-        index(`${TABLE_NAME}__planned_incomes_index`).on(table.plannedIncomesId),
+        index(`${TABLE_NAME}__planned_incomes_index`).on(table.monthlyBudgetId, table.userId),
 
         check(`${TABLE_NAME}__amount_non_negative_check`, sql`${table.amount} >= 0`),
         check(

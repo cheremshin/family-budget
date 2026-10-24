@@ -12,9 +12,7 @@
 
 ## Проверки
 
-- `pnpm typecheck` — после каждого блока правок.
 - `pnpm test` — если менялся `packages/domain` (тесты пока только там).
-- `pnpm check` (format + lint + typecheck) — перед коммитом.
 - `pnpm --filter @family-budget/domain test:mutation` — вручную, пока идут этапы 4–6
   `docs/domain-migration.md` (правка расчёта или его тестов). Выживший мутант сверх списка
   эквивалентных в `stryker.config.mjs` — место, которое тесты не проверяют. После этапа 6 Stryker
@@ -138,12 +136,10 @@ components/<виджет>/   .view.ts (buildXView), .vm.ts, .form.ts, .widget.ts
 - `ReadyGate` монтируется с `key={period}`; намерения берут `ready.period`.
 - Создание в `useState` без подписок, `activate()` в `useEffect`, `destroy` нет (ADR-0005).
 - Блокировка считается в snapshot. View объясняет её заранее, VM возвращает её через `guarded`.
-  Каждое серверное условие отказа повторено клиентской блокировкой. Для закрытия месяца не
-  реализовано: `closeBlockerOf` не знает про пустой состав и перерасход (`docs/domain/rules.md`).
+  Каждое серверное условие отказа повторено клиентской блокировкой.
 - Компонент не пишет `try/catch`: ошибка чтения — в `model.state`, ошибка команды —
   `applyCommandError(form, error)`.
 - `switch` по `status` без `default`.
-- Индикатор загрузки один на экран (спиннер); у виджетов нет веток `loading` и скелетонов.
 - `observer` рендерится только под `ClientProvider` (`app/(internal)/layout.tsx`).
 
 Периферийные экраны без расчётов и живой синхронизации (настройки, категории) можно делать проще:

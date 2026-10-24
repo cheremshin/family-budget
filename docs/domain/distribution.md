@@ -1,7 +1,7 @@
 # Распределение бюджета
 
 Спецификация `packages/domain/src/monthly-budget/monthly-budget.calculation.ts`. Сервер вызывает
-`distribute` при закрытии месяца и сохраняет результат (не реализовано, см. ниже); клиент вызывает
+`distribute` при закрытии месяца и сохраняет результат; клиент вызывает
 его же для предпросмотра открытого месяца. Типы и сигнатуры — в самом файле, здесь — правила, почему
 они такие, и разобранные примеры.
 
@@ -33,8 +33,8 @@
 - при `equalized` `personalAmount = (Σ планов − Σ обязательств) / N` и от `divisionType` не зависит —
   `divisionType` меняет только вклады и размер перевода.
 
-**Перерасход** (`isOverAllocated`) — `personalAmount < 0` хотя бы у одного участника. Такой месяц
-нельзя закрыть (`MonthlyBudgetOverAllocated`).
+**Перерасход** Если в результате поле isOverAllocated выставлено в true - отказ закрытия с кодом
+`over-allocated` (`MonthlyBudgetCloseBlocker`)
 
 ## Разбивка поступления (`allocateReceipts`)
 

@@ -20,7 +20,7 @@ export type {
     MonthlyBudgetItem,
     OpenMonthlyBudget,
 } from './monthly-budget.contract';
-export { allocateReceipts, distribute, isOverAllocated } from './monthly-budget.calculation';
+export { allocateReceipts, distribute, distributionOf } from './monthly-budget.calculation';
 export type {
     DistributionInput,
     DistributionItem,
@@ -32,13 +32,21 @@ export type {
     ReceiptAllocationResult,
 } from './monthly-budget.calculation';
 export {
-    MonthlyBudgetClosedError,
+    MonthlyBudgetCloseBlocked,
     MonthlyBudgetError,
     MonthlyBudgetNotFound,
-    MonthlyBudgetOverAllocated,
-    MonthlyBudgetPlanIncomplete,
-    MonthlyBudgetHasNoItems,
-    PlannedIncomeNotSet,
+    MonthlyBudgetPlanBlocked,
+    MonthlyBudgetReceiptBlocked,
+    closeBlockerMessage,
+    planBlockerMessage,
+    receiptBlockerMessage,
 } from './monthly-budget.errors';
+export {
+    closeBlockerOf,
+    closeBlockerOptions,
+    planBlockerOf,
+    receiptBlockerOf,
+} from './monthly-budget.rules';
+export type { CloseBlocker, PlanBlocker, ReceiptBlocker } from './monthly-budget.rules';
 export { monthlyBudgetChangedEventSchema } from './monthly-budget.events';
 export type { MonthlyBudgetChangedEvent } from './monthly-budget.events';

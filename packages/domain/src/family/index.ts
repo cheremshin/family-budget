@@ -11,6 +11,7 @@ export type {
     FamilyMember,
     FamilySettings,
     UpdateFamilyInput,
+    Actor,
 } from './family.contract';
 export { budgetDivisionTypeOptions, personalRemainderPolicyOptions } from './family.enums';
 export type { BudgetDivisionType, PersonalRemainderPolicy } from './family.enums';

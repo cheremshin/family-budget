@@ -33,6 +33,8 @@ export const CloseMonthWidget: FC<CloseMonthWidgetT> = observer(({ vm, className
 
     if (view.status === 'hidden') return null;
 
+    const isBlocked = view.status === 'blocked';
+
     const handleOpenChange = (open: boolean) => {
         if (open) vm.prepare();
         setConfirming(open);
@@ -53,49 +55,56 @@ export const CloseMonthWidget: FC<CloseMonthWidgetT> = observer(({ vm, className
                     <div>
                         <CardTitle className="flex items-center gap-1.5 text-lg">
                             Зафиксировать бюджет
-                            <Popover>
-                                <PopoverTrigger className="text-muted-foreground hover:text-foreground">
-                                    <HelpCircle className="w-3.5 h-3.5" />
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    Все члены семьи установили плановый доход. Пока месяц не
-                                    заморожен, вы находитесь в режиме предпросмотра и можете менять
-                                    категории в настройках для поиска лучшего плана на месяц! После
-                                    заморозки данные становятся историческими и не могут быть
-                                    изменены.
-                                </PopoverContent>
-                            </Popover>
+                            {!isBlocked && (
+                                <Popover>
+                                    <PopoverTrigger className="text-muted-foreground hover:text-foreground">
+                                        <HelpCircle className="w-3.5 h-3.5" />
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        Все члены семьи установили плановый доход. Пока месяц не
+                                        заморожен, вы находитесь в режиме предпросмотра и можете
+                                        менять категории в настройках для поиска лучшего плана на
+                                        месяц! После заморозки данные становятся историческими и не
+                                        могут быть изменены.
+                                    </PopoverContent>
+                                </Popover>
+                            )}
                         </CardTitle>
                         <CardDescription>
-                            Вы можете зафиксировать распределение текущего месяца
+                            {isBlocked
+                                ? view.reason
+                                : 'Вы можете зафиксировать распределение текущего месяца'}
                         </CardDescription>
                     </div>
                 </div>
-                <Button onClick={() => handleOpenChange(true)}>Зафиксировать</Button>
+                <Button onClick={() => handleOpenChange(true)} disabled={isBlocked}>
+                    Зафиксировать
+                </Button>
             </div>
-
-            <Dialog open={isConfirming} onOpenChange={handleOpenChange}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Зафиксировать бюджет месяца?</DialogTitle>
-                        <DialogDescription>
-                            Распределение станет историческим. Состав категорий и планы больше
-                            нельзя будет изменить - действие необратимо.
-                        </DialogDescription>
-                    </DialogHeader>
-                    {view.error && <p className="text-destructive text-sm">{view.error}</p>}
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button type="button" variant="outline">
-                                Отмена
+            {view.status === 'available' && (
+                <Dialog open={isConfirming} onOpenChange={handleOpenChange}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Зафиксировать бюджет месяца?</DialogTitle>
+                            <DialogDescription>
+                                Распределение станет историческим. Состав категорий и планы больше
+                                нельзя будет изменить - действие необратимо.
+                            </DialogDescription>
+                        </DialogHeader>
+                        {view.error && <p className="text-destructive text-sm">{view.error}</p>}
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button" variant="outline">
+                                    Отмена
+                                </Button>
+                            </DialogClose>
+                            <Button onClick={handleConfirm} disabled={view.isPending}>
+                                {view.isPending ? 'Фиксируем…' : 'Зафиксировать'}
                             </Button>
-                        </DialogClose>
-                        <Button onClick={handleConfirm} disabled={view.isPending}>
-                            {view.isPending ? 'Фиксируем…' : 'Зафиксировать'}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            )}
         </Card>
     );
 });

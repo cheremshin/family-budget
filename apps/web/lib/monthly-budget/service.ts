@@ -1,21 +1,21 @@
 import { Executor, db } from '@family-budget/database';
 import {
-    AddIncomeInput,
+    type AddIncomeInput,
     type AddPlannedIncomeInput,
-    CloseMonthlyBudgetInput,
-    MonthlyBudget,
-    MonthlyBudgetClosedError,
-    MonthlyBudgetHasNoItems,
+    type CloseMonthlyBudgetInput,
+    type MonthlyBudget,
+    MonthlyBudgetCloseBlocked,
     MonthlyBudgetNotFound,
-    MonthlyBudgetOverAllocated,
-    MonthlyBudgetPlanIncomplete,
-    PlannedIncomeNotSet,
-    distribute,
-    isOverAllocated,
+    MonthlyBudgetPlanBlocked,
+    MonthlyBudgetReceiptBlocked,
+    closeBlockerOf,
+    distributionOf,
+    planBlockerOf,
+    receiptBlockerOf,
 } from '@family-budget/domain/monthly-budget';
 import { Period } from '@family-budget/domain/shared';
 
-import { familyService, requireFamilyMember, requireFamilyOwner } from '@/lib/family';
+import { familyService, requireActor } from '@/lib/family';
 
 import { budgetCategoryService } from '../budget-category';
 import { mapToClosedMonthlyBudget, mapToOpenMonthlyBudget } from './monthly-budget.mappers';
@@ -27,7 +27,6 @@ import { touchMonthlyBudget } from './mutations/touch-monthly-budget';
 import { updateMonthlyBudget } from './mutations/update-monthly-budget';
 import { upsertPlannedIncome } from './mutations/upsert-planned-income';
 import { getMonthlyBudget as getMonthlyBudgetRow } from './queries/get-monthly-budget';
-import { getPlannedIncome } from './queries/get-planned-income';
 import { monthlyBudgetEventBus } from './realtime/bus';
 import { createMonthlyBudgetChangedEvent } from './realtime/events';
 import { CreateMonthlyBudgetParams } from './types';
@@ -82,13 +81,14 @@ export async function setPlannedIncome(
     userId: string,
     input: AddPlannedIncomeInput,
 ): Promise<MonthlyBudget> {
-    const familyId = await requireFamilyMember(userId);
+    const { familyId, actor } = await requireActor(userId);
 
     const budget = await db.transaction(async (tx) => {
         const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
 
-        if (monthlyBudget.isClosed) {
-            throw new MonthlyBudgetClosedError();
+        const blocker = planBlockerOf(monthlyBudget, actor, actor.memberId);
+        if (blocker) {
+            throw new MonthlyBudgetPlanBlocked(blocker);
         }
 
         await upsertPlannedIncome(
@@ -113,19 +113,20 @@ export async function addActualIncome(
     userId: string,
     input: AddIncomeInput,
 ): Promise<MonthlyBudget> {
-    const familyId = await requireFamilyMember(userId);
+    const { familyId, actor } = await requireActor(userId);
 
     const budget = await db.transaction(async (tx) => {
         const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
-        const plannedIncome = await getPlannedIncome(monthlyBudget.id, userId, tx);
 
-        if (!plannedIncome) {
-            throw new PlannedIncomeNotSet();
+        const blocker = receiptBlockerOf(monthlyBudget, actor, actor.memberId);
+        if (blocker) {
+            throw new MonthlyBudgetReceiptBlocked(blocker);
         }
 
         await insertIncome(
             {
-                plannedIncomesId: plannedIncome.id,
+                monthlyBudgetId: monthlyBudget.id,
+                userId: actor.memberId,
                 amount: input.amount,
                 receivedAt: input.receivedAt,
             },
@@ -145,34 +146,19 @@ export async function closeMonthlyBudget(
     userId: string,
     input: CloseMonthlyBudgetInput,
 ): Promise<MonthlyBudget> {
-    const familyId = await requireFamilyOwner(userId);
+    const { familyId, actor } = await requireActor(userId);
 
     const budget = await db.transaction(async (tx) => {
         const monthlyBudget = await requireMonthlyBudget(familyId, input.period, tx);
 
-        if (monthlyBudget.isClosed) {
-            throw new MonthlyBudgetClosedError();
+        const distribution = distributionOf(monthlyBudget);
+        const blocker = closeBlockerOf(monthlyBudget, actor, distribution);
+        if (blocker) {
+            throw new MonthlyBudgetCloseBlocked(blocker);
         }
 
-        const members = monthlyBudget.memberIncomes.map((member) => {
-            if (member.plannedAmount === null) {
-                throw new MonthlyBudgetPlanIncomplete();
-            }
-            return { memberId: member.memberId, plannedAmount: member.plannedAmount };
-        });
-
-        const distribution = distribute({
-            divisionType: monthlyBudget.divisionType,
-            personalRemainderPolicy: monthlyBudget.personalRemainderPolicy,
-            items: monthlyBudget.items,
-            members,
-        });
-        if (isOverAllocated(distribution)) {
-            throw new MonthlyBudgetOverAllocated();
-        }
-
-        if (monthlyBudget.items.length === 0) {
-            throw new MonthlyBudgetHasNoItems();
+        if (!distribution) {
+            throw new Error('[closeMonthlyBudget] нет распределения');
         }
 
         await insertMonthlyBudgetItems(

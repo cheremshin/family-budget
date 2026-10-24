@@ -3,14 +3,13 @@ import { describe, expect, it } from 'vitest';
 
 import { fromKopecks, toKopecks } from '../shared/money';
 import {
-    DistributionInput,
-    DistributionItem,
-    DistributionMember,
-    DistributionResult,
+    type DistributionInput,
+    type DistributionItem,
+    type DistributionMember,
+    type DistributionResult,
     ROUNDING_TOLERANCE_KOPECKS,
     allocateReceipts,
     distribute,
-    isOverAllocated,
 } from './monthly-budget.calculation';
 
 const ANYA = '00000000-0000-4000-8000-00000000000a';
@@ -117,7 +116,7 @@ describe('distribute: примеры из distribution.md', () => {
             personalAmount: '65000.00',
             settlementAmount: '85000.00',
         });
-        expect(isOverAllocated(result)).toBe(false);
+        expect(result.isOverAllocated).toBe(false);
     });
 
     describe('смесь фиксированных и процентных категорий', () => {
@@ -259,7 +258,7 @@ describe('distribute: примеры из distribution.md', () => {
             personalAmount: '150000.00',
             settlementAmount: '0.00',
         });
-        expect(isOverAllocated(result)).toBe(true);
+        expect(result.isOverAllocated).toBe(true);
     });
 
     describe.each(['equalized', 'individual'] as const)(
@@ -281,7 +280,7 @@ describe('distribute: примеры из distribution.md', () => {
 
                 expect(sumKopecks(result.contributions.map((c) => c.amount))).toBe(10002);
                 expect(remainderOf(result, ANYA).personalAmount).toBe('0.00');
-                expect(isOverAllocated(result)).toBe(false);
+                expect(result.isOverAllocated).toBe(false);
             });
 
             it('копейка снимается с крупнейшего процентного вклада (33.35 -> 33.34)', () => {
@@ -349,7 +348,7 @@ describe('distribute: примеры из distribution.md', () => {
             personalAmount: '0.00',
             settlementAmount: '-0.01',
         });
-        expect(isOverAllocated(result)).toBe(false);
+        expect(result.isOverAllocated).toBe(false);
     });
 
     it('П13 — individual: недостача гасится вкладом того, у кого она возникла', () => {
@@ -367,7 +366,7 @@ describe('distribute: примеры из distribution.md', () => {
             ownRemainder: '0.00',
             personalAmount: '0.00',
         });
-        expect(isOverAllocated(result)).toBe(false);
+        expect(result.isOverAllocated).toBe(false);
     });
 
     it('П14 — процентных вкладов ровно столько, сколько недостачи: гасится', () => {
@@ -381,7 +380,7 @@ describe('distribute: примеры из distribution.md', () => {
         expect(contributionOf(result, ANYA, CAT_1)).toBe('1.00');
         expect(contributionOf(result, ANYA, CAT_2)).toBe('0.00');
         expect(remainderOf(result, ANYA).personalAmount).toBe('0.00');
-        expect(isOverAllocated(result)).toBe(false);
+        expect(result.isOverAllocated).toBe(false);
     });
 
     it('П15 — граница допуска: 100 копеек гасится, 101 - перерасход', () => {
@@ -397,7 +396,7 @@ describe('distribute: примеры из distribution.md', () => {
             items: [relative(CAT_1, '50.00'), relative(CAT_2, '51.00')],
         });
         expect(sumKopecks(atLimit.contributions.map((c) => c.amount))).toBe(10000);
-        expect(isOverAllocated(atLimit)).toBe(false);
+        expect(atLimit.isOverAllocated).toBe(false);
 
         const overLimit = distribute({
             ...base,
@@ -405,7 +404,7 @@ describe('distribute: примеры из distribution.md', () => {
         });
         expect(sumKopecks(overLimit.contributions.map((c) => c.amount))).toBe(10101);
         expect(remainderOf(overLimit, ANYA).personalAmount).toBe('-1.01');
-        expect(isOverAllocated(overLimit)).toBe(true);
+        expect(overLimit.isOverAllocated).toBe(true);
     });
 
     it('П16 — фиксированные суммы допуском не трогаются', () => {
@@ -418,7 +417,7 @@ describe('distribute: примеры из distribution.md', () => {
 
         expect(contributionOf(result, ANYA, CAT_1)).toBe('100.50');
         expect(remainderOf(result, ANYA).personalAmount).toBe('-0.50');
-        expect(isOverAllocated(result)).toBe(true);
+        expect(result.isOverAllocated).toBe(true);
     });
 
     it('П17 — частично недостачу не гасят', () => {
@@ -431,7 +430,7 @@ describe('distribute: примеры из distribution.md', () => {
 
         expect(contributionOf(result, ANYA, CAT_2)).toBe('0.30');
         expect(remainderOf(result, ANYA).personalAmount).toBe('-0.70');
-        expect(isOverAllocated(result)).toBe(true);
+        expect(result.isOverAllocated).toBe(true);
     });
 
     it('без участников - пустой результат', () => {
@@ -442,7 +441,7 @@ describe('distribute: примеры из distribution.md', () => {
                 items: [absolute(CAT_1, '10.00')],
                 members: [],
             }),
-        ).toEqual({ contributions: [], remainders: [] });
+        ).toEqual({ contributions: [], remainders: [], isOverAllocated: false });
     });
 });
 
@@ -641,7 +640,7 @@ describe('генераторы попадают в границы', () => {
 
     it('обычные месяцы: есть и перерасход, и сведённые месяцы', () => {
         const samples = fc.sample(typicalArbitrary, { numRuns: 500, seed: 42 });
-        const over = samples.filter((input) => isOverAllocated(distribute(input))).length;
+        const over = samples.filter((input) => distribute(input).isOverAllocated).length;
 
         expect(over / samples.length).toBeGreaterThan(0.05);
         expect(over / samples.length).toBeLessThan(0.95);
@@ -724,7 +723,7 @@ describe('distribute: свойства', () => {
     );
 
     property('isOverAllocated <=> у кого-то personalAmount < 0', (_, result) => {
-        expect(isOverAllocated(result)).toBe(
+        expect(result.isOverAllocated).toBe(
             result.remainders.some((r) => toKopecks(r.personalAmount) < 0),
         );
     });

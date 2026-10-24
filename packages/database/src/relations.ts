@@ -116,15 +116,15 @@ export const relations = defineRelations(schema, (r) => ({
             optional: false,
         }),
         incomes: r.many.incomes({
-            from: r.plannedIncomes.id,
-            to: r.incomes.plannedIncomesId,
+            from: [r.plannedIncomes.monthlyBudgetId, r.plannedIncomes.userId],
+            to: [r.incomes.monthlyBudgetId, r.incomes.userId],
         }),
     },
 
     incomes: {
         plannedIncome: r.one.plannedIncomes({
-            from: r.incomes.plannedIncomesId,
-            to: r.plannedIncomes.id,
+            from: [r.incomes.monthlyBudgetId, r.incomes.userId],
+            to: [r.plannedIncomes.monthlyBudgetId, r.plannedIncomes.userId],
             optional: false,
         }),
     },

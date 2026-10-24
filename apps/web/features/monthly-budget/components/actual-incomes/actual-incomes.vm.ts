@@ -27,7 +27,7 @@ export class ActualIncomesVM {
     }
 
     add = (values: IncomeReceiptFormValues): Promise<CommandResult> =>
-        guarded(receiptLockView(this.ready.snapshot.receiptLock), () =>
+        guarded(receiptLockView(this.ready.snapshot.receiptBlocker), () =>
             this.addIncome.run({ ...values, period: this.ready.period }),
         );
 

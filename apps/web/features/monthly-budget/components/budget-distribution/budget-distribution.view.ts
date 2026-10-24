@@ -3,7 +3,6 @@ import {
     type DistributionResult,
     type Income,
     type MonthlyBudgetItem,
-    isOverAllocated,
 } from '@family-budget/domain/monthly-budget';
 import {
     type Money,
@@ -97,7 +96,7 @@ export function buildBudgetDistributionView(s: BudgetSnapshot): BudgetDistributi
     if (columns.length === 0) return { status: 'hidden' };
     if (s.budget.items.length === 0) return { status: 'empty', message: NO_CATEGORIES };
     if (!s.distribution) return { status: 'hidden' };
-    if (isOverAllocated(s.distribution)) return { status: 'empty', message: OVER_ALLOCATED };
+    if (s.distribution.isOverAllocated) return { status: 'empty', message: OVER_ALLOCATED };
 
     return s.receipt
         ? receiptView(s, s.distribution, s.receipt, columns)

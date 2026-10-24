@@ -46,3 +46,9 @@ export const familySchema = familyFieldsSchema.extend({
 export type FamilySettings = z.infer<typeof familySettingsSchema>;
 export type FamilyMember = z.infer<typeof familyMemberSchema>;
 export type Family = z.infer<typeof familySchema>;
+
+/** Кто совершает действие */
+export type Actor = {
+    memberId: string;
+    isOwner: boolean;
+};

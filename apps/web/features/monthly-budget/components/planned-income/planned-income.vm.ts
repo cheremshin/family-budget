@@ -26,7 +26,7 @@ export class PlannedIncomeVM {
     }
 
     submit = (values: PlannedIncomeFormValues): Promise<CommandResult> =>
-        guarded(planLockView(this.ready.snapshot.planLock), () =>
+        guarded(planLockView(this.ready.snapshot.planBlocker), () =>
             this.setPlan.run({ ...values, period: this.ready.period }),
         );
 }

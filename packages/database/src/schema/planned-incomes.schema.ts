@@ -6,7 +6,7 @@ import {
     foreignKey,
     index,
     pgTable,
-    uniqueIndex,
+    primaryKey,
     uuid,
 } from 'drizzle-orm/pg-core';
 
@@ -18,7 +18,6 @@ const TABLE_NAME = 'planned_incomes';
 export const plannedIncomes = pgTable(
     TABLE_NAME,
     {
-        id: uuid('id').defaultRandom().primaryKey(),
         monthlyBudgetId: uuid('monthly_budget_id').notNull(),
         userId: uuid('user_id').notNull(),
 
@@ -28,6 +27,11 @@ export const plannedIncomes = pgTable(
         }).notNull(),
     },
     (table): PgTableExtraConfigValue[] => [
+        primaryKey({
+            name: `${TABLE_NAME}_pk`,
+            columns: [table.monthlyBudgetId, table.userId],
+        }),
+
         foreignKey({
             name: `${TABLE_NAME}__monthly_budget_id_fk`,
             columns: [table.monthlyBudgetId],
@@ -40,10 +44,6 @@ export const plannedIncomes = pgTable(
             foreignColumns: [users.id],
         }).onDelete('restrict'),
 
-        uniqueIndex(`${TABLE_NAME}__single_user_monthly_plan`).on(
-            table.monthlyBudgetId,
-            table.userId,
-        ),
         index(`${TABLE_NAME}__monthly_budget_index`).on(table.monthlyBudgetId),
         index(`${TABLE_NAME}__user_index`).on(table.userId),
 

@@ -1,15 +1,15 @@
 import { CalculationMode } from '../budget-category';
 import { BudgetDivisionType, PersonalRemainderPolicy } from '../family';
 import {
-    Money,
-    SignedMoney,
+    type Money,
+    type SignedMoney,
     allocate,
     fromKopecks,
     percentOf,
     sumMoney,
     toKopecks,
 } from '../shared/money';
-import { Contribution } from './monthly-budget.contract';
+import type { Contribution, MemberIncome, MonthlyBudget } from './monthly-budget.contract';
 
 export type DistributionItem = {
     categoryId: string;
@@ -42,6 +42,7 @@ export type MemberRemainder = {
 export type DistributionResult = {
     contributions: Contribution[];
     remainders: MemberRemainder[];
+    isOverAllocated: boolean;
 };
 
 /** Кто сколько вкладывает в каждую категорию и что остаётся лично - docs/domain/distribution.md */
@@ -52,7 +53,7 @@ export function distribute({
     members,
 }: DistributionInput): DistributionResult {
     if (members.length === 0) {
-        return { contributions: [], remainders: [] };
+        return { contributions: [], remainders: [], isOverAllocated: false };
     }
 
     const orderedMembers = [...members].sort((a, b) => compareIds(a.memberId, b.memberId));
@@ -107,7 +108,32 @@ export function distribute({
         };
     });
 
-    return { contributions, remainders };
+    const isOverAllocated = remainders.some((remainder) => toKopecks(remainder.personalAmount) < 0);
+
+    return { contributions, remainders, isOverAllocated };
+}
+
+export function distributionOf(budget: MonthlyBudget): DistributionResult | undefined {
+    if (budget.isClosed) {
+        return {
+            contributions: budget.contributions,
+            remainders: budget.remainders,
+            isOverAllocated: false,
+        };
+    }
+
+    const memberIncomes: MemberIncome[] = budget.memberIncomes;
+    const members = memberIncomes.flatMap(({ memberId, plannedAmount }) =>
+        plannedAmount === null ? [] : [{ memberId, plannedAmount }],
+    );
+    if (members.length === 0) return undefined;
+
+    return distribute({
+        divisionType: budget.divisionType,
+        personalRemainderPolicy: budget.personalRemainderPolicy,
+        items: budget.items,
+        members,
+    });
 }
 
 /**
@@ -188,10 +214,6 @@ function resolvePersonalAmounts(
     const shares = allocate(pooled, equalWeights);
 
     return new Map(ownRemainders.map(({ memberId }, index) => [memberId, shares[index]]));
-}
-
-export function isOverAllocated(result: DistributionResult): boolean {
-    return result.remainders.some((remainder) => toKopecks(remainder.personalAmount) < 0);
 }
 
 export type ReceiptAllocationInput = {
